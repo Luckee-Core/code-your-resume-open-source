@@ -1,0 +1,2 @@
+# Reserved for non-CRM Next.js Route Handlers (`route.ts`).
+# CRM uses Express `/api/data/**` (see `.cursor/architecture/008-job-search-crm.md`).

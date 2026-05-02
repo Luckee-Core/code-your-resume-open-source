@@ -1,23 +1,41 @@
-# Next.js Template
+# Code Your Resume (open source)
 
-Bare Next.js app with **src/app**, **src/store**, and **src/utils**. Redux and Tailwind are wired; no entity/dashboard/API code.
+Next.js app with Redux: job-search CRM UI, graphics studio (TSX live preview), technical skills studio, and docs.
 
-## Run
+Run Next locally (`npm run dev`, default [http://localhost:3000](http://localhost:3000)) with the companion **CRM Express server** (sibling repo `code-your-resume-open-source-express-server`) on **port 3053** for `/api/data/*` and `/api/technical-skills/*`. Rewrites are configured in `next.config.ts` (`CRM_EXPRESS_INTERNAL_URL`).
+
+## Threat model and trust boundaries
+
+- **Operators are trusted.** There is no multi-user auth on the CRM API by default.
+- **TSX preview** compiles and runs code in your browser (see `/docs/security/tsx-preview`). Treat editor content as trusted.
+- **Graphics** drafts may live in **browser storage** (`localStorage`) — same-origin rules apply; clearing site data clears it.
+- **`CRM_API_SECRET`:** If you set this on Express **and** on Next (same value), Express rejects requests without `X-CRM-API-Key`. Next middleware adds that header for proxied routes. This limits **direct** access to Express when it listens beyond loopback; it does **not** stop someone who can already use your Next app from calling the CRM through Next.
+
+Never put secrets in `NEXT_PUBLIC_*` vars unless you intend them to ship to the browser.
+
+See **`SECURITY.md`** for reporting and scope.
+
+## Environment
+
+Copy `.env.example` to `.env.local`. Important variables:
+
+| Variable | Purpose |
+| -------- | ------- |
+| `CRM_EXPRESS_INTERNAL_URL` | Express base URL (no trailing slash). Production: required if Next rewrites to CRM. |
+| `CRM_API_SECRET` | Optional shared secret (must match Express). Server-only. |
+
+## Scripts
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+```bash
+npm run build
+npm start
+```
 
-## Layout
+## Docs
 
-- **src/app** — routes and layout
-- **src/store** — Redux (store, reducer, one minimal slice)
-- **src/utils** — shared utilities
-- **src/components** — shared UI (e.g. ReduxProvider)
-
-## As GitHub template
-
-Repo → Settings → General → check **Template repository**. Then use as `GITHUB_TEMPLATE_WEB` when creating new web repos from the panel.
+In-app documentation starts at `/docs`. Architecture decisions live under `.cursor/architecture/`.

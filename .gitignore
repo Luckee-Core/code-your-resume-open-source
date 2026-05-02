@@ -28,3 +28,6 @@ yarn-error.log*
 
 # typescript
 next-env.d.ts
+
+# local CRM JSON vault (written by Next route handlers)
+.data/
