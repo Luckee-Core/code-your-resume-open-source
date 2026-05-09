@@ -32,6 +32,7 @@ export const ImageGraphicsTable = () => {
             <th className={styles.th}>Title</th>
             <th className={styles.thMuted}>Canvas</th>
             <th className={styles.thMuted}>Updated</th>
+            <th className={styles.thActions} aria-label="Actions" />
           </tr>
         </thead>
         <tbody>
@@ -63,5 +64,8 @@ const styles = {
   `,
   thMuted: `
     px-3 py-2 font-semibold text-gray-500 whitespace-nowrap
+  `,
+  thActions: `
+    w-12 px-2 py-2
   `,
 };

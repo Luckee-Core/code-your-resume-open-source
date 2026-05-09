@@ -1,8 +1,13 @@
-import { buildTsxReactPreviewSrcDoc } from "./build-tsx-react-preview-src-doc";
+import {
+  buildTsxReactPreviewSrcDoc,
+  IMAGE_STUDIO_PREVIEW_HEIGHT_POST_MESSAGE_TYPE,
+} from "./build-tsx-react-preview-src-doc";
 import { compileImageStudioTsx } from "./compile-image-studio-tsx";
 
 /** Stable `id` on the studio preview iframe so thunks can locate it without React refs. */
 export const IMAGE_STUDIO_PREVIEW_IFRAME_ELEMENT_ID = "image-studio-preview-iframe";
+
+export { IMAGE_STUDIO_PREVIEW_HEIGHT_POST_MESSAGE_TYPE };
 
 export const clampStudioPreviewDimension = (n: number, fallback: number): number => {
   if (!Number.isFinite(n)) return fallback;

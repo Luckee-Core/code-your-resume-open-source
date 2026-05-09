@@ -10,10 +10,11 @@ export const DOCS_SECURITY_TSX_PREVIEW_PATH = "/docs/security/tsx-preview";
 /** CRM experience — employment history. */
 export const EXPERIENCE_PATH = "/experience";
 
-/** CRM experience — background studio (coach chat + segment builder). */
-export const EXPERIENCE_STUDIO_PATH = "/experience/studio";
+/** Long-form education + narrative segments (Supabase via Express). */
+export const EXPERIENCE_BACKGROUND_PATH = "/experience/background";
 
-/** Companies list (CRM). */
+/** CRM experience — Technical Skills Studio (coach chat + skill rows). */
+export const EXPERIENCE_STUDIO_PATH = "/experience/studio";
 export const COMPANIES_PATH = "/companies";
 export const COMPANY_DETAIL_PAGE_PATH = "/company-detail-page";
 export const JOBS_PATH = "/jobs";

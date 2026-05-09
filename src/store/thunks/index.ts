@@ -1,6 +1,8 @@
 export {
   loadImageGraphicsThunk,
   createImageGraphicThunk,
+  deleteImageGraphicThunk,
+  patchImageGraphicDetailsThunk,
   openImageGraphicStudioThunk,
   openImageGraphicStudioByIdThunk,
   saveImageGraphicStudioDraftThunk,
@@ -50,5 +52,12 @@ export {
   sendTechnicalSkillsMessageThunk,
   acceptTechnicalSkillSuggestionThunk,
 } from "./technical-skills";
+
+export {
+  loadProfessionalBackgroundThunk,
+  saveProfessionalBackgroundThunk,
+} from "./professional-background";
+
+export { loadJobStudioChatThunk, sendJobStudioMessageThunk } from "./job-studio";
 
 export { generateSkillsComponentThunk, type GenerateSkillsComponentThunkInput } from "./skills-component";

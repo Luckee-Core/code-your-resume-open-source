@@ -1,7 +1,10 @@
+import type { ProfessionalBackgroundSegments } from "@/model/professional-background";
+
 export type GenerateSkillsComponentInput = {
   skills: string[];
   canvasWidthPx?: number;
   canvasHeightPx?: number;
+  professionalBackgroundSegments?: ProfessionalBackgroundSegments;
 };
 
 export type GenerateSkillsComponentResponse = {

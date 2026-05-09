@@ -5,6 +5,7 @@ import { StudioBuilderActions } from "@/store/builders/studioBuilder";
 import {
   IMAGE_STUDIO_PREVIEW_IFRAME_ELEMENT_ID,
   IMAGE_STUDIO_PREVIEW_ROOT_ELEMENT_ID,
+  normalizeStudioPreviewCloneForPngCapture,
 } from "@/utils/image-creation-studio";
 
 type Status = Promise<200 | 400 | 500>;
@@ -63,11 +64,11 @@ export const downloadImageGraphicPreviewPngThunk = (
         useCORS: true,
         logging: false,
         onclone: (clonedDoc) => {
+          normalizeStudioPreviewCloneForPngCapture(clonedDoc);
           const clonedBody = clonedDoc.body;
           clonedBody.classList.remove("antialiased");
           clonedBody.style.setProperty("-webkit-font-smoothing", "auto");
           clonedBody.style.setProperty("moz-osx-font-smoothing", "auto");
-          clonedBody.style.minHeight = "0";
         },
       });
       const safe = downloadBasename.replace(/[^a-zA-Z0-9-_]+/g, "-").slice(0, 60) || "layout";

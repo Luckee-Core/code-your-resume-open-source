@@ -7,18 +7,18 @@ import {
   loadCrmVaultThunk,
   loadImageGraphicsThunk,
   loadJobBulletsThunk,
+  loadProfessionalBackgroundThunk,
   loadTechnicalSkillsThunk,
+  loadJobStudioChatThunk,
 } from "@/store/thunks";
+import { CurrentJobStudioActions } from "@/store/current/currentJobStudio";
+import { JobStudioBuilderActions } from "@/store/builders/jobStudioBuilder";
 import { useRegisterBreadcrumbTrail } from "@/utils/navigation";
 import type { BreadcrumbItem } from "@/model/breadcrumb";
 import { crmDetailPageTokens as t } from "@/packages/crm-detail-ui";
+import { JobDetailChatColumn } from "./chat-column";
+import { JobDetailBuilderColumn } from "./builder-column";
 import { JobHeader } from "./header";
-import { AtAGlanceSection } from "./at-a-glance";
-import { OnlineProfilesSection } from "./online-profiles";
-import { ResponsibilitiesSection } from "./responsibilities";
-import { RequirementsSection } from "./requirements";
-import { NiceToHavesSection } from "./nice-to-haves";
-import { ApplicationsSection } from "./applications";
 
 export const JobDetailPage = () => {
   const dispatch = useAppDispatch();
@@ -30,12 +30,22 @@ export const JobDetailPage = () => {
     void dispatch(loadCrmVaultThunk());
     void dispatch(loadImageGraphicsThunk());
     void dispatch(loadTechnicalSkillsThunk());
+    void dispatch(loadProfessionalBackgroundThunk());
   }, [dispatch]);
 
   useEffect(() => {
     if (job.id) {
       void dispatch(loadJobBulletsThunk(job.id));
     }
+  }, [dispatch, job.id]);
+
+  useEffect(() => {
+    if (!job.id) {
+      dispatch(CurrentJobStudioActions.resetCurrentJobStudio());
+      dispatch(JobStudioBuilderActions.reset());
+      return;
+    }
+    void dispatch(loadJobStudioChatThunk(job.id));
   }, [dispatch, job.id]);
 
   useRegisterBreadcrumbTrail(
@@ -64,23 +74,38 @@ export const JobDetailPage = () => {
   return (
     <div className={styles.wrap}>
       <JobHeader />
-      <div className={styles.summaryGrid}>
-        <AtAGlanceSection />
-        <OnlineProfilesSection />
-      </div>
-      <div className={styles.bulletsGrid}>
-        <ResponsibilitiesSection />
-        <RequirementsSection />
-        <NiceToHavesSection />
-        <ApplicationsSection />
+      <div className={styles.shell}>
+        <div className={styles.chatPane}>
+          <JobDetailChatColumn />
+        </div>
+        <div className={styles.divider} aria-hidden />
+        <div className={styles.builderPane}>
+          <JobDetailBuilderColumn />
+        </div>
       </div>
     </div>
   );
 };
 
 const styles = {
-  wrap: t.pageWrapFullWidth,
+  wrap: `w-full min-w-0 flex min-h-0 flex-col gap-4 px-4 py-4`,
   empty: t.emptyMessage,
-  summaryGrid: t.researchGrid,
-  bulletsGrid: `grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4`,
+  shell: `
+    flex w-full min-w-0 flex-col gap-4
+    max-lg:flex-none
+    lg:min-h-[min(70vh,720px)] lg:flex-1 lg:flex-row lg:gap-5 lg:overflow-hidden
+  `,
+  chatPane: `
+    flex min-w-0 flex-col
+    max-lg:w-full max-lg:flex-none max-lg:shrink-0
+    lg:min-h-0 lg:max-w-[55%] lg:flex-1
+  `,
+  divider: `
+    hidden w-px shrink-0 self-stretch bg-gray-300 lg:block
+  `,
+  builderPane: `
+    flex min-h-0 min-w-0 flex-1 flex-col
+    max-lg:w-full max-lg:flex-none max-lg:shrink-0
+    lg:h-full lg:w-[45%] lg:max-w-[45%]
+  `,
 };

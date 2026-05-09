@@ -1,8 +1,8 @@
 import type { NextConfig } from "next";
 
 /**
- * Proxies browser `fetch("/api/data/...")` and `fetch("/api/technical-skills/...")`
- * to the CRM Express server.
+ * Proxies browser `fetch("/api/data/...")`, `fetch("/api/technical-skills/...")`,
+ * `fetch("/api/job-studio...")`, and `fetch("/api/professional-background...")` to the CRM Express server.
  */
 const nextConfig: NextConfig = {
   async rewrites() {
@@ -20,8 +20,24 @@ const nextConfig: NextConfig = {
         destination: `${base}/api/technical-skills/:path*`,
       });
       rules.push({
+        source: "/api/professional-background",
+        destination: `${base}/api/professional-background`,
+      });
+      rules.push({
+        source: "/api/professional-background/:path*",
+        destination: `${base}/api/professional-background/:path*`,
+      });
+      rules.push({
         source: "/api/technical-skills",
         destination: `${base}/api/technical-skills`,
+      });
+      rules.push({
+        source: "/api/job-studio/:path*",
+        destination: `${base}/api/job-studio/:path*`,
+      });
+      rules.push({
+        source: "/api/job-studio",
+        destination: `${base}/api/job-studio`,
       });
     }
 

@@ -5,6 +5,7 @@ import {
   DOCS_PATH,
   EMPLOYEES_PATH,
   EXPERIENCE_PATH,
+  EXPERIENCE_BACKGROUND_PATH,
   EXPERIENCE_STUDIO_PATH,
   JOB_APPLICATIONS_PATH,
   JOBS_PATH,
@@ -30,7 +31,8 @@ export const getAppSidebarSections = (): SidebarSection[] => {
         { name: "Employees", href: EMPLOYEES_PATH },
         { name: "Applications", href: JOB_APPLICATIONS_PATH },
         { name: "Work History", href: EXPERIENCE_PATH },
-        { name: "Background Studio", href: EXPERIENCE_STUDIO_PATH },
+        { name: "Professional background", href: EXPERIENCE_BACKGROUND_PATH },
+        { name: "Technical skills", href: EXPERIENCE_STUDIO_PATH },
       ],
     },
   ];

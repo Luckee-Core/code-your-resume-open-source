@@ -6,12 +6,16 @@ import companiesListBuilderReducer from "./builders/companiesListBuilder";
 import breadcrumbBuilderReducer from "./builders/breadcrumbBuilder";
 import experienceBuilderReducer from "./builders/experienceBuilder";
 import technicalSkillsBuilderReducer from "./builders/technicalSkillsBuilder";
+import professionalBackgroundBuilderReducer from "./builders/professionalBackgroundBuilder";
+import jobStudioBuilderReducer from "./builders/jobStudioBuilder";
 import currentImageGraphicReducer from "./current/currentImageGraphic";
 import currentCompanyReducer from "./current/currentCompany";
 import currentJobReducer from "./current/currentJob";
 import currentCompanyEmployeeReducer from "./current/currentCompanyEmployee";
 import currentJobApplicationReducer from "./current/currentJobApplication";
 import currentTechnicalSkillsReducer from "./current/currentTechnicalSkills";
+import currentProfessionalBackgroundReducer from "./current/currentProfessionalBackground";
+import currentJobStudioReducer from "./current/currentJobStudio";
 import imageGraphicsReducer from "./dumps/imageGraphics";
 import companiesReducer from "./dumps/companies";
 import employeesReducer from "./dumps/employees";
@@ -30,6 +34,8 @@ export const rootReducer = combineReducers({
   currentCompanyEmployee: currentCompanyEmployeeReducer,
   currentJobApplication: currentJobApplicationReducer,
   currentTechnicalSkills: currentTechnicalSkillsReducer,
+  currentProfessionalBackground: currentProfessionalBackgroundReducer,
+  currentJobStudio: currentJobStudioReducer,
   imageGraphics: imageGraphicsReducer,
   companies: companiesReducer,
   employees: employeesReducer,
@@ -45,4 +51,6 @@ export const rootReducer = combineReducers({
   breadcrumbBuilder: breadcrumbBuilderReducer,
   experienceBuilder: experienceBuilderReducer,
   technicalSkillsBuilder: technicalSkillsBuilderReducer,
+  professionalBackgroundBuilder: professionalBackgroundBuilderReducer,
+  jobStudioBuilder: jobStudioBuilderReducer,
 });

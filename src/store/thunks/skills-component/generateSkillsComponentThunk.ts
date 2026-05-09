@@ -1,6 +1,7 @@
 import { patchImageGraphicStudioDraft } from "@/api/image-creation-studio";
 import { generateSkillsComponent } from "@/api/skills-component";
 import { LOCAL_USER_ID } from "@/constants/local-user";
+import type { ProfessionalBackgroundSegments } from "@/model/professional-background";
 import type { AppThunk } from "@/store";
 import { StudioBuilderActions } from "@/store/builders/studioBuilder";
 import { createImageGraphicThunk } from "@/store/thunks/image-creation-studio/create-image-graphic-thunk";
@@ -11,6 +12,7 @@ export type GenerateSkillsComponentThunkInput = {
   skills: string[];
   jobId: string;
   jobTitle?: string;
+  professionalBackgroundSegments?: ProfessionalBackgroundSegments;
 };
 
 const DEFAULT_CANVAS_W = 960;
@@ -28,7 +30,7 @@ const DEFAULT_CANVAS_H = 540;
 export const generateSkillsComponentThunk =
   (input: GenerateSkillsComponentThunkInput): AppThunk<Promise<200 | 400 | 500>> =>
   async (dispatch, getState) => {
-    const { skills, jobId, jobTitle } = input;
+    const { skills, jobId, jobTitle, professionalBackgroundSegments } = input;
     if (!skills.length || !jobId.trim()) {
       return 400;
     }
@@ -42,6 +44,7 @@ export const generateSkillsComponentThunk =
         skills,
         canvasWidthPx: w,
         canvasHeightPx: h,
+        professionalBackgroundSegments,
       });
 
       const titleBase = jobTitle?.trim() ? jobTitle.trim() : `Job ${jobId.slice(0, 8)}`;

@@ -3,6 +3,9 @@ import { escapeForInlineScript } from "./escape-for-inline-script";
 /** Matches the preview mount node in {@link buildTsxReactPreviewSrcDoc} HTML (`#root`). */
 export const IMAGE_STUDIO_PREVIEW_ROOT_ELEMENT_ID = "root";
 
+/** `postMessage` `data.type` from preview iframe → parent (iframe pixel height sync). */
+export const IMAGE_STUDIO_PREVIEW_HEIGHT_POST_MESSAGE_TYPE = "image-studio-preview-content-height";
+
 const PREVIEW_REACT_UMD_VERSION = "18.3.1";
 
 export type ImageStudioPreviewDimensions = {
@@ -154,5 +157,5 @@ ${previewRequireShim}
 
   const safeBoot = escapeForInlineScript(bootScript);
 
-  return `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=${w}"/><script src="https://cdn.tailwindcss.com"></script><script crossorigin src="${reactUrl}"></script><script crossorigin src="${reactDomUrl}"></script></head><body class="min-h-screen bg-white text-gray-900 antialiased"><div id="${IMAGE_STUDIO_PREVIEW_ROOT_ELEMENT_ID}" style="width:${w}px;min-height:${h}px;box-sizing:border-box"></div><script>${safeBoot}</script></body></html>`;
+  return `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=${w}"/><style>html,body{margin:0;height:100%;overflow:hidden}</style><script src="https://cdn.tailwindcss.com"></script><script crossorigin src="${reactUrl}"></script><script crossorigin src="${reactDomUrl}"></script></head><body class="bg-white text-gray-900 antialiased"><div id="${IMAGE_STUDIO_PREVIEW_ROOT_ELEMENT_ID}" style="width:${w}px;height:${h}px;overflow:auto;box-sizing:border-box"></div><script>${safeBoot}</script></body></html>`;
 };

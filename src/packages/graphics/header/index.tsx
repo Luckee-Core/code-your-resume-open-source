@@ -45,6 +45,7 @@ export const GraphicsListHeader = () => {
           Data lives in your browser ({`localStorage`}). See README for the storage key. Optional{" "}
           <code className={styles.code}>NEXT_PUBLIC_API_BASE_URL</code> defaults to localhost for future tooling only.
         </p>
+        <GraphicsListNewGraphicButton />
       </div>
 
       {listLoadStatus === "loading" ? <p className={styles.muted}>Loading…</p> : null}
@@ -54,8 +55,10 @@ export const GraphicsListHeader = () => {
 };
 
 const styles = {
-  subtextBar: `shrink-0 border-b border-gray-200 bg-white px-4 py-2`,
-  subtext: `text-xs text-gray-600`,
+  subtextBar: `
+    flex shrink-0 flex-wrap items-center justify-between gap-3 border-b border-gray-200 bg-white px-4 py-2
+  `,
+  subtext: `min-w-0 flex-1 text-xs text-gray-600`,
   code: `rounded bg-gray-100 px-1 py-0.5 font-mono text-[11px]`,
   addBtn: `
     inline-flex shrink-0 items-center gap-1 rounded-md border border-orange-500 bg-orange-500 px-2 py-1 text-xs font-medium

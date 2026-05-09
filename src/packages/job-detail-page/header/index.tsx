@@ -2,15 +2,17 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { MoreHorizontal } from "lucide-react";
+import { ExternalLink, MoreHorizontal } from "lucide-react";
 import { toast } from "sonner";
 import type { JobStatus } from "@/model/job";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { deleteJobThunk, importJobListingThunk, updateJobThunk } from "@/store/thunks";
 import { crmDetailPageTokens as t } from "@/packages/crm-detail-ui";
-import { JobEditModal } from "../edit-modal";
+import { JobEditModal } from "./edit-modal";
 
 const statuses: JobStatus[] = ["draft", "applied", "closed", "archived"];
+
+const AT_A_GLANCE_PREVIEW_CHARS = 320;
 
 export const JobHeader = () => {
   const dispatch = useAppDispatch();
@@ -22,7 +24,25 @@ export const JobHeader = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [importing, setImporting] = useState(false);
+  const [glanceExpanded, setGlanceExpanded] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  const postingHref = job.url.trim()
+    ? job.url.trim().startsWith("http")
+      ? job.url.trim()
+      : `https://${job.url.trim()}`
+    : "";
+
+  const description = job.description.trim();
+  const glanceLong = description.length > AT_A_GLANCE_PREVIEW_CHARS;
+  const glanceShown =
+    glanceExpanded || !glanceLong
+      ? description
+      : `${description.slice(0, AT_A_GLANCE_PREVIEW_CHARS)}…`;
+
+  useEffect(() => {
+    setGlanceExpanded(false);
+  }, [job.id]);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -144,6 +164,43 @@ export const JobHeader = () => {
               </div>
             </div>
           </div>
+
+          <div className={styles.metaRow}>
+            <div className={styles.glanceBlock}>
+              <p className={styles.glanceLabel}>At a glance</p>
+              {description ? (
+                <>
+                  <p className={styles.glanceBody}>{glanceShown}</p>
+                  {glanceLong ? (
+                    <button
+                      type="button"
+                      className={styles.glanceToggle}
+                      onClick={() => setGlanceExpanded((e) => !e)}
+                    >
+                      {glanceExpanded ? "Show less" : "Show more"}
+                    </button>
+                  ) : null}
+                </>
+              ) : (
+                <p className={styles.glanceEmpty}>
+                  Import the job listing to generate an AI summary.
+                </p>
+              )}
+            </div>
+            {postingHref ? (
+              <a
+                className={styles.postingLink}
+                href={postingHref}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <ExternalLink className={styles.postingIcon} aria-hidden />
+                Job posting
+              </a>
+            ) : (
+              <span className={styles.postingMuted}>No posting URL yet.</span>
+            )}
+          </div>
         </div>
       </header>
 
@@ -180,4 +237,20 @@ const styles = {
     flex w-full items-center px-3 py-2 text-left text-xs text-red-600
     hover:bg-red-50
   `,
+  metaRow: `
+    mt-3 flex flex-col gap-3 border-t border-gray-100 pt-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4
+  `,
+  glanceBlock: `min-w-0 flex-1`,
+  glanceLabel: `text-[11px] font-semibold uppercase tracking-wide text-gray-500`,
+  glanceBody: `mt-1 text-sm leading-relaxed text-gray-800 whitespace-pre-wrap`,
+  glanceEmpty: `mt-1 text-sm text-gray-400 italic`,
+  glanceToggle: `
+    mt-1 text-xs font-medium text-orange-600 hover:text-orange-700
+  `,
+  postingLink: `
+    inline-flex shrink-0 items-center gap-1.5 rounded-md border border-gray-200 bg-white px-3 py-2 text-xs font-medium
+    text-orange-700 shadow-sm hover:bg-orange-50 sm:self-start
+  `,
+  postingIcon: `h-3.5 w-3.5`,
+  postingMuted: `shrink-0 text-xs text-gray-400 sm:self-start sm:pt-2`,
 };
