@@ -6,11 +6,11 @@ import { Briefcase } from "lucide-react";
 import { toast } from "sonner";
 import { JOB_DETAIL_PAGE_PATH } from "@/config/routes";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { createJobFromListingUrlThunk } from "@/store/thunks";
+import { addCompanyJobThunk } from "@/store/thunks";
 import { crmDetailPageTokens as t } from "@/packages/crm-detail-ui";
 import { JobRow } from "./JobRow";
 
-const MODAL_TITLE_ID = "crm-company-add-job-url-title";
+const MODAL_TITLE_ID = "crm-company-add-job-title";
 
 export const JobsSection = () => {
   const dispatch = useAppDispatch();
@@ -19,6 +19,7 @@ export const JobsSection = () => {
   const jobs = useAppSelector((s) => s.jobs);
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [titleInput, setTitleInput] = useState("");
   const [urlInput, setUrlInput] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -29,23 +30,33 @@ export const JobsSection = () => {
 
   const closeModal = () => {
     setModalOpen(false);
+    setTitleInput("");
     setUrlInput("");
   };
 
   const openModal = () => {
+    setTitleInput("");
     setUrlInput("");
     setModalOpen(true);
   };
 
-  const onSubmitAddFromUrl = async () => {
+  const onSubmitAddJob = async () => {
     if (!companyId || busy) return;
     setBusy(true);
     const result = await dispatch(
-      createJobFromListingUrlThunk({ companyId, urlRaw: urlInput }),
+      addCompanyJobThunk({
+        companyId,
+        titleRaw: titleInput,
+        urlRaw: urlInput,
+      }),
     );
     setBusy(false);
 
     if (result.outcome === "invalid_input") {
+      if (result.reason === "empty") {
+        toast.error("Enter a job title or a posting URL.");
+        return;
+      }
       toast.error(
         "Enter a valid posting URL — paste the full https://… link from the job board, not other text.",
       );
@@ -65,10 +76,22 @@ export const JobsSection = () => {
       router.push(JOB_DETAIL_PAGE_PATH);
       return;
     }
+    if (result.outcome === "created") {
+      toast.success("Job added");
+      closeModal();
+      router.push(JOB_DETAIL_PAGE_PATH);
+      return;
+    }
     toast.success("Job added and listing imported");
     closeModal();
     router.push(JOB_DETAIL_PAGE_PATH);
   };
+
+  const submitLabel = busy
+    ? "Working…"
+    : urlInput.trim()
+      ? "Add and import"
+      : "Add job";
 
   return (
     <section className={styles.panel} aria-labelledby="crm-company-jobs-heading">
@@ -91,14 +114,28 @@ export const JobsSection = () => {
         >
           <div className={styles.modal}>
             <h3 id={MODAL_TITLE_ID} className={styles.modalTitle}>
-              Add job from posting URL
+              Add job
             </h3>
             <p className={styles.modalBody}>
-              The server will fetch this page and fill title and description when possible. Many
-              JavaScript-only job boards cannot be scraped.
+              Give the role a title so you can track it right away. Optionally paste a posting URL
+              and the server will try to fill title and description from the page (many JavaScript-only
+              boards cannot be scraped).
             </p>
-            <label className={styles.label} htmlFor="crm-add-job-url-input">
-              Posting URL
+            <label className={styles.label} htmlFor="crm-add-job-title-input">
+              Job title
+            </label>
+            <input
+              id="crm-add-job-title-input"
+              type="text"
+              className={styles.input}
+              value={titleInput}
+              onChange={(e) => setTitleInput(e.target.value)}
+              placeholder="e.g. Senior Software Engineer"
+              autoComplete="off"
+              disabled={busy}
+            />
+            <label className={`${styles.label} ${styles.labelSpaced}`} htmlFor="crm-add-job-url-input">
+              Posting URL <span className={styles.optional}>(optional)</span>
             </label>
             <input
               id="crm-add-job-url-input"
@@ -118,9 +155,9 @@ export const JobsSection = () => {
                 type="button"
                 className={styles.submitBtn}
                 disabled={busy}
-                onClick={() => void onSubmitAddFromUrl()}
+                onClick={() => void onSubmitAddJob()}
               >
-                {busy ? "Working…" : "Add and import"}
+                {submitLabel}
               </button>
             </div>
           </div>
@@ -178,6 +215,8 @@ const styles = {
   modalTitle: `text-lg font-semibold text-gray-900 mb-2`,
   modalBody: `text-sm text-gray-700 leading-relaxed mb-4`,
   label: `block text-sm font-medium text-gray-800 mb-1`,
+  labelSpaced: `mt-4`,
+  optional: `font-normal text-gray-500`,
   input: `
     w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900
     focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent

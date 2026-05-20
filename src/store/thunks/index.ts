@@ -7,6 +7,7 @@ export {
   openImageGraphicStudioByIdThunk,
   saveImageGraphicStudioDraftThunk,
   downloadImageGraphicPreviewPngThunk,
+  printImageGraphicPreviewThunk,
 } from "./image-creation-studio";
 
 export type { CreateImageGraphicInput, DownloadImageGraphicPreviewPngInput } from "./image-creation-studio";
@@ -29,8 +30,10 @@ export {
   openJobThunk,
   createJobThunk,
   createJobFromListingUrlThunk,
+  addCompanyJobThunk,
   updateJobThunk,
   importJobListingThunk,
+  importJobDescriptionThunk,
   deleteJobThunk,
   refreshJobsThunk,
   openJobApplicationThunk,
@@ -44,7 +47,7 @@ export {
   deleteEmploymentThunk,
 } from "./crm";
 
-export type { CreateJobFromListingUrlResult } from "./crm";
+export type { CreateJobFromListingUrlResult, AddCompanyJobResult } from "./crm";
 
 export {
   loadTechnicalSkillsThunk,

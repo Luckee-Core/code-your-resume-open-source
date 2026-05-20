@@ -1,15 +1,15 @@
 "use client";
 
-import { Download, Loader2 } from "lucide-react";
+import { Download, Loader2, Printer } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { downloadImageGraphicPreviewPngThunk } from "@/store/thunks";
+import { downloadImageGraphicPreviewPngThunk, printImageGraphicPreviewThunk } from "@/store/thunks";
 
 type ImageCreationStudioBuilderColumnActionsProps = {
   previewHasContent: boolean;
 };
 
 /**
- * Toolbar actions for the studio builder column (e.g. PNG export).
+ * Toolbar actions for the studio builder column (e.g. PNG export, print/PDF).
  */
 export const ImageCreationStudioBuilderColumnActions = (props: ImageCreationStudioBuilderColumnActionsProps) => {
   const { previewHasContent } = props;
@@ -31,6 +31,16 @@ export const ImageCreationStudioBuilderColumnActions = (props: ImageCreationStud
           <Download className={styles.btnIcon} aria-hidden />
         )}
         Download image
+      </button>
+      <button
+        type="button"
+        className={styles.secondaryBtn}
+        onClick={() => void dispatch(printImageGraphicPreviewThunk())}
+        disabled={!previewHasContent}
+        title="Print the preview or save as PDF (better for fonts/spacing)"
+      >
+        <Printer className={styles.btnIcon} aria-hidden />
+        Print / PDF
       </button>
     </div>
   );

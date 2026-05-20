@@ -21,9 +21,12 @@ export {
   openJobThunk,
   createJobThunk,
   createJobFromListingUrlThunk,
+  addCompanyJobThunk,
   type CreateJobFromListingUrlResult,
+  type AddCompanyJobResult,
   updateJobThunk,
   importJobListingThunk,
+  importJobDescriptionThunk,
   deleteJobThunk,
   refreshJobsThunk,
 } from "./job-thunks";

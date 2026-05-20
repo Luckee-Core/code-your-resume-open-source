@@ -1,5 +1,6 @@
 'use client';
 
+import { JobDescriptionImportSection } from "./description-import";
 import { ResponsibilitiesSection } from "./responsibilities";
 import { RequirementsSection } from "./requirements";
 import { NiceToHavesSection } from "./nice-to-haves";
@@ -16,6 +17,7 @@ export const JobDetailBuilderColumn = () => {
         <section className={s.draftColumn} aria-label="Listing bullets and applications">
           <div className={s.draftBody}>
             <ul className={s.draftList}>
+              <JobDescriptionImportSection />
               <ResponsibilitiesSection />
               <RequirementsSection />
               <NiceToHavesSection />

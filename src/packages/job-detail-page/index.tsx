@@ -1,8 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
-import { JOBS_PATH } from "@/config/routes";
+import { useCallback, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { COMPANY_DETAIL_PAGE_PATH } from "@/config/routes";
 import { useAppDispatch, useAppSelector } from "@/store";
+import { CurrentCompanyActions } from "@/store/current/currentCompany";
+import { CurrentJobActions } from "@/store/current/currentJob";
 import {
   loadCrmVaultThunk,
   loadImageGraphicsThunk,
@@ -10,11 +13,15 @@ import {
   loadProfessionalBackgroundThunk,
   loadTechnicalSkillsThunk,
   loadJobStudioChatThunk,
+  openCompanyThunk,
+  openJobThunk,
 } from "@/store/thunks";
 import { CurrentJobStudioActions } from "@/store/current/currentJobStudio";
 import { JobStudioBuilderActions } from "@/store/builders/jobStudioBuilder";
-import { useRegisterBreadcrumbTrail } from "@/utils/navigation";
-import type { BreadcrumbItem } from "@/model/breadcrumb";
+import {
+  buildJobDetailBreadcrumbTrail,
+  useRegisterBreadcrumbTrail,
+} from "@/utils/navigation";
 import { crmDetailPageTokens as t } from "@/packages/crm-detail-ui";
 import { JobDetailChatColumn } from "./chat-column";
 import { JobDetailBuilderColumn } from "./builder-column";
@@ -22,9 +29,36 @@ import { JobHeader } from "./header";
 
 export const JobDetailPage = () => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const job = useAppSelector((s) => s.currentJob);
   const companies = useAppSelector((s) => s.companies);
+  const jobs = useAppSelector((s) => s.jobs);
   const company = job.companyId ? companies[job.companyId] : undefined;
+
+  const onSelectCompany = useCallback(
+    (companyId: string) => {
+      const row = companies[companyId];
+      if (row) {
+        dispatch(CurrentCompanyActions.setCurrentCompany(row));
+      } else {
+        void dispatch(openCompanyThunk(companyId));
+      }
+      router.push(COMPANY_DETAIL_PAGE_PATH);
+    },
+    [companies, dispatch, router],
+  );
+
+  const onSelectJob = useCallback(
+    (jobId: string) => {
+      const row = jobs[jobId];
+      if (row) {
+        dispatch(CurrentJobActions.setCurrentJob(row));
+      } else {
+        void dispatch(openJobThunk(jobId));
+      }
+    },
+    [dispatch, jobs],
+  );
 
   useEffect(() => {
     void dispatch(loadCrmVaultThunk());
@@ -49,18 +83,15 @@ export const JobDetailPage = () => {
   }, [dispatch, job.id]);
 
   useRegisterBreadcrumbTrail(
-    () => {
-      const items: BreadcrumbItem[] = [{ label: "Jobs", href: JOBS_PATH }];
-      if (!job.id) {
-        return items;
-      }
-      if (company) {
-        items.push({ label: company.name });
-      }
-      items.push({ label: job.title });
-      return items;
-    },
-    [job.id, job.title, job.companyId, company?.id, company?.name],
+    () =>
+      buildJobDetailBreadcrumbTrail({
+        job,
+        companies,
+        jobs,
+        onSelectCompany,
+        onSelectJob,
+      }),
+    [job, companies, jobs, onSelectCompany, onSelectJob],
   );
 
   if (!job.id) {

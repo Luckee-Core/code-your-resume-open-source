@@ -10,3 +10,4 @@ export {
   downloadImageGraphicPreviewPngThunk,
   type DownloadImageGraphicPreviewPngInput,
 } from "./download-image-graphic-preview-png-thunk";
+export { printImageGraphicPreviewThunk } from "./print-image-graphic-preview-thunk";

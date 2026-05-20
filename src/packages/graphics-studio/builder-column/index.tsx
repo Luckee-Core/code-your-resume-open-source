@@ -152,7 +152,7 @@ export const ImageCreationStudioBuilderColumn = () => {
                   className={styles.previewFrame}
                   width={previewW}
                   height={previewH}
-                  sandbox="allow-scripts allow-same-origin"
+                  sandbox="allow-scripts allow-same-origin allow-modals allow-popups allow-popups-to-escape-sandbox"
                   srcDoc={iframeSrcDoc}
                   style={{
                     width: previewW,

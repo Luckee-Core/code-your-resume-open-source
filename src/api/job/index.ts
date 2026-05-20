@@ -11,3 +11,5 @@ export { updateJobApi } from "./update";
 export type { UpdateJobBody } from "./update";
 export { deleteJobApi } from "./delete";
 export { importJobListingApi } from "./import-listing";
+export { importJobDescriptionApi } from "./import-description";
+export type { ImportJobDescriptionApiResponse, ImportJobDescriptionBody } from "./import-description";

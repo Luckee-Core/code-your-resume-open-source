@@ -156,6 +156,47 @@ ${previewRequireShim}
 `.trim();
 
   const safeBoot = escapeForInlineScript(bootScript);
+  const rootId = IMAGE_STUDIO_PREVIEW_ROOT_ELEMENT_ID;
 
-  return `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=${w}"/><style>html,body{margin:0;height:100%;overflow:hidden}</style><script src="https://cdn.tailwindcss.com"></script><script crossorigin src="${reactUrl}"></script><script crossorigin src="${reactDomUrl}"></script></head><body class="bg-white text-gray-900 antialiased"><div id="${IMAGE_STUDIO_PREVIEW_ROOT_ELEMENT_ID}" style="width:${w}px;height:${h}px;overflow:auto;box-sizing:border-box"></div><script>${safeBoot}</script></body></html>`;
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=${w}"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script crossorigin src="${reactUrl}"></script>
+  <script crossorigin src="${reactDomUrl}"></script>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+    @media print {
+      @page {
+        margin: 0;
+        size: ${w}px ${h}px;
+      }
+      body {
+        margin: 0;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      #${rootId} {
+        width: ${w}px !important;
+        height: ${h}px !important;
+        overflow: hidden;
+      }
+    }
+    body {
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+</head>
+<body class="bg-white text-gray-900 antialiased">
+  <div id="${rootId}" style="width:${w}px;height:${h}px;overflow:auto;box-sizing:border-box"></div>
+  <script>${safeBoot}</script>
+</body>
+</html>`;
 };
