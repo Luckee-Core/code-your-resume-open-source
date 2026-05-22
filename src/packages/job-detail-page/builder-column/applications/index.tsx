@@ -11,6 +11,7 @@ import { crmDetailPageTokens as t } from "@/packages/crm-detail-ui";
 import { JobDetailSectionCard } from "../section-card";
 import { ApplicationRow } from "./ApplicationRow";
 import { GenerateResume } from "./generate-resume";
+import { GenerateCoverLetter } from "./generate-cover-letter";
 
 export const ApplicationsSection = () => {
   const dispatch = useAppDispatch();
@@ -61,6 +62,7 @@ export const ApplicationsSection = () => {
     >
       <div className={styles.stack}>
         <GenerateResume />
+        <GenerateCoverLetter />
         <div className={styles.logRow}>
           <select
             className={styles.select}

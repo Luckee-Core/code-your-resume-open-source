@@ -25,6 +25,7 @@ ADRs keep implementation consistent across the project by documenting:
 11. [011 – Technical Skills Studio](./011-technical-skills-studio.md) — AI coach chat + skill row editor; flat Supabase schema, Express `/api/technical-skills`, Redux `currentTechnicalSkills` + `technicalSkillsBuilder`, full data-flow diagrams.
 12. [012 – Professional Background Studio](./012-professional-background-studio.md) — four narrative segments (education, credibility, voice, portfolio); Supabase `professional_background`, Express `/api/professional-background`, Redux `currentProfessionalBackground`, route `/experience/background`.
 13. [013 – Job Studio](./013-job-studio.md) — job detail as two-pane studio (coach chat + builder); Supabase `job_studio_*` ledger (no suggestions); Express `/api/job-studio`; header holds at-a-glance + posting link.
+14. [014 – Cover letter generation](./014-cover-letter-generation.md) — Cursor → `GeneratedCoverLetterPreview` TSX; US Letter canvas; job + professional background context; Graphics Studio persistence; Express `/api/data/cover-letter/generate`.
 
 ## How to use
 
