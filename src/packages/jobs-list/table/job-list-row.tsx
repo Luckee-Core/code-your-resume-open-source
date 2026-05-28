@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { JOB_DETAIL_PAGE_PATH } from "@/config/routes";
 import type { Job, JobStatus } from "@/model/job";
-import { useAppDispatch } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { CurrentJobActions } from "@/store/current/currentJob";
 import { updateJobThunk } from "@/store/thunks";
 import { crmDetailPageTokens as t } from "@/packages/crm-detail-ui";
@@ -14,15 +14,19 @@ import { getJobPostingHref } from "@/utils/job/get-job-posting-href";
 
 const statuses: JobStatus[] = ["draft", "applied", "closed", "archived"];
 
-type JobRowProps = {
+type JobListRowProps = {
   job: Job;
+  rowNumber: number;
 };
 
-export const JobRow = (props: JobRowProps) => {
-  const { job } = props;
+/**
+ * Jobs list table row — reads company name from Redux; only `job` and row index are passed from parent.
+ */
+export const JobListRow = ({ job, rowNumber }: JobListRowProps) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [savingStatus, setSavingStatus] = useState(false);
+  const companyName = useAppSelector((s) => s.companies[job.companyId]?.name);
 
   const postingHref = getJobPostingHref(job.url);
 
@@ -52,8 +56,14 @@ export const JobRow = (props: JobRowProps) => {
 
   return (
     <tr className={styles.row} onClick={onOpen}>
-      <td className={styles.titleCell}>{job.title}</td>
-      <td className={styles.statusCell} onClick={stopRowClick}>
+      <td className={styles.rowNumberCell}>{rowNumber}</td>
+      <td className={styles.cell}>
+        <span className={styles.titleText}>{job.title}</span>
+      </td>
+      <td className={styles.cell}>
+        <span className={styles.companyMuted}>{companyName?.trim() || "—"}</span>
+      </td>
+      <td className={styles.cell} onClick={stopRowClick}>
         <select
           className={styles.statusSelect}
           value={job.status}
@@ -68,7 +78,7 @@ export const JobRow = (props: JobRowProps) => {
           ))}
         </select>
       </td>
-      <td className={styles.urlCell} onClick={stopRowClick}>
+      <td className={styles.cell} onClick={stopRowClick}>
         {postingHref ? (
           <a
             className={styles.urlLink}
@@ -81,7 +91,7 @@ export const JobRow = (props: JobRowProps) => {
             Posting
           </a>
         ) : (
-          "—"
+          <span className={styles.companyMuted}>—</span>
         )}
       </td>
     </tr>
@@ -89,11 +99,14 @@ export const JobRow = (props: JobRowProps) => {
 };
 
 const styles = {
-  row: t.tbodyRow,
-  titleCell: t.tdCell,
-  statusCell: t.tdCellMuted,
+  row: `
+    hover:bg-gray-50 transition-colors border-b border-gray-200 last:border-b-0 cursor-pointer
+  `,
+  rowNumberCell: `px-2 py-2 text-xs text-gray-500 tabular-nums`,
+  cell: `px-3 py-2 text-sm text-gray-700`,
+  titleText: `font-medium text-gray-900`,
+  companyMuted: `text-gray-600`,
   statusSelect: `${t.selectSm} w-full max-w-[8.5rem] cursor-pointer disabled:cursor-not-allowed disabled:opacity-60`,
-  urlCell: t.tdCellTruncate,
   urlLink: `inline-flex items-center gap-1 text-orange-700 hover:text-orange-800 hover:underline`,
   urlIcon: `h-3.5 w-3.5 shrink-0`,
 };

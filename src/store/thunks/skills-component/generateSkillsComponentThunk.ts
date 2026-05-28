@@ -16,15 +16,15 @@ export type GenerateSkillsComponentThunkInput = {
 
 /** US Letter width at 96dpi. */
 const RESUME_CANVAS_W = 816;
-/** Fixed resume document height (~US Letter). */
-const RESUME_CANVAS_H = 1050;
+/** Fixed resume document height (816×1150 preview canvas). */
+const RESUME_CANVAS_H = 1150;
 
 /**
  * Launch a Cursor agent to generate a skills showcase TSX component, save it
  * to a new server-backed image graphic tagged with `jobId`, and open
  * that graphic in studio state.
  *
- * Canvas is always 816×1050 for generated resumes.
+ * Canvas is always 816×1150 for generated resumes.
  *
  * @returns 200 on success, 400 if input invalid, 500 on API or persistence failure
  */
