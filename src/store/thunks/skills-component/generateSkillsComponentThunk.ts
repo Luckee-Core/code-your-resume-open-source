@@ -14,29 +14,30 @@ export type GenerateSkillsComponentThunkInput = {
   professionalBackgroundSegments?: ProfessionalBackgroundSegments;
 };
 
-const DEFAULT_CANVAS_W = 960;
-const DEFAULT_CANVAS_H = 540;
+/** US Letter width at 96dpi. */
+const RESUME_CANVAS_W = 816;
+/** Fixed resume document height (~US Letter). */
+const RESUME_CANVAS_H = 1050;
 
 /**
  * Launch a Cursor agent to generate a skills showcase TSX component, save it
  * to a new server-backed image graphic tagged with `jobId`, and open
  * that graphic in studio state.
  *
- * Canvas size prefers the currently open graphic; otherwise 960×540.
+ * Canvas is always 816×1050 for generated resumes.
  *
  * @returns 200 on success, 400 if input invalid, 500 on API or persistence failure
  */
 export const generateSkillsComponentThunk =
   (input: GenerateSkillsComponentThunkInput): AppThunk<Promise<200 | 400 | 500>> =>
-  async (dispatch, getState) => {
+  async (dispatch) => {
     const { skills, jobId, jobTitle, professionalBackgroundSegments } = input;
     if (!skills.length || !jobId.trim()) {
       return 400;
     }
 
-    const { canvasWidthPx, canvasHeightPx } = getState().currentImageGraphic;
-    const w = canvasWidthPx || DEFAULT_CANVAS_W;
-    const h = canvasHeightPx || DEFAULT_CANVAS_H;
+    const w = RESUME_CANVAS_W;
+    const h = RESUME_CANVAS_H;
 
     try {
       const { tsx } = await generateSkillsComponent({

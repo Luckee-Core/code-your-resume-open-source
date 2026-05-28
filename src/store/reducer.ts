@@ -8,6 +8,7 @@ import experienceBuilderReducer from "./builders/experienceBuilder";
 import technicalSkillsBuilderReducer from "./builders/technicalSkillsBuilder";
 import professionalBackgroundBuilderReducer from "./builders/professionalBackgroundBuilder";
 import jobStudioBuilderReducer from "./builders/jobStudioBuilder";
+import jobDetailChatFabReducer from "./builders/jobDetailChatFab";
 import currentImageGraphicReducer from "./current/currentImageGraphic";
 import currentCompanyReducer from "./current/currentCompany";
 import currentJobReducer from "./current/currentJob";
@@ -53,4 +54,5 @@ export const rootReducer = combineReducers({
   technicalSkillsBuilder: technicalSkillsBuilderReducer,
   professionalBackgroundBuilder: professionalBackgroundBuilderReducer,
   jobStudioBuilder: jobStudioBuilderReducer,
+  jobDetailChatFab: jobDetailChatFabReducer,
 });

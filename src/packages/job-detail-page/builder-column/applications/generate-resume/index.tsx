@@ -5,14 +5,12 @@ import { Loader2, Wand2 } from "lucide-react";
 import { toast } from "sonner";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { generateSkillsComponentThunk, loadTechnicalSkillsThunk } from "@/store/thunks";
+import { filterJobGraphicsByKind } from "@/utils/image-graphics";
 import { crmDetailPageTokens as t } from "@/packages/crm-detail-ui";
+import { JobDetailGraphicList } from "../../../graphics-column/job-graphic-list";
 
 /**
- * Applications card — generate a TSX skills showcase from Redux technical skills.
- *
- * Expects `currentTechnicalSkills` to be populated by a parent route (e.g. job
- * detail page dispatches `loadTechnicalSkillsThunk` on mount). Reads active rows
- * only; each Cursor prompt line is `Title — body` when body is set.
+ * Generate resume TSX and list job-scoped resume graphics below the action.
  */
 export const GenerateResume = () => {
   const dispatch = useAppDispatch();
@@ -24,21 +22,21 @@ export const GenerateResume = () => {
   );
   const jobId = useAppSelector((s) => s.currentJob.id);
   const jobTitle = useAppSelector((s) => s.currentJob.title);
+  const imageGraphics = useAppSelector((s) => s.imageGraphics);
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const activeSkills = useMemo(
+  const promptLines = useMemo(
     () =>
       draftTechnicalSkills
         .filter((sk) => sk.status === "active")
-        .map((sk) => ({
-          id: sk.id,
-          title: sk.title,
-          promptLine: sk.body?.trim() ? `${sk.title} — ${sk.body.trim()}` : sk.title,
-        })),
+        .map((sk) => (sk.body?.trim() ? `${sk.title} — ${sk.body.trim()}` : sk.title)),
     [draftTechnicalSkills],
   );
 
-  const promptLines = useMemo(() => activeSkills.map((s) => s.promptLine), [activeSkills]);
+  const resumeGraphics = useMemo(
+    () => filterJobGraphicsByKind(imageGraphics, jobId, "resume"),
+    [imageGraphics, jobId],
+  );
 
   const handleGenerate = async () => {
     if (!promptLines.length) {
@@ -46,7 +44,7 @@ export const GenerateResume = () => {
       return;
     }
     if (!jobId.trim()) {
-      toast.error("Open a job before generating a skills graphic.");
+      toast.error("Open a job before generating a resume.");
       return;
     }
 
@@ -63,7 +61,7 @@ export const GenerateResume = () => {
       );
 
       if (status === 200) {
-        toast.success("Skills graphic saved — open Graphics Studio to edit or export.");
+        toast.success("Resume saved — open Graphics Studio to edit or export.");
       } else if (status === 400) {
         toast.error("No skills or job to generate from.");
       } else {
@@ -76,11 +74,10 @@ export const GenerateResume = () => {
 
   const isSkillsLoading = loadStatus === "loading";
   const isSkillsError = loadStatus === "error";
+  const hasActiveSkills = promptLines.length > 0;
 
   return (
     <div className={styles.root}>
-      <p className={styles.label}>Generate skills component</p>
-
       {isSkillsLoading ? (
         <p className={styles.hint}>Loading skills…</p>
       ) : isSkillsError ? (
@@ -94,19 +91,11 @@ export const GenerateResume = () => {
             Retry
           </button>
         </div>
-      ) : activeSkills.length === 0 ? (
+      ) : !hasActiveSkills ? (
         <p className={styles.empty}>
           No active skills found. Add skills in the Technical Skills Studio first.
         </p>
-      ) : (
-        <div className={styles.pillRow}>
-          {activeSkills.map((s) => (
-            <span key={s.id} className={styles.pill}>
-              {s.title}
-            </span>
-          ))}
-        </div>
-      )}
+      ) : null}
 
       <button
         type="button"
@@ -116,7 +105,7 @@ export const GenerateResume = () => {
           isGenerating ||
           isSkillsLoading ||
           isSkillsError ||
-          activeSkills.length === 0 ||
+          !hasActiveSkills ||
           !jobId.trim()
         }
       >
@@ -128,53 +117,32 @@ export const GenerateResume = () => {
         ) : (
           <>
             <Wand2 className={styles.icon} aria-hidden />
-            Generate component
+            Generate resume
           </>
         )}
       </button>
 
-      {isGenerating && (
+      {isGenerating ? (
         <p className={styles.runningNote} role="status">
-          The Cursor agent is writing your component. This typically takes 1–3 minutes.
+          The Cursor agent is writing your resume. This typically takes 1–3 minutes.
         </p>
-      )}
+      ) : null}
+
+      <JobDetailGraphicList
+        graphics={resumeGraphics}
+        emptyLabel="No resumes for this job yet."
+      />
     </div>
   );
 };
 
 const styles = {
-  root: `
-    rounded-md border border-indigo-200 bg-indigo-50/60 px-3 py-3 space-y-2
-  `,
-  label: `
-    text-[11px] font-semibold uppercase tracking-wide text-indigo-700
-  `,
-  hint: `
-    text-[11px] text-indigo-900/60
-  `,
-  empty: `
-    text-[11px] italic text-indigo-900/50
-  `,
-  errorBlock: `
-    space-y-2
-  `,
-  errorText: `
-    text-[11px] text-red-700
-  `,
-  pillRow: `
-    flex flex-wrap gap-1
-  `,
-  pill: `
-    inline-flex items-center rounded-full border border-indigo-200 bg-white
-    px-2 py-0.5 text-[11px] font-medium text-indigo-800
-  `,
-  icon: `
-    h-3 w-3 shrink-0 mr-1
-  `,
-  iconSpin: `
-    h-3 w-3 shrink-0 mr-1 animate-spin
-  `,
-  runningNote: `
-    text-[11px] leading-relaxed text-indigo-700
-  `,
+  root: `space-y-3`,
+  hint: `text-sm text-gray-500`,
+  empty: `text-sm italic text-gray-400`,
+  errorBlock: `space-y-2`,
+  errorText: `text-sm text-red-700`,
+  icon: `h-3 w-3 shrink-0 mr-1`,
+  iconSpin: `h-3 w-3 shrink-0 mr-1 animate-spin`,
+  runningNote: `text-sm leading-relaxed text-gray-600`,
 };

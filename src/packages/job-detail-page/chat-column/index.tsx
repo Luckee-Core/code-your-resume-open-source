@@ -8,10 +8,15 @@ import { filterJobStudioMessagesRollingWindow } from '@/utils/job-studio';
 import { JOB_COACH_STARTER_PROMPTS } from './constants';
 import { JobCoachMessage } from './coach-message';
 
+type Props = {
+  /** `fab` removes outer column chrome when embedded in the floating panel. */
+  variant?: 'column' | 'fab';
+};
+
 /**
- * Job detail coach thread (left column of the two-pane layout).
+ * Job detail coach thread (standalone column or FAB panel body).
  */
-export const JobDetailChatColumn = () => {
+export const JobDetailChatColumn = ({ variant = 'column' }: Props) => {
   const dispatch = useAppDispatch();
   const jobId = useAppSelector((s) => s.currentJob.id);
   const coachBusy = useAppSelector((s) => s.jobStudioBuilder.isPostingMessage);
@@ -51,11 +56,11 @@ export const JobDetailChatColumn = () => {
   };
 
   if (loadStatus === 'loading') {
-    return <div className={styles.column} />;
+    return <div className={variant === 'fab' ? styles.fabColumn : styles.column} />;
   }
 
   return (
-    <div className={styles.column}>
+    <div className={variant === 'fab' ? styles.fabColumn : styles.column}>
       <div className={styles.threadWrap}>
         {!hasMessages ? (
           <div className={styles.empty}>
@@ -150,6 +155,9 @@ const styles = {
     flex min-w-0 flex-col border border-gray-200 bg-white
     max-lg:flex-none max-lg:min-h-[min(50vh,420px)]
     lg:min-h-0 lg:flex-1
+  `,
+  fabColumn: `
+    flex min-h-0 min-w-0 flex-1 flex-col bg-white
   `,
   threadWrap: `
     max-lg:overflow-visible

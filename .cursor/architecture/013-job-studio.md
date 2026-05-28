@@ -2,13 +2,14 @@
 
 ## What it is
 
-The Job Detail experience is a **Job Studio**: left column = AI coach chat (Supabase ledger), right column = scrollable builder with Responsibilities, Requirements, Nice-to-haves, and Applications. CRM job rows and bullet edits stay on existing `/api/data` flows; the coach is **chat-only** (no structured suggestions that mutate bullets).
+The Job Detail experience is a **Job Studio**: left column = listing bullets (responsibilities, requirements, nice-to-haves), right column = job-scoped graphics (generate actions + table) and applications log. AI coach chat lives in a **floating FAB** (Luckee tickets pattern). CRM job rows and bullet edits stay on existing `/api/data` flows; the coach is **chat-only** (no structured suggestions that mutate bullets).
 
 ## Layout
 
-- **Header** (`JobHeader`): title, company, status, actions, **At a glance** (job description), **job posting link** when `url` is set.
-- **Shell**: Match Luckee ICP Studio breakpoints — chat pane (~55% on `lg`), builder pane (~45%), stacked on small screens.
-- **Packages**: `src/packages/job-detail-page/` — only **`header/`** (incl. `edit-modal`), **`chat-column/`**, **`builder-column/`** (incl. responsibilities / requirements / nice-to-haves / applications sections). Root **`index.tsx`** wires loading + shell.
+- **Header** (`JobHeader`): title, company, status, actions, **At a glance** (job description summary), **job posting link** when `url` is set. **Paste job description** opens a modal (textarea + extract) from the ⋯ menu — not an inline builder section.
+- **Shell**: Match Luckee ICP Studio breakpoints — listing pane (~55% on `lg`), graphics pane (~45%), stacked on small screens.
+- **Coach FAB** (`JobDetailChatFab`): fixed bottom-right; collapsed = orange `MessageCircle` button; expanded = floating panel with `JobDetailChatColumn`.
+- **Packages**: `src/packages/job-detail-page/` — **`header/`** (incl. `edit-modal`, `description-modal`), **`listing-column/`**, **`graphics-column/`**, **`chat-fab/`**, **`chat-column/`**, **`builder-column/`** (shared section components + applications). Root **`index.tsx`** wires loading + shell.
 - **Builder metadata**: `src/model/job-detail-builder/` — `JobDetailBuilderSectionKey`, `JOB_DETAIL_BUILDER_SECTION_TITLE`, `JOB_DETAIL_BUILDER_SECTION_ORDER` (Luckee ICP–style `key` / `title` for the rail; row data stays in Redux dumps).
 
 ## Data boundaries
@@ -18,6 +19,7 @@ The Job Detail experience is a **Job Studio**: left column = AI coach chat (Supa
 | Jobs, companies, applications | CRM JSON vault via `/api/data` |
 | Job bullets | Supabase mirror (`job_responsibilities`, etc.) via existing list endpoints |
 | Job Studio coach transcript | Supabase **`job_studio_*`** tables only |
+| Graphics (resume, cover letter, layouts) | Browser `localStorage`; **`metadata.jobId`** tags job-scoped rows |
 
 Distinct from **`job_listing_ai_*`** (listing import / scrape ledger).
 
@@ -40,10 +42,14 @@ Proxied from Next.js via `next.config.ts` rewrites (same pattern as technical-sk
 ## Redux
 
 - `jobStudioBuilder` — load/post UI flags
+- `jobDetailChatFab` — FAB expand/collapse (`resetForJobChange` on job switch)
 - `currentJobStudio` — `loadedJobId`, `messages[]`
 
 Thunks: `loadJobStudioChatThunk(jobId)`, `sendJobStudioMessageThunk(jobId, content)` — reset/sync when `currentJob.id` changes on the job detail route.
 
+Generate resume/cover letter thunks tag new graphics with `metadata.jobId`; job detail filters graphics via `filterImageGraphicsByJobId`.
+
 ## References
 
 - [011 – Technical Skills Studio](./011-technical-skills-studio.md) — parallel Express + Redux patterns (without suggestions).
+- [014 – Cover letter generation](./014-cover-letter-generation.md) — cover letter TSX → graphic with `jobId`.

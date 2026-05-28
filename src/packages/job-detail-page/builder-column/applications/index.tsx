@@ -7,11 +7,10 @@ import { JOB_APPLICATION_DETAIL_PAGE_PATH } from "@/config/routes";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { createJobApplicationThunk } from "@/store/thunks";
 import { JOB_DETAIL_BUILDER_SECTION_TITLE } from "@/model/job-detail-builder";
+import { filterJobGraphicsByKind } from "@/utils/image-graphics";
 import { crmDetailPageTokens as t } from "@/packages/crm-detail-ui";
 import { JobDetailSectionCard } from "../section-card";
 import { ApplicationRow } from "./ApplicationRow";
-import { GenerateResume } from "./generate-resume";
-import { GenerateCoverLetter } from "./generate-cover-letter";
 
 export const ApplicationsSection = () => {
   const dispatch = useAppDispatch();
@@ -27,7 +26,10 @@ export const ApplicationsSection = () => {
     [applicationsMap, jobId],
   );
 
-  const graphicsList = useMemo(() => Object.values(imageGraphics), [imageGraphics]);
+  const resumeGraphics = useMemo(
+    () => filterJobGraphicsByKind(imageGraphics, jobId, "resume"),
+    [imageGraphics, jobId],
+  );
 
   const onLog = async () => {
     if (!jobId) return;
@@ -61,8 +63,6 @@ export const ApplicationsSection = () => {
       headingId="crm-job-applications-heading"
     >
       <div className={styles.stack}>
-        <GenerateResume />
-        <GenerateCoverLetter />
         <div className={styles.logRow}>
           <select
             className={styles.select}
@@ -71,7 +71,7 @@ export const ApplicationsSection = () => {
             aria-label="Resume graphic"
           >
             <option value="">Log application…</option>
-            {graphicsList.map((g) => (
+            {resumeGraphics.map((g) => (
               <option key={g.id} value={g.id}>
                 {g.title || g.id}
               </option>
