@@ -48,70 +48,72 @@ export default function GeneratedSkillsPreview() {
   ];
 
   return (
-    <main className={styles.page}>
-      <article className={styles.paper}>
-        <header className={styles.header}>
-          <h1 className={styles.name}>Matt Ruiz</h1>
-          <p className={styles.subline}>Software engineer | Philadelphia</p>
-        </header>
+    <React.Fragment>
+      <main className={styles.page}>
+        <article className={styles.paper}>
+          <header className={styles.header}>
+            <h1 className={styles.name}>Matt Ruiz</h1>
+            <p className={styles.subline}>Software engineer | Philadelphia</p>
+          </header>
 
-        <div className={styles.contentGrid}>
-          <section className={styles.experienceSection}>
-            <h2 className={styles.sectionLabel}>Experience</h2>
-            <div className={styles.experienceList}>
-              {experience.map((entry) => (
-                <article
-                  key={`${entry.role}-${entry.organization}`}
-                  className={styles.experienceItem}
-                >
-                  <div className={styles.entryHeader}>
-                    <div>
-                      <h3 className={styles.entryTitle}>{entry.role}</h3>
-                      <p className={styles.entryOrganization}>
-                        {entry.organization}
-                      </p>
+          <div className={styles.contentGrid}>
+            <section className={styles.experienceSection}>
+              <h2 className={styles.sectionLabel}>Experience</h2>
+              <div className={styles.experienceList}>
+                {experience.map((entry) => (
+                  <article
+                    key={`${entry.role}-${entry.organization}`}
+                    className={styles.experienceItem}
+                  >
+                    <div className={styles.entryHeader}>
+                      <div>
+                        <h3 className={styles.entryTitle}>{entry.role}</h3>
+                        <p className={styles.entryOrganization}>
+                          {entry.organization}
+                        </p>
+                      </div>
+                      <p className={styles.entryPeriod}>{entry.period}</p>
                     </div>
-                    <p className={styles.entryPeriod}>{entry.period}</p>
-                  </div>
-                  <ul className={styles.bulletList}>
-                    {entry.bullets.map((bullet) => (
-                      <li key={bullet} className={styles.bulletItem}>
-                        <span className={styles.bulletMarker} />
-                        <span>{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </article>
-              ))}
-            </div>
-          </section>
-
-          <aside className={styles.sideColumn}>
-            <section>
-              <h2 className={styles.sectionLabel}>Education</h2>
-              <div className={styles.educationBody}>
-                <p className={styles.educationSchool}>
-                  West Chester University of Pennsylvania
-                </p>
-                <p>B.S. Computer Science, 2018</p>
-              </div>
-            </section>
-
-            <section>
-              <h2 className={styles.sectionLabel}>Technical Focus</h2>
-              <div className={styles.focusList}>
-                {technicalFocus.map((group) => (
-                  <p key={group.label}>
-                    <span className={styles.focusLabel}>{group.label}:</span>{" "}
-                    {group.value}
-                  </p>
+                    <ul className={styles.bulletList}>
+                      {entry.bullets.map((bullet) => (
+                        <li key={bullet} className={styles.bulletItem}>
+                          <span className={styles.bulletMarker} />
+                          <span>{bullet}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </article>
                 ))}
               </div>
             </section>
-          </aside>
-        </div>
-      </article>
-    </main>
+
+            <aside className={styles.sideColumn}>
+              <section>
+                <h2 className={styles.sectionLabel}>Education</h2>
+                <div className={styles.educationBody}>
+                  <p className={styles.educationSchool}>
+                    West Chester University of Pennsylvania
+                  </p>
+                  <p>B.S. Computer Science, 2018</p>
+                </div>
+              </section>
+
+              <section>
+                <h2 className={styles.sectionLabel}>Technical Focus</h2>
+                <div className={styles.focusList}>
+                  {technicalFocus.map((group) => (
+                    <p key={group.label}>
+                      <span className={styles.focusLabel}>{group.label}:</span>{" "}
+                      {group.value}
+                    </p>
+                  ))}
+                </div>
+              </section>
+            </aside>
+          </div>
+        </article>
+      </main>
+    </React.Fragment>
   );
 }
 
