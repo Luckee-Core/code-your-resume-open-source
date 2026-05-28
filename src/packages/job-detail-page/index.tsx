@@ -4,6 +4,7 @@ import { useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { COMPANY_DETAIL_PAGE_PATH } from "@/config/routes";
 import { useAppDispatch, useAppSelector } from "@/store";
+import { JobDetailChatFabActions } from "@/store/builders/jobDetailChatFab";
 import { CurrentCompanyActions } from "@/store/current/currentCompany";
 import { CurrentJobActions } from "@/store/current/currentJob";
 import {
@@ -23,8 +24,9 @@ import {
   useRegisterBreadcrumbTrail,
 } from "@/utils/navigation";
 import { crmDetailPageTokens as t } from "@/packages/crm-detail-ui";
-import { JobDetailChatColumn } from "./chat-column";
-import { JobDetailBuilderColumn } from "./builder-column";
+import { JobDetailChatFab } from "./chat-fab";
+import { JobDetailListingColumn } from "./listing-column";
+import { JobDetailGraphicsColumn } from "./graphics-column";
 import { JobHeader } from "./header";
 
 export const JobDetailPage = () => {
@@ -77,8 +79,10 @@ export const JobDetailPage = () => {
     if (!job.id) {
       dispatch(CurrentJobStudioActions.resetCurrentJobStudio());
       dispatch(JobStudioBuilderActions.reset());
+      dispatch(JobDetailChatFabActions.resetForJobChange());
       return;
     }
+    dispatch(JobDetailChatFabActions.resetForJobChange());
     void dispatch(loadJobStudioChatThunk(job.id));
   }, [dispatch, job.id]);
 
@@ -106,14 +110,15 @@ export const JobDetailPage = () => {
     <div className={styles.wrap}>
       <JobHeader />
       <div className={styles.shell}>
-        <div className={styles.chatPane}>
-          <JobDetailChatColumn />
+        <div className={styles.listingPane}>
+          <JobDetailListingColumn />
         </div>
         <div className={styles.divider} aria-hidden />
-        <div className={styles.builderPane}>
-          <JobDetailBuilderColumn />
+        <div className={styles.graphicsPane}>
+          <JobDetailGraphicsColumn />
         </div>
       </div>
+      <JobDetailChatFab />
     </div>
   );
 };
@@ -126,7 +131,7 @@ const styles = {
     max-lg:flex-none
     lg:min-h-[min(70vh,720px)] lg:flex-1 lg:flex-row lg:gap-5 lg:overflow-hidden
   `,
-  chatPane: `
+  listingPane: `
     flex min-w-0 flex-col
     max-lg:w-full max-lg:flex-none max-lg:shrink-0
     lg:min-h-0 lg:max-w-[55%] lg:flex-1
@@ -134,7 +139,7 @@ const styles = {
   divider: `
     hidden w-px shrink-0 self-stretch bg-gray-300 lg:block
   `,
-  builderPane: `
+  graphicsPane: `
     flex min-h-0 min-w-0 flex-1 flex-col
     max-lg:w-full max-lg:flex-none max-lg:shrink-0
     lg:h-full lg:w-[45%] lg:max-w-[45%]

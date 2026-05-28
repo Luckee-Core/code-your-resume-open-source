@@ -66,3 +66,8 @@ export { loadJobStudioChatThunk, sendJobStudioMessageThunk } from "./job-studio"
 export { generateSkillsComponentThunk, type GenerateSkillsComponentThunkInput } from "./skills-component";
 
 export { generateCoverLetterThunk, type GenerateCoverLetterThunkInput } from "./cover-letter";
+
+export {
+  generateCompanyInterestThunk,
+  type GenerateCompanyInterestThunkInput,
+} from "./company-interest";

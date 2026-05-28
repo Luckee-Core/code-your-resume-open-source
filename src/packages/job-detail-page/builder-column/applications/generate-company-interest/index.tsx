@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { EXPERIENCE_BACKGROUND_PATH } from "@/config/routes";
 import { useAppDispatch, useAppSelector } from "@/store";
 import {
-  generateCoverLetterThunk,
+  generateCompanyInterestThunk,
   loadProfessionalBackgroundThunk,
 } from "@/store/thunks";
 import { filterJobGraphicsByKind } from "@/utils/image-graphics";
@@ -15,9 +15,9 @@ import { crmDetailPageTokens as t } from "@/packages/crm-detail-ui";
 import { JobDetailGraphicList } from "../../../graphics-column/job-graphic-list";
 
 /**
- * Generate cover letter TSX and list job-scoped cover letter graphics below the action.
+ * Generate a short company-interest answer and list matching graphics below.
  */
-export const GenerateCoverLetter = () => {
+export const GenerateCompanyInterest = () => {
   const dispatch = useAppDispatch();
   const loadStatus = useAppSelector((s) => s.professionalBackgroundBuilder.loadStatus);
   const loadError = useAppSelector((s) => s.professionalBackgroundBuilder.error);
@@ -44,8 +44,8 @@ export const GenerateCoverLetter = () => {
     [draftTechnicalSkills],
   );
 
-  const coverLetterGraphics = useMemo(
-    () => filterJobGraphicsByKind(imageGraphics, job.id, "coverLetter"),
+  const companyInterestGraphics = useMemo(
+    () => filterJobGraphicsByKind(imageGraphics, job.id, "companyInterest"),
     [imageGraphics, job.id],
   );
 
@@ -55,11 +55,11 @@ export const GenerateCoverLetter = () => {
       return;
     }
     if (!job.id.trim()) {
-      toast.error("Open a job before generating a cover letter.");
+      toast.error("Open a job before generating.");
       return;
     }
     if (!job.title?.trim()) {
-      toast.error("Job title is required to generate a cover letter.");
+      toast.error("Job title is required.");
       return;
     }
 
@@ -67,7 +67,7 @@ export const GenerateCoverLetter = () => {
 
     try {
       const status = await dispatch(
-        generateCoverLetterThunk({
+        generateCompanyInterestThunk({
           jobId: job.id,
           jobTitle: job.title,
           companyName: companyName?.trim() || undefined,
@@ -77,7 +77,7 @@ export const GenerateCoverLetter = () => {
       );
 
       if (status === 200) {
-        toast.success("Cover letter saved — open Graphics Studio to edit or export.");
+        toast.success("Company interest saved — open Graphics Studio to edit or export.");
       } else if (status === 400) {
         toast.error("Add professional background (bio or voice) before generating.");
       } else {
@@ -93,6 +93,10 @@ export const GenerateCoverLetter = () => {
 
   return (
     <div className={styles.root}>
+      <p className={styles.promptHint}>
+        Answers: What interests you about working for this company?
+      </p>
+
       {isBackgroundLoading ? (
         <p className={styles.hint}>Loading professional background…</p>
       ) : isBackgroundError ? (
@@ -137,20 +141,20 @@ export const GenerateCoverLetter = () => {
         ) : (
           <>
             <Wand2 className={styles.icon} aria-hidden />
-            Generate cover letter
+            Generate company interest
           </>
         )}
       </button>
 
       {isGenerating ? (
         <p className={styles.runningNote} role="status">
-          The Cursor agent is writing your cover letter. This typically takes 1–3 minutes.
+          Writing a short answer. This typically takes 1–3 minutes.
         </p>
       ) : null}
 
       <JobDetailGraphicList
-        graphics={coverLetterGraphics}
-        emptyLabel="No cover letters for this job yet."
+        graphics={companyInterestGraphics}
+        emptyLabel="No company interest answers for this job yet."
       />
     </div>
   );
@@ -158,6 +162,7 @@ export const GenerateCoverLetter = () => {
 
 const styles = {
   root: `space-y-3`,
+  promptHint: `text-sm text-gray-600 leading-relaxed`,
   hint: `text-sm text-gray-500`,
   empty: `text-sm italic text-gray-400`,
   link: `underline text-orange-700 hover:text-orange-900`,

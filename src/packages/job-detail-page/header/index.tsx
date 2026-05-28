@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { deleteJobThunk, importJobListingThunk, updateJobThunk } from "@/store/thunks";
 import { crmDetailPageTokens as t } from "@/packages/crm-detail-ui";
 import { JobEditModal } from "./edit-modal";
+import { JobDescriptionModal } from "./description-modal";
 
 const statuses: JobStatus[] = ["draft", "applied", "closed", "archived"];
 
@@ -23,6 +24,7 @@ export const JobHeader = () => {
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showDescriptionModal, setShowDescriptionModal] = useState(false);
   const [importing, setImporting] = useState(false);
   const [glanceExpanded, setGlanceExpanded] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -88,6 +90,11 @@ export const JobHeader = () => {
     setShowEditModal(true);
   }, []);
 
+  const onPasteDescription = useCallback(() => {
+    setMenuOpen(false);
+    setShowDescriptionModal(true);
+  }, []);
+
   const onDelete = useCallback(async () => {
     if (!job.id) return;
     setMenuOpen(false);
@@ -148,6 +155,9 @@ export const JobHeader = () => {
                     >
                       {importing ? "Importing…" : "Import listing"}
                     </button>
+                    <button type="button" className={styles.menuItem} onClick={onPasteDescription}>
+                      Paste job description
+                    </button>
                     <button type="button" className={styles.menuItem} onClick={onEdit}>
                       Edit
                     </button>
@@ -205,6 +215,9 @@ export const JobHeader = () => {
       </header>
 
       {showEditModal ? <JobEditModal onClose={() => setShowEditModal(false)} /> : null}
+      {showDescriptionModal ? (
+        <JobDescriptionModal onClose={() => setShowDescriptionModal(false)} />
+      ) : null}
     </>
   );
 };
