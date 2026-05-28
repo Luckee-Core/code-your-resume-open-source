@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Luckee - NextJS to Preview",
-  description: "TSX preview and PNG download — persisted in localStorage",
+  description: "TSX preview and PNG download — graphics persisted in Supabase",
   icons: {
     icon: [{ url: "/logo.svg", type: "image/svg+xml" }],
   },

@@ -1,6 +1,5 @@
 export type ImageGraphic = {
   id: string;
-  userId: string;
   title: string;
   /** Preview / export canvas in CSS pixels. */
   canvasWidthPx: number;

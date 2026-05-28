@@ -2,7 +2,7 @@
 
 ## Objective
 
-Document how **Generate cover letter** on the job detail Applications section produces a **US Letter–sized TSX cover letter**, persists it as a localStorage-backed **image graphic** tagged with `jobId`, and opens **Graphics Studio** for edit/export — mirroring the skills/resume TSX pipeline (ADR 007, skills-component flow) without extending `JobApplication`.
+Document how **Generate cover letter** on the job detail Applications section produces a **US Letter–sized TSX cover letter**, persists it as a Supabase **image graphic** tagged with `jobId`, and opens **Graphics Studio** for edit/export — mirroring the skills/resume TSX pipeline (ADR 007, skills-component flow) without extending `JobApplication`.
 
 ## Decisions
 
@@ -41,7 +41,7 @@ After generation:
 2. `patchImageGraphicStudioDraft` — TSX in `metadata.studioDraft.tsx`.
 3. `loadImageGraphicsThunk`, `openImageGraphicStudioByIdThunk`, `hydrateStudioForGraphic`.
 
-Graphics remain in browser `localStorage` (ADR 008). No CRM `JobApplication` field for cover letters in MVP.
+Graphics persist in Supabase `image_graphics` (ADR 008). No CRM `JobApplication` field for cover letters in MVP.
 
 ### 5) Ledger
 

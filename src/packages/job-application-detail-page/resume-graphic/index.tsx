@@ -18,7 +18,7 @@ export const JobApplicationResumeGraphicSection = () => {
     if (status === 200) {
       router.push("/studio");
     } else {
-      toast.error("Graphic not found in this browser vault — create or load graphics first.");
+      toast.error("Graphic not found — create or load graphics from the server vault first.");
     }
   };
 

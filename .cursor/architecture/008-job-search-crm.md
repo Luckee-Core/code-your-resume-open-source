@@ -2,7 +2,7 @@
 
 ## Objective
 
-Document how **Companies → Employees / Jobs → Job applications → Employment** are implemented: **browser** persistence for graphics only; **CRM entity data** on disk as **gitignored JSON** under `.data/crm/` (or `CRM_DATA_DIR` on Express), accessed through **`code-your-resume-open-source-express-server`** at **`/api/data/{entity}/{action}`** (same contract as the former Next Route Handlers).
+Document how **Companies → Employees / Jobs → Job applications → Employment** and **image graphics** are implemented: **CRM** on disk as **gitignored JSON** under `.data/crm/`; **graphics** in tenant **Supabase** (`image_graphics`), both via Express **`/api/data/{entity}/{action}`**. The Next app uses `fetch` only — no `localStorage`, no Supabase client in the browser.
 
 **Employment** rows (`employments.json`) link an existing **company** and **job** with tenure dates; create/update handlers enforce `job.companyId === employment.companyId`.
 
@@ -12,8 +12,8 @@ Document how **Companies → Employees / Jobs → Job applications → Employmen
 
 ### 1) Persistence boundary
 
-- **Graphics** (`ImageGraphic`): remain in **browser `localStorage`**. Keys live in [`src/config/local-storage-keys.ts`](../../src/config/local-storage-keys.ts).
-- **CRM** (companies, employees, jobs, job applications): **never** in `localStorage`. JSON files on disk; Express implements read/write (ported from [`src/lib/crm-store/`](../../src/lib/crm-store/) logic). Next **does not** ship Route Handlers for CRM anymore.
+- **Graphics** (`ImageGraphic`): Supabase **`image_graphics`** (DDL in Express `docs/supabase-image-graphics-schema.sql`); routes under `/api/data/image-graphic/*`. Client modules in [`src/api/image-creation-studio/`](../../src/api/image-creation-studio/).
+- **CRM** (companies, employees, jobs, job applications): JSON vault on disk. Next **does not** ship Route Handlers for CRM anymore.
 
 ### 2) API surface
 
@@ -44,5 +44,5 @@ Document how **Companies → Employees / Jobs → Job applications → Employmen
 ## PR checklist
 
 - [ ] CRM reads/writes go through thunks → `src/api/**` → Express `/api/data/**` (or rewrite), not components calling `fetch` ad hoc.
-- [ ] New keys for browser vaults go through `local-storage-keys.ts`.
+- [ ] Graphics require `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` on Express (tenant DB).
 - [ ] `.data/` remains gitignored; document first-run behavior if empty.

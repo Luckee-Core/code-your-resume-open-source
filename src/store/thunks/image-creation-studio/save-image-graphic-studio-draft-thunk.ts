@@ -1,5 +1,4 @@
 import { patchImageGraphicStudioDraft } from "@/api/image-creation-studio";
-import { LOCAL_USER_ID } from "@/constants/local-user";
 import type { AppThunk } from "@/store";
 import { StudioBuilderActions } from "@/store/builders/studioBuilder";
 import { CurrentImageGraphicActions } from "@/store/current/currentImageGraphic";
@@ -8,7 +7,7 @@ import { ImageGraphicsActions } from "@/store/dumps/imageGraphics";
 type Status = Promise<200 | 400 | 500>;
 
 /**
- * Persists TSX from `studioBuilder` into `metadata.studioDraft` via localStorage and syncs Redux.
+ * Persists TSX from `studioBuilder` into `metadata.studioDraft` on the server and syncs Redux.
  */
 export const saveImageGraphicStudioDraftThunk = (): AppThunk<Status> => {
   return async (dispatch, getState): Status => {
@@ -22,7 +21,7 @@ export const saveImageGraphicStudioDraftThunk = (): AppThunk<Status> => {
 
     dispatch(StudioBuilderActions.setIsSavingDraft(true));
     try {
-      const result = await patchImageGraphicStudioDraft(graphicId, LOCAL_USER_ID, tsx);
+      const result = await patchImageGraphicStudioDraft(graphicId, tsx);
       if (!result.success || !result.data) {
         return 500;
       }

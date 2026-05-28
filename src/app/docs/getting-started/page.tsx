@@ -4,7 +4,7 @@ import { DOCS_PATH } from "@/config/routes";
 
 export const metadata: Metadata = {
   title: "Getting started | Documentation",
-  description: "Run nextjs-to-download locally, deploy to Vercel, and understand localStorage persistence.",
+  description: "Run Code Your Resume locally with Express CRM JSON persistence.",
 };
 
 /**
@@ -25,53 +25,45 @@ export default function DocsGettingStartedPage() {
       <h1 className={styles.h1}>Getting started</h1>
       <p className={styles.lead}>
         Next.js app that compiles TSX in the browser, shows a live iframe preview at each graphic&apos;s canvas size,
-        and lets you save a draft and download a PNG. No Express server: <code className={styles.code}>src/api</code>{" "}
-        modules are thin wrappers over <code className={styles.code}>localStorage</code>.
+        and lets you save a draft and download a PNG. CRM uses Express JSON; graphics use Express → Supabase (
+        <code className={styles.code}>image_graphics</code>).
       </p>
 
       <section className={styles.section}>
         <h2 className={styles.h2}>Run locally</h2>
         <pre className={styles.pre}>
-          <code>{`npm install
-npm run dev`}</code>
+          <code>{`# Terminal 1 — Express (port 3053)
+cd code-your-resume-open-source-express-server
+npm install && npm run dev
+
+# Terminal 2 — Next (port 3000)
+cd code-your-resume-open-source
+npm install && npm run dev`}</code>
         </pre>
         <p className={styles.p}>
-          Open <code className={styles.code}>http://localhost:3000</code>. On localhost (and{" "}
-          <code className={styles.code}>127.0.0.1</code> / <code className={styles.code}>.localhost</code>), a one-time
-          welcome explains storage and security; you can dismiss it permanently or until you close the tab—clearing site
-          data shows it again.
-        </p>
-        <p className={styles.p}>
-          Create a graphic, then open <strong className={styles.strong}>Studio</strong> from the list (
-          <code className={styles.code}>/studio</code>).
-        </p>
-      </section>
-
-      <section className={styles.section}>
-        <h2 className={styles.h2}>Deploy to Vercel</h2>
-        <p className={styles.p}>
-          Push the repo, import in Vercel as a Next.js project, and leave environment variables empty—no secrets are
-          required for the default UI. Production serves static/SSR assets and the JS bundle only.
+          Open <code className={styles.code}>http://localhost:3000</code>. Create a graphic, then open{" "}
+          <strong className={styles.strong}>Studio</strong> from the list (<code className={styles.code}>/studio</code>
+          ).
         </p>
       </section>
 
       <section className={styles.section}>
         <h2 className={styles.h2}>Persistence</h2>
         <p className={styles.p}>
-          Graphics (title, metadata including <code className={styles.code}>studioDraft.tsx</code>) are stored under the
-          key <code className={styles.code}>nextjs-to-download:image-graphics:v1</code> in{" "}
-          <code className={styles.code}>localStorage</code>. Export <code className={styles.code}>getStorageKeyForDocs</code>{" "}
-          from <code className={styles.code}>@/api/image-creation-studio</code> if you need the key in tooling.
+          Companies and jobs: <code className={styles.code}>.data/crm/*.json</code> on Express. Graphics: Supabase table{" "}
+          <code className={styles.code}>image_graphics</code> (run{" "}
+          <code className={styles.code}>docs/supabase-image-graphics-schema.sql</code> in your tenant project). Set{" "}
+          <code className={styles.code}>SUPABASE_URL</code> and{" "}
+          <code className={styles.code}>SUPABASE_SERVICE_ROLE_KEY</code> on Express only.
         </p>
       </section>
 
       <section className={styles.section}>
         <h2 className={styles.h2}>API layer</h2>
         <p className={styles.p}>
-          <code className={styles.code}>src/api/config.ts</code> exposes <code className={styles.code}>API_BASE_URL</code>{" "}
-          for optional future localhost tooling; the default UI does not call it. Thunks in{" "}
-          <code className={styles.code}>src/store/thunks/image-creation-studio/</code> call the localStorage-backed
-          wrappers and return <code className={styles.code}>200 | 400 | 500</code>.
+          <code className={styles.code}>src/api/image-creation-studio/</code> calls Express at{" "}
+          <code className={styles.code}>/api/data/image-graphic/*</code> (proxied by Next rewrites). Thunks return{" "}
+          <code className={styles.code}>200 | 400 | 500</code>.
         </p>
       </section>
     </article>
@@ -79,43 +71,17 @@ npm run dev`}</code>
 }
 
 const styles = {
-  article: `
-    max-w-3xl mx-auto w-full px-6 py-10 lg:px-12 lg:py-12
-  `,
-  breadcrumb: `
-    text-xs text-zinc-500
-  `,
-  breadcrumbLink: `
-    font-medium text-orange-600 hover:text-orange-700
-  `,
-  breadcrumbSep: `
-    mx-1 text-zinc-400
-  `,
-  breadcrumbCurrent: `
-    text-zinc-600
-  `,
-  h1: `
-    mt-2 text-2xl font-semibold tracking-tight text-zinc-900
-  `,
-  lead: `
-    mt-3 text-sm leading-relaxed text-zinc-600
-  `,
-  section: `
-    mt-10
-  `,
-  h2: `
-    text-sm font-semibold uppercase tracking-wide text-zinc-500
-  `,
-  pre: `
-    mt-3 overflow-x-auto rounded-md border border-zinc-200 bg-zinc-50 p-4 text-xs text-zinc-800
-  `,
-  p: `
-    mt-3 text-sm leading-relaxed text-zinc-700
-  `,
-  strong: `
-    font-semibold text-zinc-900
-  `,
-  code: `
-    rounded bg-zinc-100 px-1 py-0.5 text-xs font-mono text-zinc-800
-  `,
+  article: `mx-auto max-w-2xl px-4 py-8`,
+  breadcrumb: `text-xs text-gray-500`,
+  breadcrumbLink: `text-orange-600 hover:underline`,
+  breadcrumbSep: `mx-1`,
+  breadcrumbCurrent: `text-gray-700`,
+  h1: `mt-2 text-2xl font-semibold text-gray-900`,
+  lead: `mt-3 text-sm text-gray-600 leading-relaxed`,
+  section: `mt-8`,
+  h2: `text-sm font-semibold uppercase tracking-wide text-gray-500`,
+  p: `mt-2 text-sm text-gray-700 leading-relaxed`,
+  pre: `mt-2 overflow-x-auto rounded-md border border-gray-200 bg-gray-50 p-3 text-xs`,
+  code: `rounded bg-gray-100 px-1 py-0.5 font-mono text-[11px]`,
+  strong: `font-semibold text-gray-900`,
 };

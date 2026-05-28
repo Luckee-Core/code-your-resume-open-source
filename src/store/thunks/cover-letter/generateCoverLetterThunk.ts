@@ -1,6 +1,5 @@
 import { patchImageGraphicStudioDraft } from "@/api/image-creation-studio";
 import { generateCoverLetter } from "@/api/cover-letter";
-import { LOCAL_USER_ID } from "@/constants/local-user";
 import type { ProfessionalBackgroundSegments } from "@/model/professional-background";
 import type { AppThunk } from "@/store";
 import { StudioBuilderActions } from "@/store/builders/studioBuilder";
@@ -24,7 +23,7 @@ const DEFAULT_CANVAS_H = 1056;
 
 /**
  * Launch a Cursor agent to generate a cover letter TSX component, save it
- * to a new localStorage-backed image graphic tagged with `jobId`, and open
+ * to a new Supabase-backed image graphic tagged with `jobId`, and open
  * that graphic in studio state.
  *
  * @returns 200 on success, 400 if input invalid, 500 on API or persistence failure
@@ -83,7 +82,7 @@ export const generateCoverLetterThunk =
         return 500;
       }
 
-      const patch = await patchImageGraphicStudioDraft(newId, LOCAL_USER_ID, tsx);
+      const patch = await patchImageGraphicStudioDraft(newId, tsx);
       if (!patch.success) {
         return 500;
       }

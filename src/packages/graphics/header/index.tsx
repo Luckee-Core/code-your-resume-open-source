@@ -42,8 +42,8 @@ export const GraphicsListHeader = () => {
     <>
       <div className={styles.subtextBar}>
         <p className={styles.subtext}>
-          Data lives in your browser ({`localStorage`}). See README for the storage key. Optional{" "}
-          <code className={styles.code}>NEXT_PUBLIC_API_BASE_URL</code> defaults to localhost for future tooling only.
+          Layouts persist in Supabase via Express (<code className={styles.code}>/api/data/image-graphic/*</code>, port
+          3053 in dev).
         </p>
         <GraphicsListNewGraphicButton />
       </div>

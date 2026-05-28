@@ -11,9 +11,6 @@ import {
 } from "@/store/thunks";
 import { SOCIAL_CANVAS_PRESETS, type SocialCanvasPreset } from "@/utils/image-creation-studio";
 
-/** When set in `localStorage`, the “where is my data?” callout stays hidden in this browser. */
-const CREATE_GRAPHIC_DATA_NOTICE_DISMISSED_KEY = "nextjs-to-download:dismiss-create-graphic-data-notice";
-
 /**
  * Create-graphic modal: title, canvas size, social presets; persists via thunks then opens studio.
  */
@@ -38,24 +35,10 @@ export const GraphicsListCreateModal = () => {
   }, []);
 
   useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
-    try {
-      setShowDataNotice(!window.localStorage.getItem(CREATE_GRAPHIC_DATA_NOTICE_DISMISSED_KEY));
-    } catch {
+    if (isOpen) {
       setShowDataNotice(true);
     }
   }, [isOpen]);
-
-  const dismissDataNotice = () => {
-    try {
-      window.localStorage.setItem(CREATE_GRAPHIC_DATA_NOTICE_DISMISSED_KEY, "1");
-    } catch {
-      /* ignore quota / private mode */
-    }
-    setShowDataNotice(false);
-  };
 
   const handlePickPreset = (preset: SocialCanvasPreset) => {
     dispatch(
@@ -195,11 +178,10 @@ export const GraphicsListCreateModal = () => {
         {showDataNotice ? (
           <div className={styles.dataNotice} role="status">
             <p className={styles.dataNoticeText}>
-              <span className={styles.dataNoticeStrong}>Your new graphic is created only on this device.</span> It is
-              stored in your browser&apos;s <code className={styles.dataNoticeCode}>localStorage</code> (same place as
-              your other layouts)—not sent to a server. Another browser or cleared site data won&apos;t have it.
+              <span className={styles.dataNoticeStrong}>Graphics are saved in your tenant Supabase</span> through the
+              Express API — the browser never talks to Supabase directly.
             </p>
-            <button type="button" className={styles.dataNoticeDismiss} onClick={dismissDataNotice}>
+            <button type="button" className={styles.dataNoticeDismiss} onClick={() => setShowDataNotice(false)}>
               Got it
             </button>
           </div>

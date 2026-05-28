@@ -10,7 +10,7 @@ import { ImageCreationStudioEditorColumn } from "./editor-column";
 import { ImageCreationStudioHeader } from "./header";
 
 /**
- * Studio for `currentImageGraphic`: TSX preview, save to localStorage, export.
+ * Studio for `currentImageGraphic`: TSX preview, save to Supabase, export.
  */
 export const ImageCreationStudio = () => {
   const dispatch = useAppDispatch();

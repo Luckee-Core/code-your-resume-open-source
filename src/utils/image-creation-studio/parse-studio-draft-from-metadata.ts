@@ -1,5 +1,5 @@
 /**
- * TSX saved with a graphic in `localStorage` under `metadata.studioDraft`.
+ * TSX saved with a graphic in `metadata.studioDraft` (Supabase JSON column).
  */
 export type StudioDraftFromMetadata = {
   tsx: string;

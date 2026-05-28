@@ -1,5 +1,4 @@
 import { patchImageGraphicDetailsApi, type PatchImageGraphicDetailsBody } from "@/api/image-creation-studio";
-import { LOCAL_USER_ID } from "@/constants/local-user";
 import type { AppThunk } from "@/store";
 import { CurrentImageGraphicActions } from "@/store/current/currentImageGraphic";
 import { ImageGraphicsActions } from "@/store/dumps/imageGraphics";
@@ -15,7 +14,7 @@ export const patchImageGraphicDetailsThunk = (body: PatchImageGraphicDetailsBody
     if (!graphicId) {
       return 400;
     }
-    const result = await patchImageGraphicDetailsApi(LOCAL_USER_ID, graphicId, body);
+    const result = await patchImageGraphicDetailsApi(graphicId, body);
     if (!result.success || !result.data) {
       return result.error === "Graphic not found" ? 400 : 500;
     }

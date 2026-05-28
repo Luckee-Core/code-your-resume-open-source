@@ -5,4 +5,3 @@ export { patchImageGraphicStudioDraft } from "./patch-image-graphic-studio-draft
 export type { PatchImageGraphicStudioDraftData } from "./patch-image-graphic-studio-draft";
 export { patchImageGraphicDetailsApi } from "./patch-image-graphic-details";
 export type { PatchImageGraphicDetailsBody } from "./patch-image-graphic-details";
-export { getStorageKeyForDocs } from "./persisted-graphics";

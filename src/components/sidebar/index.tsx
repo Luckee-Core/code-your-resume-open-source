@@ -156,7 +156,7 @@ export const Sidebar = () => {
       <div className={styles.footer}>
         {!collapsed ? (
           <p className={styles.footerText}>
-            Graphics: browser. CRM: <span className={styles.mono}>.data/crm/</span> on the server.
+            CRM: <span className={styles.mono}>.data/crm/</span>. Graphics: Supabase via Express (3053).
           </p>
         ) : null}
       </div>

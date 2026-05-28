@@ -6,7 +6,7 @@ import { GraphicsListCreateModal } from "./header/create";
 import { ImageGraphicsTable } from "./table";
 
 /**
- * Table of layout projects stored in `localStorage`; create opens the studio.
+ * Table of layout projects from Supabase; create opens the studio.
  */
 export const ImageGraphicsListPage = () => {
   return (

@@ -3,7 +3,6 @@ import type { ImageGraphic } from "@/model";
 
 const emptyGraphic = (): ImageGraphic => ({
   id: "",
-  userId: "",
   title: "",
   canvasWidthPx: 960,
   canvasHeightPx: 540,

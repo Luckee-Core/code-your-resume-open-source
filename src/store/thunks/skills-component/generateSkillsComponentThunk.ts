@@ -1,6 +1,5 @@
 import { patchImageGraphicStudioDraft } from "@/api/image-creation-studio";
 import { generateSkillsComponent } from "@/api/skills-component";
-import { LOCAL_USER_ID } from "@/constants/local-user";
 import type { ProfessionalBackgroundSegments } from "@/model/professional-background";
 import type { AppThunk } from "@/store";
 import { StudioBuilderActions } from "@/store/builders/studioBuilder";
@@ -20,7 +19,7 @@ const DEFAULT_CANVAS_H = 540;
 
 /**
  * Launch a Cursor agent to generate a skills showcase TSX component, save it
- * to a new localStorage-backed image graphic tagged with `jobId`, and open
+ * to a new server-backed image graphic tagged with `jobId`, and open
  * that graphic in studio state.
  *
  * Canvas size prefers the currently open graphic; otherwise 960×540.
@@ -64,7 +63,7 @@ export const generateSkillsComponentThunk =
         return 500;
       }
 
-      const patch = await patchImageGraphicStudioDraft(newId, LOCAL_USER_ID, tsx);
+      const patch = await patchImageGraphicStudioDraft(newId, tsx);
       if (!patch.success) {
         return 500;
       }

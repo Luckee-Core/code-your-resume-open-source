@@ -1,6 +1,6 @@
 # Image creation studio helpers (`src/utils/image-creation-studio`)
 
-Imagine you have **coloring paper** (your graphic) and a **little TV** (the preview box). This folder is the **grown-up stuff behind the curtain** that makes the TV show your drawing, saves it in a **treasure box** (`localStorage`), and picks **paper sizes** (Instagram square, story, etc.).
+Imagine you have **coloring paper** (your graphic) and a **little TV** (the preview box). This folder is the **grown-up stuff behind the curtain** that makes the TV show your drawing, saves drafts via Express → Supabase, and picks **paper sizes** (Instagram square, story, etc.).
 
 Nothing here talks to a server. It all runs in **your browser**. If something breaks, it is usually because the browser could not load a helper from the internet (see below) or your TSX has a typo.
 
