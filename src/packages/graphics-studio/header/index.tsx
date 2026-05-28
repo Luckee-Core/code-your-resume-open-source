@@ -4,17 +4,21 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { MoreHorizontal } from "lucide-react";
 import { toast } from "sonner";
+import { JOB_DETAIL_PAGE_PATH } from "@/config/routes";
 import { useAppDispatch, useAppSelector } from "@/store";
+import { CurrentJobActions } from "@/store/current/currentJob";
 import { deleteImageGraphicThunk } from "@/store/thunks";
 import { ImageCreationStudioEditGraphicModal } from "./edit-graphic-modal";
 
 /**
- * Studio top bar: graphic title, canvas dimensions, ellipsis menu (edit / delete).
+ * Studio top bar: graphic title, linked job/company/status, canvas dimensions, ellipsis menu.
  */
 export const ImageCreationStudioHeader = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const graphic = useAppSelector((s) => s.currentImageGraphic);
+  const jobs = useAppSelector((s) => s.jobs);
+  const companies = useAppSelector((s) => s.companies);
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
@@ -56,11 +60,40 @@ export const ImageCreationStudioHeader = () => {
   const title = graphic.title.trim() || "Untitled";
   const dimLabel = `${graphic.canvasWidthPx}×${graphic.canvasHeightPx}px`;
 
+  const linkedJobId = graphic.jobId.trim();
+  const job = linkedJobId ? jobs[linkedJobId] : undefined;
+  const companyName = job?.companyId ? companies[job.companyId]?.name?.trim() : undefined;
+  const jobContextLabel = job
+    ? [companyName, job.title.trim()].filter(Boolean).join(" · ")
+    : linkedJobId
+      ? "Linked job"
+      : "";
+
+  const onOpenJob = () => {
+    if (!job) return;
+    dispatch(CurrentJobActions.setCurrentJob(job));
+    router.push(JOB_DETAIL_PAGE_PATH);
+  };
+
   return (
     <>
       <header className={styles.header}>
         <div className={styles.titleBlock}>
           <h1 className={styles.title}>{title}</h1>
+          {jobContextLabel ? (
+            job ? (
+              <div className={styles.jobContextRow}>
+                <button type="button" className={styles.jobContextBtn} onClick={onOpenJob}>
+                  {jobContextLabel}
+                </button>
+                <span className={styles.jobStatus} aria-label={`Job status: ${job.status}`}>
+                  {job.status}
+                </span>
+              </div>
+            ) : (
+              <p className={styles.jobContextMuted}>{jobContextLabel}</p>
+            )
+          ) : null}
           <p className={styles.meta}>
             Canvas <span className={styles.metaStrong}>{dimLabel}</span>
           </p>
@@ -103,6 +136,16 @@ const styles = {
   title: `
     truncate text-base font-semibold text-gray-900
   `,
+  jobContextRow: `mt-0.5 flex min-w-0 flex-wrap items-center gap-2`,
+  jobContextBtn: `
+    min-w-0 max-w-full truncate text-left text-xs font-medium text-blue-700
+    hover:text-blue-800 hover:underline
+  `,
+  jobStatus: `
+    shrink-0 rounded-full border border-gray-200 bg-gray-50 px-2 py-0.5 text-[10px] font-medium
+    uppercase tracking-wide text-gray-600
+  `,
+  jobContextMuted: `mt-0.5 truncate text-xs text-gray-500`,
   meta: `mt-0.5 text-xs text-gray-500`,
   metaStrong: `font-medium text-gray-700`,
   menuWrap: `relative shrink-0`,

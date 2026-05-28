@@ -71,8 +71,8 @@ export const generateCompanyInterestThunk =
           title: `Company interest — ${titleBase}`,
           canvasWidthPx: DEFAULT_CANVAS_W,
           canvasHeightPx: DEFAULT_CANVAS_H,
+          jobId: jobId.trim(),
           metadata: {
-            jobId: jobId.trim(),
             companyInterestSource: "cursor",
           },
         }),

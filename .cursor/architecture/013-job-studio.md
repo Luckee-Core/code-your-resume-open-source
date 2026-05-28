@@ -19,7 +19,7 @@ The Job Detail experience is a **Job Studio**: left column = listing bullets (re
 | Jobs, companies, applications | CRM JSON vault via `/api/data` |
 | Job bullets | Supabase mirror (`job_responsibilities`, etc.) via existing list endpoints |
 | Job Studio coach transcript | Supabase **`job_studio_*`** tables only |
-| Graphics (resume, cover letter, layouts) | Browser `localStorage`; **`metadata.jobId`** tags job-scoped rows |
+| Graphics (resume, cover letter, layouts) | Supabase via Express; **`jobId`** column tags job-scoped rows |
 
 Distinct from **`job_listing_ai_*`** (listing import / scrape ledger).
 
@@ -47,7 +47,7 @@ Proxied from Next.js via `next.config.ts` rewrites (same pattern as technical-sk
 
 Thunks: `loadJobStudioChatThunk(jobId)`, `sendJobStudioMessageThunk(jobId, content)` — reset/sync when `currentJob.id` changes on the job detail route.
 
-Generate resume/cover letter thunks tag new graphics with `metadata.jobId`; job detail filters graphics via `filterImageGraphicsByJobId`.
+Generate resume/cover letter thunks set `jobId` on create; job detail filters graphics via `filterImageGraphicsByJobId`.
 
 ## References
 

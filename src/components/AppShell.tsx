@@ -2,7 +2,6 @@
 
 import type { ReactNode } from "react";
 import { AppShellBreadcrumbHeader } from "./app-shell-breadcrumb-header";
-import { LocalWelcomeModal } from "./local-welcome-modal";
 import { Sidebar } from "./sidebar";
 
 type AppShellProps = {
@@ -26,7 +25,6 @@ export const AppShell = (props: AppShellProps) => {
           </main>
         </div>
       </div>
-      <LocalWelcomeModal />
     </>
   );
 };

@@ -1,7 +1,7 @@
 import type { ImageGraphic } from "@/model";
 
 /**
- * Returns graphics whose metadata includes the given job id, newest first.
+ * Returns graphics linked to the given job id, newest first.
  */
 export const filterImageGraphicsByJobId = (
   graphicsById: Record<string, ImageGraphic>,
@@ -11,9 +11,6 @@ export const filterImageGraphicsByJobId = (
   if (!trimmed) return [];
 
   return Object.values(graphicsById)
-    .filter((g) => {
-      const metaJobId = g.metadata?.jobId;
-      return typeof metaJobId === "string" && metaJobId.trim() === trimmed;
-    })
+    .filter((g) => g.jobId.trim() === trimmed)
     .sort((a, b) => (a.updatedAt < b.updatedAt ? 1 : a.updatedAt > b.updatedAt ? -1 : 0));
 };

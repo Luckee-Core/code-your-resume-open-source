@@ -6,6 +6,7 @@ export type CreateImageGraphicInput = {
   title: string;
   canvasWidthPx: number;
   canvasHeightPx: number;
+  jobId?: string;
   metadata?: Record<string, unknown>;
 };
 
@@ -15,12 +16,13 @@ export type CreateImageGraphicInput = {
 export const createImageGraphicThunk = (input: CreateImageGraphicInput): AppThunk<Promise<string | null>> => {
   return async (dispatch) => {
     const title = input.title.trim() || "Untitled graphic";
-    const result = await createImageGraphicApi(
+    const result = await createImageGraphicApi({
       title,
-      input.canvasWidthPx,
-      input.canvasHeightPx,
-      input.metadata ?? {},
-    );
+      canvasWidthPx: input.canvasWidthPx,
+      canvasHeightPx: input.canvasHeightPx,
+      jobId: input.jobId,
+      metadata: input.metadata,
+    });
     if (!result.success || !result.data?.id) {
       return null;
     }

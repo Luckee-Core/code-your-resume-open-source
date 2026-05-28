@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { StudioBuilderActions } from "@/store/builders/studioBuilder";
+import { loadCrmVaultThunk } from "@/store/thunks";
 import { parseStudioDraftFromMetadata } from "@/utils/image-creation-studio";
 import { ImageCreationStudioBuilderColumn } from "./builder-column";
 import { ImageCreationStudioEditorColumn } from "./editor-column";
@@ -16,6 +17,13 @@ export const ImageCreationStudio = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const graphic = useAppSelector((s) => s.currentImageGraphic);
+  const crmLoadStatus = useAppSelector((s) => s.crmBuilder.listLoadStatus);
+
+  useEffect(() => {
+    if (crmLoadStatus === "idle") {
+      void dispatch(loadCrmVaultThunk());
+    }
+  }, [dispatch, crmLoadStatus]);
 
   useEffect(() => {
     if (!graphic.id) {

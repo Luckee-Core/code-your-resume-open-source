@@ -12,7 +12,6 @@ const getTime = (date: string | undefined): number => (date ? new Date(date).get
 export const JobsTable = () => {
   const jobsRecord = useAppSelector((s) => s.jobs);
   const companiesRecord = useAppSelector((s) => s.companies);
-
   const [sortColumn, setSortColumn] = useState<SortColumn>("updatedAt");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
 
@@ -80,6 +79,7 @@ export const JobsTable = () => {
                 {sortColumn === "status" ? (sortDirection === "asc" ? " ↑" : " ↓") : " ↕"}
               </span>
             </th>
+            <th className={styles.graphicsHeader}>Graphics</th>
             <th className={styles.headerCell}>Posting</th>
           </tr>
         </thead>
@@ -105,6 +105,10 @@ const styles = {
   sortableHeader: `
     px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wide
     bg-gray-100 border-b border-gray-300 cursor-pointer hover:bg-gray-200 transition-colors select-none
+  `,
+  graphicsHeader: `
+    px-3 py-2 text-right text-xs font-semibold text-gray-600 uppercase tracking-wide
+    bg-gray-100 border-b border-gray-300 w-20
   `,
   headerCell: `
     px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wide

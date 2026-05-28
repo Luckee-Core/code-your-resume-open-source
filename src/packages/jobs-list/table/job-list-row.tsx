@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { ExternalLink } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -11,6 +11,7 @@ import { CurrentJobActions } from "@/store/current/currentJob";
 import { updateJobThunk } from "@/store/thunks";
 import { crmDetailPageTokens as t } from "@/packages/crm-detail-ui";
 import { getJobPostingHref } from "@/utils/job/get-job-posting-href";
+import { filterImageGraphicsByJobId } from "@/utils/image-graphics";
 
 const statuses: JobStatus[] = ["draft", "applied", "closed", "archived"];
 
@@ -20,13 +21,18 @@ type JobListRowProps = {
 };
 
 /**
- * Jobs list table row — reads company name from Redux; only `job` and row index are passed from parent.
+ * Jobs list table row — reads company name and graphic count from Redux; only `job` and row index are passed from parent.
  */
 export const JobListRow = ({ job, rowNumber }: JobListRowProps) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [savingStatus, setSavingStatus] = useState(false);
   const companyName = useAppSelector((s) => s.companies[job.companyId]?.name);
+  const imageGraphics = useAppSelector((s) => s.imageGraphics);
+  const graphicCount = useMemo(
+    () => filterImageGraphicsByJobId(imageGraphics, job.id).length,
+    [imageGraphics, job.id],
+  );
 
   const postingHref = getJobPostingHref(job.url);
 
@@ -78,6 +84,9 @@ export const JobListRow = ({ job, rowNumber }: JobListRowProps) => {
           ))}
         </select>
       </td>
+      <td className={styles.graphicsCell} onClick={stopRowClick}>
+        <span className={graphicCount > 0 ? styles.graphicsCount : styles.graphicsMuted}>{graphicCount}</span>
+      </td>
       <td className={styles.cell} onClick={stopRowClick}>
         {postingHref ? (
           <a
@@ -104,6 +113,9 @@ const styles = {
   `,
   rowNumberCell: `px-2 py-2 text-xs text-gray-500 tabular-nums`,
   cell: `px-3 py-2 text-sm text-gray-700`,
+  graphicsCell: `px-3 py-2 text-right text-sm tabular-nums`,
+  graphicsCount: `font-medium text-gray-900`,
+  graphicsMuted: `text-gray-400`,
   titleText: `font-medium text-gray-900`,
   companyMuted: `text-gray-600`,
   statusSelect: `${t.selectSm} w-full max-w-[8.5rem] cursor-pointer disabled:cursor-not-allowed disabled:opacity-60`,

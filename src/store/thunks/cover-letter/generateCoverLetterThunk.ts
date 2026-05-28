@@ -71,8 +71,8 @@ export const generateCoverLetterThunk =
           title: `Cover letter — ${titleBase}`,
           canvasWidthPx: DEFAULT_CANVAS_W,
           canvasHeightPx: DEFAULT_CANVAS_H,
+          jobId: jobId.trim(),
           metadata: {
-            jobId: jobId.trim(),
             coverLetterSource: "cursor",
           },
         }),

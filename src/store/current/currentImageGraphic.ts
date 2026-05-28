@@ -4,6 +4,7 @@ import type { ImageGraphic } from "@/model";
 const emptyGraphic = (): ImageGraphic => ({
   id: "",
   title: "",
+  jobId: "",
   canvasWidthPx: 960,
   canvasHeightPx: 540,
   metadata: {},

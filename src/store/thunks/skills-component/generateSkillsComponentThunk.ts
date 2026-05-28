@@ -53,8 +53,8 @@ export const generateSkillsComponentThunk =
           title: `Skills — ${titleBase}`,
           canvasWidthPx: w,
           canvasHeightPx: h,
+          jobId: jobId.trim(),
           metadata: {
-            jobId: jobId.trim(),
             skillsComponentSource: "cursor",
           },
         }),

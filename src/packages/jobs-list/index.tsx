@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { loadCrmVaultThunk } from "@/store/thunks";
+import { loadCrmVaultThunk, loadImageGraphicsThunk } from "@/store/thunks";
 import { JobsTable } from "./table";
 
 export { JobsTable } from "./table";
@@ -17,6 +17,7 @@ export const JobsList = () => {
 
   useEffect(() => {
     void dispatch(loadCrmVaultThunk());
+    void dispatch(loadImageGraphicsThunk());
   }, [dispatch]);
 
   return (
