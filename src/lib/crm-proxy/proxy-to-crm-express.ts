@@ -1,9 +1,9 @@
 import { getCrmUpstreamHeaders } from "@/config/crm-upstream-headers";
-import { resolveCrmExpressBaseUrl } from "@/config/resolve-crm-express-base-url";
+import {
+  CRM_EXPRESS_NOT_CONFIGURED_MESSAGE,
+  resolveCrmExpressBaseUrl,
+} from "@/config/resolve-crm-express-base-url";
 import { NextRequest, NextResponse } from "next/server";
-
-const CRM_NOT_CONFIGURED =
-  "CRM backend is not configured. Set CRM_EXPRESS_INTERNAL_URL on Vercel (and run the Express server on Railway).";
 
 /**
  * Forwards a Next `/api/*` request to the CRM Express server with optional `X-CRM-API-Key`.
@@ -15,7 +15,10 @@ export const proxyToCrmExpress = async (
 ): Promise<NextResponse> => {
   const base = resolveCrmExpressBaseUrl();
   if (!base) {
-    return NextResponse.json({ success: false, error: CRM_NOT_CONFIGURED }, { status: 503 });
+    return NextResponse.json(
+      { success: false, error: CRM_EXPRESS_NOT_CONFIGURED_MESSAGE },
+      { status: 503 },
+    );
   }
 
   const path = pathSegments.filter(Boolean).join("/");

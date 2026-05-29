@@ -21,8 +21,8 @@ Copy `.env.example` to `.env.local`. Important variables:
 
 | Variable | Purpose |
 | -------- | ------- |
-| `CRM_EXPRESS_INTERNAL_URL` | Express base URL (no trailing slash). Production: required if Next rewrites to CRM. |
-| `CRM_API_SECRET` | Optional shared secret (must match Express). Server-only. |
+| `EXPRESS_API_URL` | Railway (or other) public URL for Express — **required on Vercel** (no trailing slash). |
+| `CRM_API_SECRET` | Optional; only if you set the same secret on Express. |
 
 ## Scripts
 

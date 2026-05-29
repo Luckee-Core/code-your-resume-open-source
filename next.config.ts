@@ -8,9 +8,9 @@ const nextConfig: NextConfig = {
   async rewrites() {
     const rules: { source: string; destination: string }[] = [];
 
-    const crmFromEnv = process.env.CRM_EXPRESS_INTERNAL_URL?.trim();
     const crmTarget =
-      crmFromEnv ||
+      process.env.EXPRESS_API_URL?.trim() ||
+      process.env.CRM_EXPRESS_INTERNAL_URL?.trim() ||
       (process.env.NODE_ENV !== "production" ? "http://127.0.0.1:3053" : "");
     if (crmTarget) {
       const base = crmTarget.replace(/\/$/, "");
