@@ -5,14 +5,12 @@ import { ExternalLink } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { JOB_DETAIL_PAGE_PATH } from "@/config/routes";
-import type { Job, JobStatus } from "@/model/job";
+import { JOB_STATUSES, type Job, type JobStatus } from "@/model/job";
 import { useAppDispatch } from "@/store";
 import { CurrentJobActions } from "@/store/current/currentJob";
 import { updateJobThunk } from "@/store/thunks";
 import { crmDetailPageTokens as t } from "@/packages/crm-detail-ui";
 import { getJobPostingHref } from "@/utils/job/get-job-posting-href";
-
-const statuses: JobStatus[] = ["draft", "applied", "closed", "archived"];
 
 type JobRowProps = {
   job: Job;
@@ -61,7 +59,7 @@ export const JobRow = (props: JobRowProps) => {
           aria-label={`Status for ${job.title}`}
           onChange={(e) => void onChangeStatus(e.target.value as JobStatus)}
         >
-          {statuses.map((s) => (
+          {JOB_STATUSES.map((s) => (
             <option key={s} value={s}>
               {s}
             </option>

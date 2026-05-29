@@ -6,7 +6,14 @@ import { normalizeJob } from "./normalize-job";
 const FILE = "jobs.json";
 
 const isJobStatus = (value: unknown): value is JobStatus => {
-  return value === "draft" || value === "applied" || value === "closed" || value === "archived";
+  return (
+    value === "draft" ||
+    value === "applied" ||
+    value === "interview" ||
+    value === "rejected" ||
+    value === "closed" ||
+    value === "archived"
+  );
 };
 
 /**

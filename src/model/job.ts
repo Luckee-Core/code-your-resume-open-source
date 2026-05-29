@@ -1,4 +1,20 @@
-export type JobStatus = "draft" | "applied" | "closed" | "archived";
+export type JobStatus =
+  | "draft"
+  | "applied"
+  | "interview"
+  | "rejected"
+  | "closed"
+  | "archived";
+
+/** Ordered options for status selects (draft → applied → interview → rejected → closed → archived). */
+export const JOB_STATUSES: JobStatus[] = [
+  "draft",
+  "applied",
+  "interview",
+  "rejected",
+  "closed",
+  "archived",
+];
 
 export type JobType = "job" | "contract";
 

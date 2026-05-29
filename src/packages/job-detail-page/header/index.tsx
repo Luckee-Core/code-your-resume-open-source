@@ -4,14 +4,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ExternalLink, MoreHorizontal } from "lucide-react";
 import { toast } from "sonner";
-import type { JobStatus } from "@/model/job";
+import { JOB_STATUSES, type JobStatus } from "@/model/job";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { deleteJobThunk, importJobListingThunk, updateJobThunk } from "@/store/thunks";
 import { crmDetailPageTokens as t } from "@/packages/crm-detail-ui";
 import { JobEditModal } from "./edit-modal";
 import { JobDescriptionModal } from "./description-modal";
-
-const statuses: JobStatus[] = ["draft", "applied", "closed", "archived"];
 
 const AT_A_GLANCE_PREVIEW_CHARS = 320;
 
@@ -127,7 +125,7 @@ export const JobHeader = () => {
                   value={job.status}
                   onChange={(e) => void onChangeStatus(e.target.value as JobStatus)}
                 >
-                  {statuses.map((s) => (
+                  {JOB_STATUSES.map((s) => (
                     <option key={s} value={s}>
                       {s}
                     </option>
