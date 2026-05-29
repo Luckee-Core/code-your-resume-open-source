@@ -9,17 +9,8 @@ export default function GeneratedSkillsPreview() {
       organization: "TroutHouseTech",
       period: "Recent",
       bullets: [
-        "Built mobile and web products with an operations-aware delivery style, including TeenPros, BoxBets, Swizzy Golf, Women Heart Sister Match, marketplace patterns, and field-service workflows spanning leads, quotes, scheduling, rentals, payments, chat, groups, notifications, maps, and video.",
-        "Integrated OpenAI and Anthropic Claude APIs for chatbots, prompt engineering, fine-tuning, embeddings, function calling, and RAG systems across Node.js backends, React Native apps, and Next.js dashboards with real-time inference needs.",
-      ],
-    },
-    {
-      role: "React Native / Next.js Product Engineer",
-      organization: "Production app delivery",
-      period: "Since 2022",
-      bullets: [
-        "Shipped 12+ production apps using React Native, Expo, TypeScript, Redux, React Navigation, Expo Router, Firebase, Supabase, Node.js, CI/testing patterns, and mobile-first feature development.",
-        "Built and deployed full-stack Next.js applications and dashboards on Vercel, GCP, and AWS, including LLM-powered features, real-time backends, and production services.",
+        "Built and shipped 12+ React Native, Expo, and Next.js products since 2022, including TeenPros, BoxBets, Swizzy Golf, Women Heart Sister Match, marketplace patterns, and field-service workflows spanning payments, chat, groups, notifications, maps, video, leads, quotes, and scheduling.",
+        "Integrated OpenAI and Anthropic Claude APIs for chatbots, prompt engineering, fine-tuning, embeddings, function calling, and RAG systems across Node.js backends, React Native apps, and Next.js dashboards deployed on Vercel, GCP, and AWS.",
       ],
     },
     {
