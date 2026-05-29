@@ -69,7 +69,7 @@ export default function GeneratedSkillsPreview() {
       <article className={styles.paper}>
         <header className={styles.header}>
           <h1 className={styles.name}>Matt Ruiz</h1>
-          <p className={styles.subline}>Software engineer · Philadelphia</p>
+          <p className={styles.subline}>Software engineer, Philadelphia</p>
         </header>
 
         <div className={styles.bodyGrid}>
