@@ -3,30 +3,16 @@
 import React from "react";
 
 export default function GeneratedSkillsPreview() {
-  const summary = [
-    "Built and shipped React Native, Expo, and Next.js products with TypeScript, Node.js backends, real-time data, payments, maps, video, and production deployment workflows.",
-    "Delivered AI-enabled workflows using OpenAI and Anthropic Claude APIs for chatbots, prompt engineering, embeddings, function calling, fine-tuning, and RAG-style systems.",
-    "Led practical product builds across marketplaces, social apps, training tools, field-service workflows, and automation projects with an operations-aware engineering style.",
-    "Scaled delivery patterns with CI/testing, Vercel, AWS, GCP, Firebase, Supabase, Redux, React Navigation, Expo Router, Twilio video, MapBox, and Salesforce platform experience.",
-  ];
-
   const experience = [
     {
-      role: "Founder & Hands-on Engineer",
-      organization: "TroutHouseTech",
-      period: "Recent",
-      bullets: [
-        "Help teams reduce repetitive work through AI automation, workflow tooling, and practical engineering across Node.js, React Native, and Next.js applications.",
-        "Integrated OpenAI and Anthropic Claude APIs into prototypes and production systems, including real-time inference, chatbots, embeddings, function calling, and RAG workflows.",
-      ],
-    },
-    {
       role: "Product Engineer",
-      organization: "Independent product and client work",
+      organization: "TroutHouseTech and client product work",
       period: "Recent",
       bullets: [
-        "Built and shipped 12+ React Native and Expo apps since 2022, using TypeScript, Redux, React Navigation, Expo Router, Firebase, Supabase, Stripe, MapBox, and push-enabled real-time backends.",
-        "Delivered products across TeenPros, BoxBets, Swizzy Golf, Women Heart Sister Match, painter/DIY marketplaces, and field-service workflows involving leads, quotes, scheduling, rentals, payments, chat, groups, and notifications.",
+        "Built AI automation and workflow tooling for teams reducing repetitive work, with production integrations across Node.js backends, React Native mobile apps, and Next.js dashboards.",
+        "Integrated OpenAI and Anthropic Claude APIs for chatbots, prompt engineering, fine-tuning, embeddings, function calling, RAG systems, and real-time inference.",
+        "Shipped marketplace, social, field-service, video, and payments products including TeenPros, BoxBets, Swizzy Golf, Women Heart Sister Match, painter/DIY workflows, and Amplinks-style operations flows.",
+        "Delivered React Native, Expo, Next.js, TypeScript, Redux, Firebase, Supabase, Twilio video, MapBox, Stripe, CI/testing, Vercel, AWS, and GCP work across product prototypes and production services.",
       ],
     },
     {
@@ -34,8 +20,8 @@ export default function GeneratedSkillsPreview() {
       organization: "Revature",
       period: "Earlier",
       bullets: [
-        "Coordinated with large development groups, delivered Salesforce training workshops and curriculum, and contributed measurable process improvements.",
-        "Applied Salesforce Admin and Apex Developer knowledge across core platform features, custom objects, flows, automation, and business analysis work.",
+        "Coordinated with large development groups while applying Salesforce Admin and Apex Developer knowledge across core platform features, custom objects, flows, automation, and business analysis work.",
+        "Designed and delivered Salesforce training workshops and curriculum as a corporate trainer, pairing technical instruction with practical process improvement work.",
       ],
     },
   ];
@@ -44,7 +30,7 @@ export default function GeneratedSkillsPreview() {
     {
       label: "AI and automation",
       value:
-        "OpenAI, Anthropic Claude, chatbots, prompt engineering, fine-tuning, embeddings, function calling, RAG systems, real-time inference, n8n-style workflow automation.",
+        "OpenAI, Anthropic Claude, chatbots, prompt engineering, fine-tuning, embeddings, function calling, RAG systems, real-time inference.",
     },
     {
       label: "Mobile and web",
@@ -54,7 +40,7 @@ export default function GeneratedSkillsPreview() {
     {
       label: "Backends and data",
       value:
-        "Firebase Realtime Database, Firestore, Firebase Auth, Cloud Functions, Supabase PostgreSQL, real-time subscriptions, authentication, CI/testing patterns.",
+        "Node.js, Firebase Realtime Database, Firestore, Firebase Auth, Cloud Functions, Supabase PostgreSQL, real-time subscriptions, authentication.",
     },
     {
       label: "Integrations and platforms",
@@ -64,115 +50,120 @@ export default function GeneratedSkillsPreview() {
   ];
 
   return (
-    <React.Fragment>
-      <main className="min-h-screen w-full bg-slate-100 px-4 py-4 font-sans text-slate-800">
-        <section className="mx-auto flex w-full max-w-5xl flex-col rounded-sm border border-slate-200 bg-white px-9 py-7 shadow-sm">
-          <header className="border-b border-slate-200 pb-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
-              Full-stack product engineer
-            </p>
-            <div className="mt-2">
-              <h1 className="text-3xl font-semibold tracking-tight text-slate-950">
-                Matt Ruiz
-              </h1>
-            </div>
-          </header>
+    <main className={styles.page}>
+      <article className={styles.paper}>
+        <header className={styles.header}>
+          <h1 className={styles.name}>Matt Ruiz</h1>
+          <p className={styles.subline}>Software engineer, Philadelphia</p>
+        </header>
 
-          <div className="grid grid-cols-[1.35fr_0.9fr] gap-7 pt-5">
-            <div className="space-y-5">
-              <section>
-                <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
-                  Summary
-                </h2>
-                <ul className="mt-2 space-y-1.5 text-sm leading-relaxed text-slate-700">
-                  {summary.map((item) => (
-                    <li key={item} className="flex gap-2">
-                      <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-slate-400" />
-                      <span>{item}</span>
+        <section className={styles.section}>
+          <h2 className={styles.sectionLabel}>Experience</h2>
+          <div className={styles.experienceList}>
+            {experience.map((entry) => (
+              <article key={`${entry.role}-${entry.organization}`} className={styles.experienceEntry}>
+                <div className={styles.entryHeader}>
+                  <h3 className={styles.entryTitle}>
+                    {entry.role} | {entry.organization}
+                  </h3>
+                  <p className={styles.entryPeriod}>{entry.period}</p>
+                </div>
+                <ul className={styles.bulletList}>
+                  {entry.bullets.map((bullet) => (
+                    <li key={bullet} className={styles.bulletItem}>
+                      <span className={styles.bulletDot} />
+                      <span>{bullet}</span>
                     </li>
                   ))}
                 </ul>
-              </section>
-
-              <section>
-                <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
-                  Experience
-                </h2>
-                <div className="mt-2 space-y-4">
-                  {experience.map((entry) => (
-                    <article key={`${entry.role}-${entry.organization}`}>
-                      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                        <h3 className="text-sm font-semibold text-slate-950">
-                          {entry.role} | {entry.organization}
-                        </h3>
-                        <p className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">
-                          {entry.period}
-                        </p>
-                      </div>
-                      <ul className="mt-1.5 space-y-1 text-sm leading-relaxed text-slate-700">
-                        {entry.bullets.map((bullet) => (
-                          <li key={bullet} className="flex gap-2">
-                            <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-slate-400" />
-                            <span>{bullet}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </article>
-                  ))}
-                </div>
-              </section>
-            </div>
-
-            <aside className="space-y-5">
-              <section>
-                <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
-                  Technical Focus
-                </h2>
-                <div className="mt-2 space-y-3 text-sm leading-relaxed text-slate-700">
-                  {technicalFocus.map((group) => (
-                    <p key={group.label}>
-                      <span className="font-semibold text-slate-950">{group.label}:</span>{" "}
-                      {group.value}
-                    </p>
-                  ))}
-                </div>
-              </section>
-
-              <section>
-                <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
-                  Education
-                </h2>
-                <div className="mt-2 text-sm leading-relaxed text-slate-700">
-                  <p className="font-semibold text-slate-950">
-                    West Chester University of Pennsylvania
-                  </p>
-                  <p>B.S. Computer Science, 2018</p>
-                </div>
-              </section>
-
-              <section>
-                <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
-                  Delivery Notes
-                </h2>
-                <ul className="mt-2 space-y-1.5 text-sm leading-relaxed text-slate-700">
-                  <li className="flex gap-2">
-                    <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-slate-400" />
-                    <span>
-                      Approach shaped by early electrical and field operations work in a family contracting business: diagnose before prescribing, keep systems usable, and optimize for outcomes.
-                    </span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-slate-400" />
-                    <span>
-                      Salesforce foundation remains strong across admin, Apex, custom objects, flows, automation, and training, with current focus on AI, mobile, web, and workflow automation delivery.
-                    </span>
-                  </li>
-                </ul>
-              </section>
-            </aside>
+              </article>
+            ))}
           </div>
         </section>
-      </main>
-    </React.Fragment>
+
+        <section className={styles.section}>
+          <h2 className={styles.sectionLabel}>Education</h2>
+          <div className={styles.educationBody}>
+            <p className={styles.school}>West Chester University of Pennsylvania</p>
+            <p>B.S. Computer Science, 2018</p>
+          </div>
+        </section>
+
+        <section className={styles.section}>
+          <h2 className={styles.sectionLabel}>Technical Focus</h2>
+          <div className={styles.focusGrid}>
+            {technicalFocus.map((group) => (
+              <p key={group.label} className={styles.focusItem}>
+                <span className={styles.focusLabel}>{group.label}:</span> {group.value}
+              </p>
+            ))}
+          </div>
+        </section>
+      </article>
+    </main>
   );
 }
+
+const styles = {
+  page: `
+    min-h-screen w-full bg-slate-100 px-4 py-5 font-sans text-slate-800
+  `,
+  paper: `
+    mx-auto flex w-full max-w-[760px] flex-col rounded-sm border border-slate-200 bg-white px-9 py-8 shadow-sm
+  `,
+  header: `
+    border-b border-slate-200 pb-4
+  `,
+  name: `
+    text-3xl font-semibold tracking-tight text-slate-950
+  `,
+  subline: `
+    mt-1 text-sm font-medium text-slate-600
+  `,
+  section: `
+    mt-6
+  `,
+  sectionLabel: `
+    text-[11px] font-bold uppercase tracking-[0.22em] text-slate-500
+  `,
+  experienceList: `
+    mt-3 space-y-5
+  `,
+  experienceEntry: `
+    text-sm leading-relaxed text-slate-700
+  `,
+  entryHeader: `
+    flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1
+  `,
+  entryTitle: `
+    text-sm font-semibold text-slate-950
+  `,
+  entryPeriod: `
+    text-xs font-medium uppercase tracking-[0.14em] text-slate-500
+  `,
+  bulletList: `
+    mt-2 space-y-1.5
+  `,
+  bulletItem: `
+    flex gap-2
+  `,
+  bulletDot: `
+    mt-2 h-1 w-1 shrink-0 rounded-full bg-slate-400
+  `,
+  educationBody: `
+    mt-3 text-sm leading-relaxed text-slate-700
+  `,
+  school: `
+    font-semibold text-slate-950
+  `,
+  focusGrid: `
+    mt-3 grid gap-2 text-sm leading-relaxed text-slate-700
+    sm:grid-cols-2
+  `,
+  focusItem: `
+    min-w-0
+  `,
+  focusLabel: `
+    font-semibold text-slate-950
+  `,
+} as const;
