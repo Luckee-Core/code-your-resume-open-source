@@ -1,6 +1,5 @@
 import { patchImageGraphicStudioDraft } from "@/api/image-creation-studio";
 import { generateCompanyInterest } from "@/api/company-interest";
-import { LOCAL_USER_ID } from "@/constants/local-user";
 import type { ProfessionalBackgroundSegments } from "@/model/professional-background";
 import type { AppThunk } from "@/store";
 import { StudioBuilderActions } from "@/store/builders/studioBuilder";
@@ -82,7 +81,7 @@ export const generateCompanyInterestThunk =
         return 500;
       }
 
-      const patch = await patchImageGraphicStudioDraft(newId, LOCAL_USER_ID, tsx);
+      const patch = await patchImageGraphicStudioDraft(newId, tsx);
       if (!patch.success) {
         return 500;
       }
