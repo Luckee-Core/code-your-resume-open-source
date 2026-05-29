@@ -1,29 +1,19 @@
 import { getCrmUpstreamHeaders } from "@/config/crm-upstream-headers";
+import { resolveCrmExpressBaseUrl } from "@/config/resolve-crm-express-base-url";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
- * Cursor skills generation can take several minutes. Next.js rewrites use a
- * shorter upstream timeout, which surfaces as 500/HTML to the browser. This
- * route proxies to Express with an extended serverless limit where supported.
+ * Cursor skills generation can take several minutes. The catch-all CRM proxy uses a
+ * shorter upstream timeout, which surfaces as 500/HTML to the browser. This route
+ * proxies to Express with an extended serverless limit where supported.
  */
 export const maxDuration = 300;
-
-const resolveExpressBaseUrl = (): string => {
-  const fromEnv = process.env.CRM_EXPRESS_INTERNAL_URL?.trim();
-  if (fromEnv) {
-    return fromEnv.replace(/\/$/, "");
-  }
-  if (process.env.NODE_ENV !== "production") {
-    return "http://127.0.0.1:3053";
-  }
-  return "";
-};
 
 /**
  * POST — forwards JSON body to Express `/api/data/skills-component/generate`.
  */
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const base = resolveExpressBaseUrl();
+  const base = resolveCrmExpressBaseUrl();
   if (!base) {
     return NextResponse.json(
       { success: false, error: "CRM_EXPRESS_INTERNAL_URL is not configured" },

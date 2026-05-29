@@ -2,7 +2,7 @@
 
 ## Objective
 
-Document how **Companies → Employees / Jobs → Job applications → Employment** and **image graphics** are implemented: **CRM** on disk as **gitignored JSON** under `.data/crm/`; **graphics** in tenant **Supabase** (`image_graphics`), both via Express **`/api/data/{entity}/{action}`**. The Next app uses `fetch` only — no `localStorage`, no Supabase client in the browser.
+Document how **Companies → Employees / Jobs → Job applications → Employment** and **image graphics** are implemented: **CRM core tables** and **graphics** live in tenant **Supabase**; Express uses the service role and exposes **`/api/data/{entity}/{action}`**. The Next app uses `fetch` only — no `localStorage`, no Supabase client in the browser.
 
 **Employment** rows (`employments.json`) link an existing **company** and **job** with tenure dates; create/update handlers enforce `job.companyId === employment.companyId`.
 
@@ -13,7 +13,7 @@ Document how **Companies → Employees / Jobs → Job applications → Employmen
 ### 1) Persistence boundary
 
 - **Graphics** (`ImageGraphic`): Supabase **`image_graphics`** (DDL in Express `docs/supabase-image-graphics-schema.sql`); routes under `/api/data/image-graphic/*`. Client modules in [`src/api/image-creation-studio/`](../../src/api/image-creation-studio/).
-- **CRM** (companies, employees, jobs, job applications): JSON vault on disk. Next **does not** ship Route Handlers for CRM anymore.
+- **CRM** (companies, employees, jobs, job applications, employments): Supabase tables (`docs/crm-postgres-schema.sql` in express-server). Next **does not** ship Route Handlers for CRM entity CRUD.
 
 ### 2) API surface
 

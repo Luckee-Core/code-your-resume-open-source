@@ -1,8 +1,8 @@
 import type { NextConfig } from "next";
 
 /**
- * Proxies browser `fetch("/api/data/...")`, `fetch("/api/technical-skills/...")`,
- * `fetch("/api/job-studio...")`, and `fetch("/api/professional-background...")` to the CRM Express server.
+ * Fallback rewrites to Express when no matching App Router BFF proxy route exists.
+ * CRM list/read/write traffic uses catch-all route handlers that attach CRM_API_SECRET server-side.
  */
 const nextConfig: NextConfig = {
   async rewrites() {
