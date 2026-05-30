@@ -10,7 +10,6 @@ import {
   generateCoverLetterThunk,
   loadProfessionalBackgroundThunk,
 } from "@/store/thunks";
-import { filterJobGraphicsByKind } from "@/utils/image-graphics";
 import { crmDetailPageTokens as t } from "@/packages/crm-detail-ui";
 import { JobDetailGraphicList } from "../../../graphics-column/job-graphic-list";
 
@@ -25,7 +24,6 @@ export const GenerateCoverLetter = () => {
   const draftTechnicalSkills = useAppSelector((s) => s.currentTechnicalSkills.draftTechnicalSkills);
   const job = useAppSelector((s) => s.currentJob);
   const companies = useAppSelector((s) => s.companies);
-  const imageGraphics = useAppSelector((s) => s.imageGraphics);
   const [isGenerating, setIsGenerating] = useState(false);
 
   const companyName = job.companyId ? companies[job.companyId]?.name : undefined;
@@ -42,11 +40,6 @@ export const GenerateCoverLetter = () => {
           sk.body?.trim() ? `${sk.title} — ${sk.body.trim()}` : sk.title,
         ),
     [draftTechnicalSkills],
-  );
-
-  const coverLetterGraphics = useMemo(
-    () => filterJobGraphicsByKind(imageGraphics, job.id, "coverLetter"),
-    [imageGraphics, job.id],
   );
 
   const handleGenerate = async () => {
@@ -149,7 +142,8 @@ export const GenerateCoverLetter = () => {
       ) : null}
 
       <JobDetailGraphicList
-        graphics={coverLetterGraphics}
+        jobId={job.id}
+        kind="coverLetter"
         emptyLabel="No cover letters for this job yet."
       />
     </div>

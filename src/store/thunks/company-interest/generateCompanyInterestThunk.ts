@@ -2,7 +2,7 @@ import { patchImageGraphicStudioDraft } from "@/api/image-creation-studio";
 import { generateCompanyInterest } from "@/api/company-interest";
 import type { ProfessionalBackgroundSegments } from "@/model/professional-background";
 import type { AppThunk } from "@/store";
-import { StudioBuilderActions } from "@/store/builders/studioBuilder";
+import { CurrentStudioEditorActions } from "@/store/current/currentStudioEditor";
 import { createImageGraphicThunk } from "@/store/thunks/image-creation-studio/create-image-graphic-thunk";
 import { loadImageGraphicsThunk } from "@/store/thunks/image-creation-studio/load-image-graphics-thunk";
 import { openImageGraphicStudioByIdThunk } from "@/store/thunks/image-creation-studio/open-image-graphic-studio-by-id-thunk";
@@ -65,7 +65,7 @@ export const generateCompanyInterestThunk =
       });
 
       const titleBase = jobTitle.trim();
-      const newId = await dispatch(
+      const createStatus = await dispatch(
         createImageGraphicThunk({
           title: `Company interest — ${titleBase}`,
           canvasWidthPx: DEFAULT_CANVAS_W,
@@ -77,6 +77,11 @@ export const generateCompanyInterestThunk =
         }),
       );
 
+      if (createStatus !== 200) {
+        return 500;
+      }
+
+      const newId = getState().currentImageGraphic.id;
       if (!newId) {
         return 500;
       }
@@ -88,7 +93,7 @@ export const generateCompanyInterestThunk =
 
       await dispatch(loadImageGraphicsThunk());
       await dispatch(openImageGraphicStudioByIdThunk(newId));
-      dispatch(StudioBuilderActions.hydrateStudioForGraphic({ tsx }));
+      dispatch(CurrentStudioEditorActions.hydrateStudioForGraphic({ graphicId: newId, tsx }));
 
       return 200;
     } catch (error) {

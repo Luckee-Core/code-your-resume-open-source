@@ -6,19 +6,12 @@ import { COMPANY_DETAIL_PAGE_PATH } from "@/config/routes";
 import type { Company } from "@/model/company";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { CurrentCompanyActions } from "@/store/current/currentCompany";
+import { formatDateMedium } from "@/utils/date-time";
 
 type SortColumn = "name" | "website" | "createdAt" | "updatedAt";
 type SortDirection = "asc" | "desc";
 
 const getTime = (date: string | undefined): number => (date ? new Date(date).getTime() : 0);
-
-const formatDate = (dateString: string) => {
-  try {
-    return new Date(dateString).toLocaleDateString();
-  } catch {
-    return dateString;
-  }
-};
 
 export const CompaniesTable = () => {
   const dispatch = useAppDispatch();
@@ -136,8 +129,8 @@ export const CompaniesTable = () => {
               <td className={styles.cell}>
                 <span className={styles.websiteMuted}>{company.website || "—"}</span>
               </td>
-              <td className={styles.cell}>{formatDate(company.createdAt)}</td>
-              <td className={styles.cell}>{formatDate(company.updatedAt)}</td>
+              <td className={styles.cell}>{formatDateMedium(company.createdAt)}</td>
+              <td className={styles.cell}>{formatDateMedium(company.updatedAt)}</td>
             </tr>
           ))}
         </tbody>

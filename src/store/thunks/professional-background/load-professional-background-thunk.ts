@@ -2,6 +2,7 @@ import { getProfessionalBackgroundPayload } from "@/api/professional-background"
 import type { AppThunk } from "@/store";
 import { ProfessionalBackgroundBuilderActions } from "@/store/builders/professionalBackgroundBuilder";
 import { CurrentProfessionalBackgroundActions } from "@/store/current/currentProfessionalBackground";
+import { commitProfessionalBackgroundSegmentsFingerprintThunk } from "./commit-professional-background-segments-fingerprint-thunk";
 
 type Status = Promise<200 | 500>;
 
@@ -13,7 +14,7 @@ export const loadProfessionalBackgroundThunk = (): AppThunk<Status> => {
       const payload = await getProfessionalBackgroundPayload();
       dispatch(CurrentProfessionalBackgroundActions.syncDraftSegments(payload.segments));
       dispatch(CurrentProfessionalBackgroundActions.setUpdatedAt(payload.updatedAt));
-      dispatch(CurrentProfessionalBackgroundActions.commitSegmentsFingerprint());
+      await dispatch(commitProfessionalBackgroundSegmentsFingerprintThunk());
       dispatch(ProfessionalBackgroundBuilderActions.setLoaded());
       return 200;
     } catch (e: unknown) {

@@ -1,7 +1,7 @@
 import html2canvas from "html2canvas";
 import { toast } from "sonner";
 import type { AppThunk } from "@/store";
-import { StudioBuilderActions } from "@/store/builders/studioBuilder";
+import { CurrentStudioEditorActions } from "@/store/current/currentStudioEditor";
 import {
   IMAGE_STUDIO_PREVIEW_IFRAME_ELEMENT_ID,
   IMAGE_STUDIO_PREVIEW_ROOT_ELEMENT_ID,
@@ -53,7 +53,7 @@ export const downloadImageGraphicPreviewPngThunk = (
     const graphic = state.currentImageGraphic;
     const downloadBasename = graphic.title || graphic.id || "layout";
 
-    dispatch(StudioBuilderActions.setIsDownloadingPreviewPng(true));
+    dispatch(CurrentStudioEditorActions.setIsDownloadingPreviewPng(true));
     try {
       const canvas = await html2canvas(target, {
         backgroundColor: "#ffffff",
@@ -83,7 +83,7 @@ export const downloadImageGraphicPreviewPngThunk = (
       toast.error("Could not capture preview as image");
       return 500;
     } finally {
-      dispatch(StudioBuilderActions.setIsDownloadingPreviewPng(false));
+      dispatch(CurrentStudioEditorActions.setIsDownloadingPreviewPng(false));
     }
   };
 };

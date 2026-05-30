@@ -10,6 +10,7 @@ type CrmBuilderState = {
   isCompanyEditModalOpen: boolean;
   companyWebsiteResearchRunPhase: CompanyWebsiteResearchRunPhase;
   isCompanyWebsiteResearchConfirmModalOpen: boolean;
+  lastJobImportWarning: string | null;
 };
 
 const initialState: CrmBuilderState = {
@@ -18,6 +19,7 @@ const initialState: CrmBuilderState = {
   isCompanyEditModalOpen: false,
   companyWebsiteResearchRunPhase: "idle",
   isCompanyWebsiteResearchConfirmModalOpen: false,
+  lastJobImportWarning: null,
 };
 
 const crmBuilderSlice = createSlice({
@@ -41,6 +43,12 @@ const crmBuilderSlice = createSlice({
     },
     setCompanyWebsiteResearchConfirmModalOpen: (state, action: PayloadAction<boolean>) => {
       state.isCompanyWebsiteResearchConfirmModalOpen = action.payload;
+    },
+    setLastJobImportWarning: (state, action: PayloadAction<string | null>) => {
+      state.lastJobImportWarning = action.payload;
+    },
+    clearLastJobImportWarning: (state) => {
+      state.lastJobImportWarning = null;
     },
   },
 });

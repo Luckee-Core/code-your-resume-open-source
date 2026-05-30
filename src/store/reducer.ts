@@ -16,6 +16,7 @@ import currentCompanyEmployeeReducer from "./current/currentCompanyEmployee";
 import currentJobApplicationReducer from "./current/currentJobApplication";
 import currentTechnicalSkillsReducer from "./current/currentTechnicalSkills";
 import currentProfessionalBackgroundReducer from "./current/currentProfessionalBackground";
+import currentStudioEditorReducer from "./current/currentStudioEditor";
 import currentJobStudioReducer from "./current/currentJobStudio";
 import imageGraphicsReducer from "./dumps/imageGraphics";
 import companiesReducer from "./dumps/companies";
@@ -36,6 +37,7 @@ export const rootReducer = combineReducers({
   currentJobApplication: currentJobApplicationReducer,
   currentTechnicalSkills: currentTechnicalSkillsReducer,
   currentProfessionalBackground: currentProfessionalBackgroundReducer,
+  currentStudioEditor: currentStudioEditorReducer,
   currentJobStudio: currentJobStudioReducer,
   imageGraphics: imageGraphicsReducer,
   companies: companiesReducer,

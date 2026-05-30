@@ -3,7 +3,7 @@
 import { ClipboardCopy, HelpCircle, Info, Save } from "lucide-react";
 import { toast } from "sonner";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { StudioBuilderActions } from "@/store/builders/studioBuilder";
+import { CurrentStudioEditorActions } from "@/store/current/currentStudioEditor";
 import { saveImageGraphicStudioDraftThunk } from "@/store/thunks";
 
 /**
@@ -11,8 +11,8 @@ import { saveImageGraphicStudioDraftThunk } from "@/store/thunks";
  */
 export const ImageCreationStudioEditorColumn = () => {
   const dispatch = useAppDispatch();
-  const tsxDraft = useAppSelector((s) => s.studioBuilder.tsxDraft);
-  const isSavingDraft = useAppSelector((s) => s.studioBuilder.isSavingDraft);
+  const tsxDraft = useAppSelector((s) => s.currentStudioEditor.tsxDraft);
+  const isSavingDraft = useAppSelector((s) => s.currentStudioEditor.isSavingDraft);
 
   const handleCopyTsx = async () => {
     const text = tsxDraft.trim();
@@ -95,7 +95,7 @@ export const ImageCreationStudioEditorColumn = () => {
         <textarea
           className={styles.codeArea}
           value={tsxDraft}
-          onChange={(e) => dispatch(StudioBuilderActions.setTsxDraft(e.target.value))}
+          onChange={(e) => dispatch(CurrentStudioEditorActions.setTsxDraft(e.target.value))}
           placeholder={`'use client';\nimport React from 'react';\n\nexport default function GeneratedPreview() { ... }`}
           spellCheck={false}
         />

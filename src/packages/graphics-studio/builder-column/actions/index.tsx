@@ -14,7 +14,7 @@ type ImageCreationStudioBuilderColumnActionsProps = {
 export const ImageCreationStudioBuilderColumnActions = (props: ImageCreationStudioBuilderColumnActionsProps) => {
   const { previewHasContent } = props;
   const dispatch = useAppDispatch();
-  const isDownloadingPreviewPng = useAppSelector((s) => s.studioBuilder.isDownloadingPreviewPng);
+  const isDownloadingPreviewPng = useAppSelector((s) => s.currentStudioEditor.isDownloadingPreviewPng);
 
   return (
     <div className={styles.root}>

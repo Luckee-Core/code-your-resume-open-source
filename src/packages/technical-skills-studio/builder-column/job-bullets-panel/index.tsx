@@ -3,31 +3,44 @@
 import { useMemo, useState } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/store';
-import type { TechnicalSkillItem } from '@/model/technical-skills';
-import { CurrentTechnicalSkillsActions } from '@/store/current/currentTechnicalSkills';
-
-type JobBulletGroup = {
-  employmentId: string;
-  companyName: string;
-  jobTitle: string;
-  responsibilities: string[];
-  requirements: string[];
-  niceToHaves: string[];
-};
+import { addDraftTechnicalSkillFromBulletThunk } from '@/store/thunks';
+import { buildEmploymentJobBulletGroups } from '@/utils/employments';
 
 const JobGroup = ({
-  group,
+  employmentId,
   isSaving,
-  onAddSkill,
 }: {
-  group: JobBulletGroup;
+  employmentId: string;
   isSaving: boolean;
-  onAddSkill: (text: string) => void;
 }) => {
+  const dispatch = useAppDispatch();
+  const employment = useAppSelector((s) => s.employments[employmentId]);
+  const job = useAppSelector((s) => (employment ? s.jobs[employment.jobId] : undefined));
+  const company = useAppSelector((s) => (employment ? s.companies[employment.companyId] : undefined));
+
+  const group = useMemo(() => {
+    if (!employment || !job || !company) return null;
+    return {
+      companyName: company.name,
+      jobTitle: job.title,
+      responsibilities: job.responsibilities ?? [],
+      requirements: job.requirements ?? [],
+      niceToHaves: job.niceToHaves ?? [],
+    };
+  }, [employment, job, company]);
+
   const [open, setOpen] = useState(false);
+
+  if (!group) return null;
+
   const totalBullets =
     group.responsibilities.length + group.requirements.length + group.niceToHaves.length;
   if (totalBullets === 0) return null;
+
+  const onAddSkill = (text: string) => {
+    if (isSaving) return;
+    void dispatch(addDraftTechnicalSkillFromBulletThunk(text));
+  };
 
   return (
     <div className={styles.group}>
@@ -98,56 +111,26 @@ const BulletSection = ({
  * Allows quick-adding a bullet as a technical skill row.
  */
 export const JobBulletsPanel = ({ isSaving }: { isSaving: boolean }) => {
-  const dispatch = useAppDispatch();
   const employmentsById = useAppSelector((s) => s.employments);
   const jobsById = useAppSelector((s) => s.jobs);
   const companiesById = useAppSelector((s) => s.companies);
-  const draftTechnicalSkills = useAppSelector((s) => s.currentTechnicalSkills.draftTechnicalSkills);
 
   const [open, setOpen] = useState(false);
 
-  const groups = useMemo((): JobBulletGroup[] =>
-    Object.values(employmentsById)
-      .map((emp) => {
-        const job = jobsById[emp.jobId];
-        const company = companiesById[emp.companyId];
-        if (!job || !company) return null;
-        return {
-          employmentId: emp.id,
-          companyName: company.name,
-          jobTitle: job.title,
-          responsibilities: job.responsibilities ?? [],
-          requirements: job.requirements ?? [],
-          niceToHaves: job.niceToHaves ?? [],
-        };
-      })
-      .filter((g): g is JobBulletGroup => g !== null),
-    [employmentsById, jobsById, companiesById],
-  );
+  const employmentIds = useMemo(() => {
+    const groups = buildEmploymentJobBulletGroups(employmentsById, jobsById, companiesById);
+    return groups.map((g) => g.employmentId);
+  }, [employmentsById, jobsById, companiesById]);
 
-  const totalBullets = useMemo(
-    () => groups.reduce((sum, g) => sum + g.responsibilities.length + g.requirements.length + g.niceToHaves.length, 0),
-    [groups],
-  );
+  const totalBullets = useMemo(() => {
+    const groups = buildEmploymentJobBulletGroups(employmentsById, jobsById, companiesById);
+    return groups.reduce(
+      (sum, g) => sum + g.responsibilities.length + g.requirements.length + g.niceToHaves.length,
+      0,
+    );
+  }, [employmentsById, jobsById, companiesById]);
 
-  if (groups.length === 0) return null;
-
-  const handleAddSkill = (text: string) => {
-    if (isSaving) return;
-    const id =
-      typeof crypto !== 'undefined' && 'randomUUID' in crypto
-        ? crypto.randomUUID()
-        : `skill-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
-    const maxOrder = Math.max(-1, ...draftTechnicalSkills.map((i) => i.sortOrder));
-    const row: TechnicalSkillItem = {
-      id,
-      sortOrder: maxOrder + 1,
-      title: text.length > 80 ? `${text.slice(0, 80)}…` : text,
-      body: '',
-      status: 'active',
-    };
-    dispatch(CurrentTechnicalSkillsActions.addDraftTechnicalSkill(row));
-  };
+  if (employmentIds.length === 0) return null;
 
   return (
     <div className={styles.panel}>
@@ -164,18 +147,13 @@ export const JobBulletsPanel = ({ isSaving }: { isSaving: boolean }) => {
         )}
         <span className={styles.panelLabel}>Job bullets</span>
         <span className={styles.panelMeta}>
-          {totalBullets} bullets from {groups.length} job{groups.length !== 1 ? 's' : ''}
+          {totalBullets} bullets from {employmentIds.length} job{employmentIds.length !== 1 ? 's' : ''}
         </span>
       </button>
       {open && (
         <div className={styles.panelBody}>
-          {groups.map((group) => (
-            <JobGroup
-              key={group.employmentId}
-              group={group}
-              isSaving={isSaving}
-              onAddSkill={handleAddSkill}
-            />
+          {employmentIds.map((employmentId) => (
+            <JobGroup key={employmentId} employmentId={employmentId} isSaving={isSaving} />
           ))}
         </div>
       )}

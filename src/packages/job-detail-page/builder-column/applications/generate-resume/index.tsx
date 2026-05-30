@@ -5,7 +5,6 @@ import { Loader2, Wand2 } from "lucide-react";
 import { toast } from "sonner";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { generateSkillsComponentThunk, loadTechnicalSkillsThunk } from "@/store/thunks";
-import { filterJobGraphicsByKind } from "@/utils/image-graphics";
 import { crmDetailPageTokens as t } from "@/packages/crm-detail-ui";
 import { JobDetailGraphicList } from "../../../graphics-column/job-graphic-list";
 
@@ -22,7 +21,6 @@ export const GenerateResume = () => {
   );
   const jobId = useAppSelector((s) => s.currentJob.id);
   const jobTitle = useAppSelector((s) => s.currentJob.title);
-  const imageGraphics = useAppSelector((s) => s.imageGraphics);
   const [isGenerating, setIsGenerating] = useState(false);
 
   const promptLines = useMemo(
@@ -31,11 +29,6 @@ export const GenerateResume = () => {
         .filter((sk) => sk.status === "active")
         .map((sk) => (sk.body?.trim() ? `${sk.title} — ${sk.body.trim()}` : sk.title)),
     [draftTechnicalSkills],
-  );
-
-  const resumeGraphics = useMemo(
-    () => filterJobGraphicsByKind(imageGraphics, jobId, "resume"),
-    [imageGraphics, jobId],
   );
 
   const handleGenerate = async () => {
@@ -129,7 +122,8 @@ export const GenerateResume = () => {
       ) : null}
 
       <JobDetailGraphicList
-        graphics={resumeGraphics}
+        jobId={jobId}
+        kind="resume"
         emptyLabel="No resumes for this job yet."
       />
     </div>

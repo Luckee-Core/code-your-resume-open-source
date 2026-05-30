@@ -37,7 +37,7 @@ export const ImageGraphicsTable = () => {
         </thead>
         <tbody>
           {rows.map((g) => (
-            <ImageGraphicsTableRow key={g.id} graphic={g} />
+            <ImageGraphicsTableRow key={g.id} graphicId={g.id} />
           ))}
         </tbody>
       </table>

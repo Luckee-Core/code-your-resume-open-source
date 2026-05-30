@@ -1,6 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { ProfessionalBackgroundSegments } from "@/model/professional-background";
-import { getProfessionalBackgroundFingerprint } from "@/utils/professional-background/get-professional-background-fingerprint";
 
 export type CurrentProfessionalBackgroundState = {
   draftSegments: ProfessionalBackgroundSegments;
@@ -31,8 +30,8 @@ const currentProfessionalBackgroundSlice = createSlice({
     setUpdatedAt: (state, action: PayloadAction<string | null>) => {
       state.updatedAt = action.payload;
     },
-    commitSegmentsFingerprint: (state) => {
-      state.committedFingerprint = getProfessionalBackgroundFingerprint(state.draftSegments);
+    setCommittedFingerprint: (state, action: PayloadAction<string>) => {
+      state.committedFingerprint = action.payload;
     },
     updateDraftSegment: (
       state,

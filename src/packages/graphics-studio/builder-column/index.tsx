@@ -2,10 +2,11 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { StudioBuilderActions } from "@/store/builders/studioBuilder";
+import { CurrentStudioEditorActions } from "@/store/current/currentStudioEditor";
 import {
   clampStudioPreviewDimension,
   compileImageStudioTsx,
+  computePreviewDisplayScale,
   computeStudioIframeSrcDoc,
   IMAGE_STUDIO_PREVIEW_IFRAME_ELEMENT_ID,
 } from "@/utils/image-creation-studio";
@@ -38,22 +39,12 @@ function useElementWidth<T extends HTMLElement>(): [React.RefObject<T | null>, n
 }
 
 /**
- * Width-only fit-to-container scale. The preview always fills the column width (capped at 1:1
- * for small canvases). Tall canvases simply scroll inside `root` (which is `overflow-y-auto`).
- * Iframe `srcDoc` stays at full `previewW`×`previewH` so PNG export is unaffected.
- */
-function computePreviewDisplayScale(previewW: number, availableW: number): number {
-  if (availableW <= 0) return 1;
-  return Math.min(1, availableW / Math.max(previewW, 1));
-}
-
-/**
  * Right column: live TSX preview for the layout builder.
  */
 export const ImageCreationStudioBuilderColumn = () => {
   const dispatch = useAppDispatch();
-  const tsxDraft = useAppSelector((s) => s.studioBuilder.tsxDraft);
-  const tsxBaselineForPreview = useAppSelector((s) => s.studioBuilder.tsxBaselineForPreview);
+  const tsxDraft = useAppSelector((s) => s.currentStudioEditor.tsxDraft);
+  const tsxBaselineForPreview = useAppSelector((s) => s.currentStudioEditor.tsxBaselineForPreview);
   const graphicId = useAppSelector((s) => s.currentImageGraphic.id);
   const canvasWidthPx = useAppSelector((s) => s.currentImageGraphic.canvasWidthPx);
   const canvasHeightPx = useAppSelector((s) => s.currentImageGraphic.canvasHeightPx);
@@ -86,7 +77,7 @@ export const ImageCreationStudioBuilderColumn = () => {
 
   /** When the graphic changes, align baseline to the loaded draft. */
   useEffect(() => {
-    dispatch(StudioBuilderActions.alignTsxBaselineToCurrentDraft());
+    dispatch(CurrentStudioEditorActions.alignTsxBaselineToCurrentDraft());
   }, [dispatch, graphicId]);
 
   const iframeSrcDoc = useMemo(

@@ -2,7 +2,7 @@ import { patchImageGraphicStudioDraft } from "@/api/image-creation-studio";
 import { generateCoverLetter } from "@/api/cover-letter";
 import type { ProfessionalBackgroundSegments } from "@/model/professional-background";
 import type { AppThunk } from "@/store";
-import { StudioBuilderActions } from "@/store/builders/studioBuilder";
+import { CurrentStudioEditorActions } from "@/store/current/currentStudioEditor";
 import { createImageGraphicThunk } from "@/store/thunks/image-creation-studio/create-image-graphic-thunk";
 import { loadImageGraphicsThunk } from "@/store/thunks/image-creation-studio/load-image-graphics-thunk";
 import { openImageGraphicStudioByIdThunk } from "@/store/thunks/image-creation-studio/open-image-graphic-studio-by-id-thunk";
@@ -66,7 +66,7 @@ export const generateCoverLetterThunk =
       });
 
       const titleBase = jobTitle.trim();
-      const newId = await dispatch(
+      const createStatus = await dispatch(
         createImageGraphicThunk({
           title: `Cover letter — ${titleBase}`,
           canvasWidthPx: DEFAULT_CANVAS_W,
@@ -78,6 +78,11 @@ export const generateCoverLetterThunk =
         }),
       );
 
+      if (createStatus !== 200) {
+        return 500;
+      }
+
+      const newId = getState().currentImageGraphic.id;
       if (!newId) {
         return 500;
       }
@@ -89,7 +94,7 @@ export const generateCoverLetterThunk =
 
       await dispatch(loadImageGraphicsThunk());
       await dispatch(openImageGraphicStudioByIdThunk(newId));
-      dispatch(StudioBuilderActions.hydrateStudioForGraphic({ tsx }));
+      dispatch(CurrentStudioEditorActions.hydrateStudioForGraphic({ graphicId: newId, tsx }));
 
       return 200;
     } catch (error) {

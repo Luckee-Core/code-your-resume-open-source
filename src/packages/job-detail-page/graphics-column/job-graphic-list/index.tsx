@@ -1,18 +1,30 @@
 "use client";
 
-import type { ImageGraphic } from "@/model";
+import { useMemo } from "react";
+import { useAppSelector } from "@/store";
+import {
+  filterJobGraphicsByKind,
+  type JobGraphicKind,
+} from "@/utils/image-graphics";
 import { ImageGraphicsTableRow } from "@/packages/graphics/table/row";
 
 type Props = {
-  graphics: ImageGraphic[];
+  jobId: string;
+  kind: JobGraphicKind;
   emptyLabel: string;
 };
 
 /**
  * Compact table of job-scoped graphics inside a generate section.
  */
-export const JobDetailGraphicList = ({ graphics, emptyLabel }: Props) => {
-  if (graphics.length === 0) {
+export const JobDetailGraphicList = ({ jobId, kind, emptyLabel }: Props) => {
+  const imageGraphics = useAppSelector((s) => s.imageGraphics);
+
+  const graphicIds = useMemo(() => {
+    return filterJobGraphicsByKind(imageGraphics, jobId, kind).map((g) => g.id);
+  }, [imageGraphics, jobId, kind]);
+
+  if (graphicIds.length === 0) {
     return <p className={styles.empty}>{emptyLabel}</p>;
   }
 
@@ -28,8 +40,8 @@ export const JobDetailGraphicList = ({ graphics, emptyLabel }: Props) => {
           </tr>
         </thead>
         <tbody>
-          {graphics.map((graphic) => (
-            <ImageGraphicsTableRow key={graphic.id} graphic={graphic} />
+          {graphicIds.map((graphicId) => (
+            <ImageGraphicsTableRow key={graphicId} graphicId={graphicId} />
           ))}
         </tbody>
       </table>

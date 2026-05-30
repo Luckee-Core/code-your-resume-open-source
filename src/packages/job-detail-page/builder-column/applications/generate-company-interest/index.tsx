@@ -10,7 +10,6 @@ import {
   generateCompanyInterestThunk,
   loadProfessionalBackgroundThunk,
 } from "@/store/thunks";
-import { filterJobGraphicsByKind } from "@/utils/image-graphics";
 import { crmDetailPageTokens as t } from "@/packages/crm-detail-ui";
 import { JobDetailGraphicList } from "../../../graphics-column/job-graphic-list";
 
@@ -25,7 +24,6 @@ export const GenerateCompanyInterest = () => {
   const draftTechnicalSkills = useAppSelector((s) => s.currentTechnicalSkills.draftTechnicalSkills);
   const job = useAppSelector((s) => s.currentJob);
   const companies = useAppSelector((s) => s.companies);
-  const imageGraphics = useAppSelector((s) => s.imageGraphics);
   const [isGenerating, setIsGenerating] = useState(false);
 
   const companyName = job.companyId ? companies[job.companyId]?.name : undefined;
@@ -42,11 +40,6 @@ export const GenerateCompanyInterest = () => {
           sk.body?.trim() ? `${sk.title} — ${sk.body.trim()}` : sk.title,
         ),
     [draftTechnicalSkills],
-  );
-
-  const companyInterestGraphics = useMemo(
-    () => filterJobGraphicsByKind(imageGraphics, job.id, "companyInterest"),
-    [imageGraphics, job.id],
   );
 
   const handleGenerate = async () => {
@@ -153,7 +146,8 @@ export const GenerateCompanyInterest = () => {
       ) : null}
 
       <JobDetailGraphicList
-        graphics={companyInterestGraphics}
+        jobId={job.id}
+        kind="companyInterest"
         emptyLabel="No company interest answers for this job yet."
       />
     </div>

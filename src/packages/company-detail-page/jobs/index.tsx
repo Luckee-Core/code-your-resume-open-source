@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Briefcase } from "lucide-react";
 import { toast } from "sonner";
 import { JOB_DETAIL_PAGE_PATH } from "@/config/routes";
-import { useAppDispatch, useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector, store } from "@/store";
 import { addCompanyJobThunk } from "@/store/thunks";
 import { crmDetailPageTokens as t } from "@/packages/crm-detail-ui";
 import { JobRow } from "./JobRow";
@@ -43,7 +43,7 @@ export const JobsSection = () => {
   const onSubmitAddJob = async () => {
     if (!companyId || busy) return;
     setBusy(true);
-    const result = await dispatch(
+    const status = await dispatch(
       addCompanyJobThunk({
         companyId,
         titleRaw: titleInput,
@@ -52,8 +52,10 @@ export const JobsSection = () => {
     );
     setBusy(false);
 
-    if (result.outcome === "invalid_input") {
-      if (result.reason === "empty") {
+    if (status === 400) {
+      const hasTitle = titleInput.trim().length > 0;
+      const hasUrl = urlInput.trim().length > 0;
+      if (!hasTitle && !hasUrl) {
         toast.error("Enter a job title or a posting URL.");
         return;
       }
@@ -62,27 +64,21 @@ export const JobsSection = () => {
       );
       return;
     }
-    if (result.outcome === "create_failed") {
+    if (status === 500) {
       toast.error("Could not create job");
       return;
     }
-    if (result.outcome === "import_failed") {
+
+    const importWarning = store.getState().crmBuilder.lastJobImportWarning;
+    if (importWarning) {
       toast.warning("Job saved, but the listing could not be imported.", {
-        description:
-          result.error?.trim() ||
-          "Check the URL or use Import listing on the job page.",
+        description: importWarning,
       });
-      closeModal();
-      router.push(JOB_DETAIL_PAGE_PATH);
-      return;
-    }
-    if (result.outcome === "created") {
+    } else if (urlInput.trim()) {
+      toast.success("Job added and listing imported");
+    } else {
       toast.success("Job added");
-      closeModal();
-      router.push(JOB_DETAIL_PAGE_PATH);
-      return;
     }
-    toast.success("Job added and listing imported");
     closeModal();
     router.push(JOB_DETAIL_PAGE_PATH);
   };

@@ -47,13 +47,12 @@ export {
   deleteEmploymentThunk,
 } from "./crm";
 
-export type { CreateJobFromListingUrlResult, AddCompanyJobResult } from "./crm";
-
 export {
   loadTechnicalSkillsThunk,
   saveTechnicalSkillsThunk,
   sendTechnicalSkillsMessageThunk,
   acceptTechnicalSkillSuggestionThunk,
+  addDraftTechnicalSkillFromBulletThunk,
 } from "./technical-skills";
 
 export {

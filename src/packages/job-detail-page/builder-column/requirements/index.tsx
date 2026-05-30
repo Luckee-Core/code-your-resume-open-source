@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { useAppSelector } from "@/store";
 import { JOB_DETAIL_BUILDER_SECTION_TITLE } from "@/model/job-detail-builder";
+import { collectSortedJobBulletRowsByJobId } from "@/utils/job";
 import { JobDetailSectionCard } from "../section-card";
 
 export const RequirementsSection = () => {
@@ -10,10 +11,7 @@ export const RequirementsSection = () => {
   const allRows = useAppSelector((s) => s.jobRequirements);
 
   const items = useMemo(
-    () =>
-      Object.values(allRows)
-        .filter((r) => r.jobId === jobId)
-        .sort((a, b) => a.sortOrder - b.sortOrder),
+    () => collectSortedJobBulletRowsByJobId(allRows, jobId),
     [allRows, jobId],
   );
 

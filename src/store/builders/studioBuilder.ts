@@ -5,10 +5,6 @@ const DEFAULT_CREATE_CANVAS_H = 1080;
 const DEFAULT_CREATE_PRESET_ID = "ig-square";
 
 type StudioBuilderState = {
-  tsxDraft: string;
-  isSavingDraft: boolean;
-  isDownloadingPreviewPng: boolean;
-  tsxBaselineForPreview: string;
   listLoadStatus: "idle" | "loading" | "error";
   listError: string | null;
   isCreateGraphicModalOpen: boolean;
@@ -18,18 +14,7 @@ type StudioBuilderState = {
   createGraphicSelectedPresetId: string | null;
 };
 
-const editorInitial = (): Pick<
-  StudioBuilderState,
-  "tsxDraft" | "isSavingDraft" | "isDownloadingPreviewPng" | "tsxBaselineForPreview"
-> => ({
-  tsxDraft: "",
-  isSavingDraft: false,
-  isDownloadingPreviewPng: false,
-  tsxBaselineForPreview: "",
-});
-
 const initialState: StudioBuilderState = {
-  ...editorInitial(),
   listLoadStatus: "idle",
   listError: null,
   isCreateGraphicModalOpen: false,
@@ -43,33 +28,6 @@ const studioBuilderSlice = createSlice({
   name: "studioBuilder",
   initialState,
   reducers: {
-    hydrateStudioForGraphic: (state, action: PayloadAction<{ tsx: string }>) => {
-      state.tsxDraft = action.payload.tsx;
-      state.tsxBaselineForPreview = action.payload.tsx;
-    },
-    /** Clears studio editor session fields; keeps list + create-modal state. */
-    resetStudioEditorState: (state) => {
-      const next = editorInitial();
-      state.tsxDraft = next.tsxDraft;
-      state.isSavingDraft = next.isSavingDraft;
-      state.isDownloadingPreviewPng = next.isDownloadingPreviewPng;
-      state.tsxBaselineForPreview = next.tsxBaselineForPreview;
-    },
-    setTsxDraft: (state, action: PayloadAction<string>) => {
-      state.tsxDraft = action.payload;
-    },
-    alignTsxBaselineToCurrentDraft: (state) => {
-      state.tsxBaselineForPreview = state.tsxDraft;
-    },
-    setIsSavingDraft: (state, action: PayloadAction<boolean>) => {
-      state.isSavingDraft = action.payload;
-    },
-    setIsDownloadingPreviewPng: (state, action: PayloadAction<boolean>) => {
-      state.isDownloadingPreviewPng = action.payload;
-    },
-    syncTsxBaselineAfterSave: (state) => {
-      state.tsxBaselineForPreview = state.tsxDraft;
-    },
     setListLoadStatus: (state, action: PayloadAction<StudioBuilderState["listLoadStatus"]>) => {
       state.listLoadStatus = action.payload;
     },

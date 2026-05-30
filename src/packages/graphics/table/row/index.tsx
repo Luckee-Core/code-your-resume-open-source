@@ -4,17 +4,17 @@ import { startTransition, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { MoreHorizontal } from "lucide-react";
 import { toast } from "sonner";
-import type { ImageGraphic } from "@/model";
-import { useAppDispatch } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { deleteImageGraphicThunk, openImageGraphicStudioByIdThunk } from "@/store/thunks";
 import { formatDateMedium } from "@/utils/date-time";
 
 type ImageGraphicsTableRowProps = {
-  graphic: ImageGraphic;
+  graphicId: string;
 };
 
 export const ImageGraphicsTableRow = (props: ImageGraphicsTableRowProps) => {
-  const { graphic } = props;
+  const { graphicId } = props;
+  const graphic = useAppSelector((s) => s.imageGraphics[graphicId]);
   const dispatch = useAppDispatch();
   const router = useRouter();
 
@@ -32,9 +32,11 @@ export const ImageGraphicsTableRow = (props: ImageGraphicsTableRowProps) => {
     return () => document.removeEventListener("mousedown", onOutside);
   }, [menuOpen]);
 
+  if (!graphic) return null;
+
   const handleOpenStudio = () => {
     void (async () => {
-      const code = await dispatch(openImageGraphicStudioByIdThunk(graphic.id));
+      const code = await dispatch(openImageGraphicStudioByIdThunk(graphicId));
       if (code !== 200) {
         toast.error("Could not open studio");
         return;
@@ -56,7 +58,7 @@ export const ImageGraphicsTableRow = (props: ImageGraphicsTableRowProps) => {
       if (!window.confirm("Delete this graphic? This cannot be undone.")) {
         return;
       }
-      const status = await dispatch(deleteImageGraphicThunk(graphic.id));
+      const status = await dispatch(deleteImageGraphicThunk(graphicId));
       if (status === 200) {
         toast.success("Graphic deleted");
       } else {

@@ -1,13 +1,13 @@
 import { patchImageGraphicStudioDraft } from "@/api/image-creation-studio";
 import type { AppThunk } from "@/store";
-import { StudioBuilderActions } from "@/store/builders/studioBuilder";
+import { CurrentStudioEditorActions } from "@/store/current/currentStudioEditor";
 import { CurrentImageGraphicActions } from "@/store/current/currentImageGraphic";
 import { ImageGraphicsActions } from "@/store/dumps/imageGraphics";
 
 type Status = Promise<200 | 400 | 500>;
 
 /**
- * Persists TSX from `studioBuilder` into `metadata.studioDraft` on the server and syncs Redux.
+ * Persists TSX from `currentStudioEditor` into `metadata.studioDraft` on the server and syncs Redux.
  */
 export const saveImageGraphicStudioDraftThunk = (): AppThunk<Status> => {
   return async (dispatch, getState): Status => {
@@ -17,9 +17,9 @@ export const saveImageGraphicStudioDraftThunk = (): AppThunk<Status> => {
       return 400;
     }
 
-    const tsx = state.studioBuilder.tsxDraft;
+    const tsx = state.currentStudioEditor.tsxDraft;
 
-    dispatch(StudioBuilderActions.setIsSavingDraft(true));
+    dispatch(CurrentStudioEditorActions.setIsSavingDraft(true));
     try {
       const result = await patchImageGraphicStudioDraft(graphicId, tsx);
       if (!result.success || !result.data) {
@@ -38,10 +38,10 @@ export const saveImageGraphicStudioDraftThunk = (): AppThunk<Status> => {
       };
       dispatch(CurrentImageGraphicActions.setCurrentImageGraphic(nextGraphic));
       dispatch(ImageGraphicsActions.upsertImageGraphics([nextGraphic]));
-      dispatch(StudioBuilderActions.syncTsxBaselineAfterSave());
+      dispatch(CurrentStudioEditorActions.syncTsxBaselineAfterSave());
       return 200;
     } finally {
-      dispatch(StudioBuilderActions.setIsSavingDraft(false));
+      dispatch(CurrentStudioEditorActions.setIsSavingDraft(false));
     }
   };
 };

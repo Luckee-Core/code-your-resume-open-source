@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { useAppDispatch, useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector, store } from "@/store";
 import { StudioBuilderActions } from "@/store/builders/studioBuilder";
 import {
   createImageGraphicThunk,
@@ -67,13 +67,18 @@ export const GraphicsListCreateModal = () => {
       toast.error("Width and height must be numbers of at least 64px");
       return;
     }
-    const newId = await dispatch(
+    const createStatus = await dispatch(
       createImageGraphicThunk({
         title,
         canvasWidthPx: w,
         canvasHeightPx: h,
       }),
     );
+    if (createStatus !== 200) {
+      toast.error("Could not create graphic");
+      return;
+    }
+    const newId = store.getState().currentImageGraphic.id;
     if (!newId) {
       toast.error("Could not create graphic");
       return;

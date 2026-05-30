@@ -8,6 +8,7 @@ import { listJobsApi } from "@/api/job/list";
 import { updateJobApi } from "@/api/job/update";
 import type { JobStatus, JobType } from "@/model/job";
 import type { AppThunk } from "@/store";
+import { CrmBuilderActions } from "@/store/builders/crmBuilder";
 import { CurrentJobActions } from "@/store/current/currentJob";
 import { JobsActions } from "@/store/dumps/jobs";
 import { loadJobBulletsThunk } from "./load-job-bullets-thunk";
@@ -18,18 +19,8 @@ import {
 
 type Status = Promise<200 | 400 | 500>;
 
-export type CreateJobFromListingUrlResult =
-  | { outcome: "created_and_imported"; jobId: string }
-  | { outcome: "import_failed"; jobId: string; error?: string }
-  | { outcome: "create_failed" }
-  | { outcome: "invalid_input" };
-
-export type AddCompanyJobResult =
-  | { outcome: "created"; jobId: string }
-  | { outcome: "created_and_imported"; jobId: string }
-  | { outcome: "import_failed"; jobId: string; error?: string }
-  | { outcome: "create_failed" }
-  | { outcome: "invalid_input"; reason: "empty" | "invalid_url" };
+const DEFAULT_IMPORT_WARNING =
+  "Check the URL or use Import listing on the job page.";
 
 /**
  * Creates a draft job from a posting URL via **one** Express call that runs the full
@@ -38,11 +29,11 @@ export type AddCompanyJobResult =
 export const createJobFromListingUrlThunk = (input: {
   companyId: string;
   urlRaw: string;
-}): AppThunk<Promise<CreateJobFromListingUrlResult>> => {
-  return async (dispatch): Promise<CreateJobFromListingUrlResult> => {
+}): AppThunk<Status> => {
+  return async (dispatch): Status => {
     const url = normalizeJobListingUrlInput(input.urlRaw);
     if (!url || !validateNormalizedJobListingUrlForSubmit(url)) {
-      return { outcome: "invalid_input" };
+      return 400;
     }
     console.log("[CRM] createJobFromListingUrl: POST job/create-from-listing-url (vault + scrape-job-listing)", {
       companyId: input.companyId,
@@ -55,25 +46,27 @@ export const createJobFromListingUrlThunk = (input: {
     if (result.success && result.data) {
       dispatch(JobsActions.upsertJob(result.data));
       dispatch(CurrentJobActions.setCurrentJob(result.data));
+      dispatch(CrmBuilderActions.clearLastJobImportWarning());
       console.log("[CRM] createJobFromListingUrl: done", { jobId: result.data.id });
-      return { outcome: "created_and_imported", jobId: result.data.id };
+      return 200;
     }
     if (result.data && !result.success) {
       dispatch(JobsActions.upsertJob(result.data));
       dispatch(CurrentJobActions.setCurrentJob(result.data));
+      dispatch(
+        CrmBuilderActions.setLastJobImportWarning(
+          result.error?.trim() || DEFAULT_IMPORT_WARNING,
+        ),
+      );
       console.warn("[CRM] createJobFromListingUrl: import failed after job row created", {
         jobId: result.data.id,
         httpStatus: result.httpStatus,
         error: result.error,
       });
-      return {
-        outcome: "import_failed",
-        jobId: result.data.id,
-        error: result.error,
-      };
+      return 200;
     }
     console.warn("[CRM] createJobFromListingUrl: failed", result);
-    return { outcome: "create_failed" };
+    return 500;
   };
 };
 
@@ -85,38 +78,24 @@ export const addCompanyJobThunk = (input: {
   companyId: string;
   titleRaw: string;
   urlRaw: string;
-}): AppThunk<Promise<AddCompanyJobResult>> => {
-  return async (dispatch): Promise<AddCompanyJobResult> => {
+}): AppThunk<Status> => {
+  return async (dispatch): Status => {
+    dispatch(CrmBuilderActions.clearLastJobImportWarning());
+
     const title = input.titleRaw.trim();
     const url = normalizeJobListingUrlInput(input.urlRaw);
     const hasTitle = title.length > 0;
     const hasUrl = url.length > 0;
 
     if (!hasTitle && !hasUrl) {
-      return { outcome: "invalid_input", reason: "empty" };
+      return 400;
     }
     if (hasUrl && !validateNormalizedJobListingUrlForSubmit(url)) {
-      return { outcome: "invalid_input", reason: "invalid_url" };
+      return 400;
     }
 
     if (!hasTitle && hasUrl) {
-      const listingResult = await dispatch(
-        createJobFromListingUrlThunk({ companyId: input.companyId, urlRaw: url }),
-      );
-      if (listingResult.outcome === "created_and_imported") {
-        return { outcome: "created_and_imported", jobId: listingResult.jobId };
-      }
-      if (listingResult.outcome === "import_failed") {
-        return {
-          outcome: "import_failed",
-          jobId: listingResult.jobId,
-          error: listingResult.error,
-        };
-      }
-      if (listingResult.outcome === "invalid_input") {
-        return { outcome: "invalid_input", reason: "invalid_url" };
-      }
-      return { outcome: "create_failed" };
+      return dispatch(createJobFromListingUrlThunk({ companyId: input.companyId, urlRaw: url }));
     }
 
     const result = await createJobApi({
@@ -130,23 +109,22 @@ export const addCompanyJobThunk = (input: {
     if (result.success && result.data) {
       dispatch(JobsActions.upsertJob(result.data));
       dispatch(CurrentJobActions.setCurrentJob(result.data));
-      if (hasUrl) {
-        return { outcome: "created_and_imported", jobId: result.data.id };
-      }
-      return { outcome: "created", jobId: result.data.id };
+      dispatch(CrmBuilderActions.clearLastJobImportWarning());
+      return 200;
     }
 
     if (result.data && !result.success) {
       dispatch(JobsActions.upsertJob(result.data));
       dispatch(CurrentJobActions.setCurrentJob(result.data));
-      return {
-        outcome: "import_failed",
-        jobId: result.data.id,
-        error: result.error,
-      };
+      dispatch(
+        CrmBuilderActions.setLastJobImportWarning(
+          result.error?.trim() || DEFAULT_IMPORT_WARNING,
+        ),
+      );
+      return 200;
     }
 
-    return { outcome: "create_failed" };
+    return 500;
   };
 };
 

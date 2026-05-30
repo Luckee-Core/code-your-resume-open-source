@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { StudioBuilderActions } from "@/store/builders/studioBuilder";
+import { CurrentStudioEditorActions } from "@/store/current/currentStudioEditor";
 import { loadCrmVaultThunk } from "@/store/thunks";
 import { parseStudioDraftFromMetadata } from "@/utils/image-creation-studio";
 import { ImageCreationStudioBuilderColumn } from "./builder-column";
@@ -27,13 +27,14 @@ export const ImageCreationStudio = () => {
 
   useEffect(() => {
     if (!graphic.id) {
-      dispatch(StudioBuilderActions.resetStudioEditorState());
+      dispatch(CurrentStudioEditorActions.resetStudioEditorState());
       void router.replace("/");
       return;
     }
     const draft = parseStudioDraftFromMetadata(graphic.metadata);
     dispatch(
-      StudioBuilderActions.hydrateStudioForGraphic({
+      CurrentStudioEditorActions.hydrateStudioForGraphic({
+        graphicId: graphic.id,
         tsx: draft?.tsx ?? "",
       }),
     );

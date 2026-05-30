@@ -2,7 +2,7 @@ import { patchImageGraphicStudioDraft } from "@/api/image-creation-studio";
 import { generateSkillsComponent } from "@/api/skills-component";
 import type { ProfessionalBackgroundSegments } from "@/model/professional-background";
 import type { AppThunk } from "@/store";
-import { StudioBuilderActions } from "@/store/builders/studioBuilder";
+import { CurrentStudioEditorActions } from "@/store/current/currentStudioEditor";
 import { createImageGraphicThunk } from "@/store/thunks/image-creation-studio/create-image-graphic-thunk";
 import { loadImageGraphicsThunk } from "@/store/thunks/image-creation-studio/load-image-graphics-thunk";
 import { openImageGraphicStudioByIdThunk } from "@/store/thunks/image-creation-studio/open-image-graphic-studio-by-id-thunk";
@@ -30,7 +30,7 @@ const RESUME_CANVAS_H = 1150;
  */
 export const generateSkillsComponentThunk =
   (input: GenerateSkillsComponentThunkInput): AppThunk<Promise<200 | 400 | 500>> =>
-  async (dispatch) => {
+  async (dispatch, getState) => {
     const { skills, jobId, jobTitle, professionalBackgroundSegments } = input;
     if (!skills.length || !jobId.trim()) {
       return 400;
@@ -48,7 +48,7 @@ export const generateSkillsComponentThunk =
       });
 
       const titleBase = jobTitle?.trim() ? jobTitle.trim() : `Job ${jobId.slice(0, 8)}`;
-      const newId = await dispatch(
+      const createStatus = await dispatch(
         createImageGraphicThunk({
           title: `Skills — ${titleBase}`,
           canvasWidthPx: w,
@@ -60,6 +60,11 @@ export const generateSkillsComponentThunk =
         }),
       );
 
+      if (createStatus !== 200) {
+        return 500;
+      }
+
+      const newId = getState().currentImageGraphic.id;
       if (!newId) {
         return 500;
       }
@@ -71,7 +76,7 @@ export const generateSkillsComponentThunk =
 
       await dispatch(loadImageGraphicsThunk());
       await dispatch(openImageGraphicStudioByIdThunk(newId));
-      dispatch(StudioBuilderActions.hydrateStudioForGraphic({ tsx }));
+      dispatch(CurrentStudioEditorActions.hydrateStudioForGraphic({ graphicId: newId, tsx }));
 
       return 200;
     } catch (error) {

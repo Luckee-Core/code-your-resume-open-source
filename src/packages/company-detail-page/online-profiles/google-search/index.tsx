@@ -1,25 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ExternalLink, Loader2, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import {
+  buildGoogleSearchQuery,
+  filterDiscoveredWebsiteUrls,
   getPrimaryWebsiteForCompany,
   PLAYWRIGHT_WEBSITE_URL_DISCOVERY_RUN_DISABLED_TITLE,
 } from "@/utils/companies";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { runCompanyDiscoverSitePageUrlsThunk } from "@/store/thunks";
-import type { Company } from "@/model/company";
 
 const ROW_LABEL = "Site pages";
-
-const buildGoogleSearchQuery = (company: Company) => {
-  const name = company.name?.trim() || "";
-  const hint = company.notes?.trim().split("\n")[0]?.trim() || "";
-  const parts = [name, hint].filter((p) => p.length > 0);
-  if (parts.length === 0) return null;
-  return parts.join(" ");
-};
 
 export const OnlineProfilesGoogleSearchRow = () => {
   const dispatch = useAppDispatch();
@@ -27,20 +20,21 @@ export const OnlineProfilesGoogleSearchRow = () => {
   const [isSearching, setIsSearching] = useState(false);
 
   const website = getPrimaryWebsiteForCompany(company);
-  const discoveredWebsiteUrls = (company.websiteUrls ?? []).filter((url) => {
-    if (!url?.trim()) return false;
-    if (!website) return true;
-    return url.trim() !== website.trim();
-  });
+
+  const discoveredWebsiteUrls = useMemo(
+    () => filterDiscoveredWebsiteUrls(company.websiteUrls, website),
+    [company.websiteUrls, website],
+  );
 
   const busy = isSearching;
   const isMissingRequiredWebsite = !website;
   const playwrightDiscoveryAlreadyUsed = company.playwrightWebsiteUrlDiscoveryAttempted === true;
 
-  const googleQuery = buildGoogleSearchQuery(company);
-  const googleSearchUrl = googleQuery
-    ? `https://www.google.com/search?q=${encodeURIComponent(googleQuery)}`
-    : null;
+  const googleQuery = useMemo(() => buildGoogleSearchQuery(company), [company]);
+  const googleSearchUrl = useMemo(
+    () => (googleQuery ? `https://www.google.com/search?q=${encodeURIComponent(googleQuery)}` : null),
+    [googleQuery],
+  );
 
   return (
     <div className={styles.profileChip}>
