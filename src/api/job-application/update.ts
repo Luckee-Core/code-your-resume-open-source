@@ -1,6 +1,6 @@
-import type { ApiResponse } from "@/api/types";
+import type { ApiResult } from "@/api/types";
 import type { JobApplication } from "@/model/job-application";
-import { parseApiJson } from "@/api/parse-api-json";
+import { requestApi } from "@/api/_shared/request-api";
 
 export type UpdateJobApplicationBody = { id: string } & Partial<
   Pick<JobApplication, "jobId" | "submittedAt" | "imageGraphicId" | "notes">
@@ -11,11 +11,10 @@ export type UpdateJobApplicationBody = { id: string } & Partial<
  */
 export const updateJobApplicationApi = async (
   body: UpdateJobApplicationBody,
-): Promise<ApiResponse<JobApplication>> => {
-  const res = await fetch("/api/data/job-application/update", {
+): Promise<ApiResult<JobApplication>> => {
+  return requestApi<JobApplication>("/api/data/job-application/update", {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  return parseApiJson<JobApplication>(res);
 };

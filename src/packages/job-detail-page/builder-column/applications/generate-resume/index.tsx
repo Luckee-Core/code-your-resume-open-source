@@ -16,11 +16,7 @@ export const GenerateResume = () => {
   const loadStatus = useAppSelector((s) => s.technicalSkillsBuilder.loadStatus);
   const loadError = useAppSelector((s) => s.technicalSkillsBuilder.error);
   const draftTechnicalSkills = useAppSelector((s) => s.currentTechnicalSkills.draftTechnicalSkills);
-  const professionalBackgroundSegments = useAppSelector(
-    (s) => s.currentProfessionalBackground.draftSegments,
-  );
   const jobId = useAppSelector((s) => s.currentJob.id);
-  const jobTitle = useAppSelector((s) => s.currentJob.title);
   const [isGenerating, setIsGenerating] = useState(false);
 
   const promptLines = useMemo(
@@ -46,10 +42,7 @@ export const GenerateResume = () => {
     try {
       const status = await dispatch(
         generateSkillsComponentThunk({
-          skills: promptLines,
           jobId,
-          jobTitle: jobTitle || undefined,
-          professionalBackgroundSegments,
         }),
       );
 

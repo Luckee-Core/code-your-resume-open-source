@@ -1,11 +1,10 @@
-import type { ApiResponse } from "@/api/types";
+import type { ApiResult } from "@/api/types";
 import type { JobBulletRow } from "@/model/job";
-import { parseApiJson } from "@/api/parse-api-json";
+import { requestApi } from "@/api/_shared/request-api";
 
 /**
  * GET /api/data/job-requirements/list?jobId=<id>
  */
-export const listJobRequirementsApi = async (jobId: string): Promise<ApiResponse<JobBulletRow[]>> => {
-  const res = await fetch(`/api/data/job-requirements/list?jobId=${encodeURIComponent(jobId)}`);
-  return parseApiJson<JobBulletRow[]>(res);
+export const listJobRequirementsApi = async (jobId: string): Promise<ApiResult<JobBulletRow[]>> => {
+  return requestApi<JobBulletRow[]>(`/api/data/job-requirements/list?jobId=${encodeURIComponent(jobId)}`);
 };

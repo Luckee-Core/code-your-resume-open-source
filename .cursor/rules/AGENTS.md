@@ -40,7 +40,7 @@ BEFORE implementing ANY feature, you MUST:
 
 ## Quick Reference (Architecture ADRs)
 
-### Shared (001–006)
+### Shared (001–006, 010)
 - Architecture entrypoint → `.cursor/architecture/README.md`
 - Redux → `.cursor/architecture/001-redux-patterns.md`
 - Components → `.cursor/architecture/002-component-composition.md`
@@ -48,6 +48,7 @@ BEFORE implementing ANY feature, you MUST:
 - API integration → `.cursor/architecture/004-api-integration.md`
 - File organization → `.cursor/architecture/005-file-organization.md`
 - Constants / utilities → `.cursor/architecture/006-constants-utilities.md`
+- Public content reads from Express → `.cursor/architecture/010-public-blog-express-fetch.md`
 
 ### Product-specific (this repo)
 - Studio PNG export → `.cursor/architecture/007-studio-preview-png-export.md`
@@ -58,3 +59,5 @@ BEFORE implementing ANY feature, you MUST:
 - Professional Background Studio → `.cursor/architecture/012-professional-background-studio.md`
 - Job Studio → `.cursor/architecture/013-job-studio.md`
 - Cover letter generation → `.cursor/architecture/014-cover-letter-generation.md`
+- Error event logging → `.cursor/architecture/015-error-event-logging.md`
+- Client API error handling → `.cursor/architecture/016-client-api-error-handling.md`

@@ -10,10 +10,18 @@ export const loadTechnicalSkillsThunk = (): AppThunk<Status> => {
   return async (dispatch): Status => {
     dispatch(TechnicalSkillsBuilderActions.setLoading());
     try {
-      const payload = await getTechnicalSkillsStudioPayload();
-      dispatch(CurrentTechnicalSkillsActions.syncDraftTechnicalSkills(payload.skills));
+      const result = await getTechnicalSkillsStudioPayload();
+      if (!result.success || !result.data) {
+        dispatch(
+          TechnicalSkillsBuilderActions.setError(
+            result.error ?? "Failed to load Technical Skills Studio",
+          ),
+        );
+        return 500;
+      }
+      dispatch(CurrentTechnicalSkillsActions.syncDraftTechnicalSkills(result.data.skills));
       dispatch(CurrentTechnicalSkillsActions.commitSkillsFingerprint());
-      dispatch(CurrentTechnicalSkillsActions.syncMessages(payload.messages));
+      dispatch(CurrentTechnicalSkillsActions.syncMessages(result.data.messages));
       dispatch(TechnicalSkillsBuilderActions.setLoaded());
       return 200;
     } catch (e: unknown) {

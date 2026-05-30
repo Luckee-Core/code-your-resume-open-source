@@ -1,55 +1,32 @@
-import type { ProfessionalBackgroundSegments } from "@/model/professional-background";
-
-export type GenerateSkillsComponentInput = {
-  skills: string[];
-  canvasWidthPx?: number;
-  canvasHeightPx?: number;
-  professionalBackgroundSegments?: ProfessionalBackgroundSegments;
-};
-
-export type GenerateSkillsComponentResponse = {
-  tsx: string;
-};
+import type { GenerateByJobIdInput } from "@/api/generation/types";
+import type { ApiResult } from "@/api/types";
+import { generationTimeoutError, normalizeTsxApiResult } from "@/api/_shared/normalize-tsx-api-result";
+import { requestApi } from "@/api/_shared/request-api";
 
 /**
  * POST /api/data/skills-component/generate
  *
  * Launches a Cursor agent to generate a skills showcase TSX component.
- * The request is proxied by Next.js rewrites to the Express server.
+ * Server loads active skills and background from Supabase using jobId.
  *
- * @param input - Skills list and optional canvas dimensions
- * @returns The generated TSX source string
+ * @param input - Job id
+ * @returns Generated TSX or structured error (never throws)
  */
 export const generateSkillsComponent = async (
-  input: GenerateSkillsComponentInput,
-): Promise<GenerateSkillsComponentResponse> => {
-  const response = await fetch("/api/data/skills-component/generate", {
+  input: GenerateByJobIdInput,
+): Promise<ApiResult<{ tsx: string }>> => {
+  const result = await requestApi<{ tsx: string }>("/api/data/skills-component/generate", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input),
   });
 
-  const raw = await response.text();
-  let parsed: { tsx?: string; error?: string; success?: boolean };
-  try {
-    parsed = JSON.parse(raw) as { tsx?: string; error?: string; success?: boolean };
-  } catch {
-    throw new Error(
-      response.status === 504 || response.status === 408
-        ? "Request timed out — skills generation can take several minutes. Retry from the job page."
-        : `Skills component generation failed (${response.status}): response was not JSON`,
-    );
+  const timeoutMessage = generationTimeoutError(result.httpStatus, "skills generation");
+  if (!result.success && timeoutMessage) {
+    return { success: false, error: timeoutMessage, httpStatus: result.httpStatus };
   }
 
-  if (!response.ok) {
-    throw new Error(
-      parsed.error ?? `Skills component generation failed (${response.status})`,
-    );
-  }
-
-  if (typeof parsed.tsx !== "string") {
-    throw new Error("Invalid response: missing tsx");
-  }
-
-  return { tsx: parsed.tsx };
+  return normalizeTsxApiResult(result);
 };
+
+export type { GenerateByJobIdInput };

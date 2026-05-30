@@ -1,6 +1,6 @@
-import type { ApiResponse } from "@/api/types";
+import type { ApiResult } from "@/api/types";
 import type { Employment } from "@/model/employment";
-import { parseApiJson } from "@/api/parse-api-json";
+import { requestApi } from "@/api/_shared/request-api";
 
 export type CreateEmploymentBody = Pick<Employment, "companyId" | "jobId" | "startDate" | "endDate">;
 
@@ -9,11 +9,10 @@ export type CreateEmploymentBody = Pick<Employment, "companyId" | "jobId" | "sta
  */
 export const createEmploymentApi = async (
   body: CreateEmploymentBody,
-): Promise<ApiResponse<Employment>> => {
-  const res = await fetch("/api/data/employment/create", {
+): Promise<ApiResult<Employment>> => {
+  return requestApi<Employment>("/api/data/employment/create", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  return parseApiJson<Employment>(res);
 };

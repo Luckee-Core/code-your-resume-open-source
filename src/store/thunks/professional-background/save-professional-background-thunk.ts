@@ -12,9 +12,12 @@ export const saveProfessionalBackgroundThunk = (): AppThunk<Status> => {
     const segments = getState().currentProfessionalBackground.draftSegments;
     dispatch(ProfessionalBackgroundBuilderActions.setSaving(true));
     try {
-      const payload = await patchProfessionalBackground({ segments });
-      dispatch(CurrentProfessionalBackgroundActions.syncDraftSegments(payload.segments));
-      dispatch(CurrentProfessionalBackgroundActions.setUpdatedAt(payload.updatedAt));
+      const result = await patchProfessionalBackground({ segments });
+      if (!result.success || !result.data) {
+        return 500;
+      }
+      dispatch(CurrentProfessionalBackgroundActions.syncDraftSegments(result.data.segments));
+      dispatch(CurrentProfessionalBackgroundActions.setUpdatedAt(result.data.updatedAt));
       await dispatch(commitProfessionalBackgroundSegmentsFingerprintThunk());
       return 200;
     } catch {

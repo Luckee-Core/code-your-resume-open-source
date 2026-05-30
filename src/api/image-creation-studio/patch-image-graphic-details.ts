@@ -1,6 +1,6 @@
 import type { ImageGraphic } from "@/model";
-import type { ApiResponse } from "@/api/types";
-import { parseApiJson } from "@/api/parse-api-json";
+import type { ApiResult } from "@/api/types";
+import { requestApi } from "@/api/_shared/request-api";
 
 export type PatchImageGraphicDetailsBody = {
   title: string;
@@ -14,11 +14,10 @@ export type PatchImageGraphicDetailsBody = {
 export const patchImageGraphicDetailsApi = async (
   graphicId: string,
   body: PatchImageGraphicDetailsBody,
-): Promise<ApiResponse<ImageGraphic>> => {
-  const res = await fetch("/api/data/image-graphic/update-details", {
+): Promise<ApiResult<ImageGraphic>> => {
+  return requestApi<ImageGraphic>("/api/data/image-graphic/update-details", {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ graphicId, ...body }),
   });
-  return parseApiJson<ImageGraphic>(res);
 };

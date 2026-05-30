@@ -1,19 +1,14 @@
 import { patchImageGraphicStudioDraft } from "@/api/image-creation-studio";
 import { generateCompanyInterest } from "@/api/company-interest";
-import type { ProfessionalBackgroundSegments } from "@/model/professional-background";
+import { coerceErrorFields, reportThunkError } from "@/api/thunk-errors";
 import type { AppThunk } from "@/store";
 import { CurrentStudioEditorActions } from "@/store/current/currentStudioEditor";
 import { createImageGraphicThunk } from "@/store/thunks/image-creation-studio/create-image-graphic-thunk";
 import { loadImageGraphicsThunk } from "@/store/thunks/image-creation-studio/load-image-graphics-thunk";
 import { openImageGraphicStudioByIdThunk } from "@/store/thunks/image-creation-studio/open-image-graphic-studio-by-id-thunk";
-import { collectSortedJobBulletBodies } from "@/utils/job";
 
 export type GenerateCompanyInterestThunkInput = {
   jobId: string;
-  jobTitle: string;
-  companyName?: string;
-  skills?: string[];
-  professionalBackgroundSegments: ProfessionalBackgroundSegments;
 };
 
 /** US Letter width at 96dpi. */
@@ -30,47 +25,27 @@ const DEFAULT_CANVAS_H = 480;
 export const generateCompanyInterestThunk =
   (input: GenerateCompanyInterestThunkInput): AppThunk<Promise<200 | 400 | 500>> =>
   async (dispatch, getState) => {
-    const { jobId, jobTitle, companyName, skills, professionalBackgroundSegments } = input;
-
-    if (!jobId.trim() || !jobTitle.trim()) {
+    const jobId = input.jobId.trim();
+    if (!jobId) {
       return 400;
     }
 
-    const credibility = professionalBackgroundSegments.credibility_bio?.trim() ?? "";
-    const voice = professionalBackgroundSegments.voice_style?.trim() ?? "";
-    if (!credibility && !voice) {
-      return 400;
-    }
-
-    const state = getState();
-    const responsibilities = collectSortedJobBulletBodies(
-      state.jobResponsibilities,
-      jobId.trim(),
-    );
-    const requirements = collectSortedJobBulletBodies(state.jobRequirements, jobId.trim());
-    const niceToHaves = collectSortedJobBulletBodies(state.jobNiceToHaves, jobId.trim());
+    const jobTitle = getState().currentJob.title?.trim() ?? "";
 
     try {
-      const { tsx } = await generateCompanyInterest({
-        jobId: jobId.trim(),
-        jobTitle: jobTitle.trim(),
-        companyName,
-        responsibilities,
-        requirements,
-        niceToHaves,
-        skills,
-        canvasWidthPx: DEFAULT_CANVAS_W,
-        canvasHeightPx: DEFAULT_CANVAS_H,
-        professionalBackgroundSegments,
-      });
+      const generated = await generateCompanyInterest({ jobId });
+      if (!generated.success || !generated.data?.tsx) {
+        return 500;
+      }
+      const tsx = generated.data.tsx;
 
-      const titleBase = jobTitle.trim();
+      const titleBase = jobTitle || `Job ${jobId.slice(0, 8)}`;
       const createStatus = await dispatch(
         createImageGraphicThunk({
           title: `Company interest — ${titleBase}`,
           canvasWidthPx: DEFAULT_CANVAS_W,
           canvasHeightPx: DEFAULT_CANVAS_H,
-          jobId: jobId.trim(),
+          jobId,
           metadata: {
             companyInterestSource: "cursor",
           },
@@ -97,6 +72,16 @@ export const generateCompanyInterestThunk =
 
       return 200;
     } catch (error) {
+      const { message, stack } = coerceErrorFields(error);
+      reportThunkError({
+        event: "failedToGenerateCompanyInterest",
+        message,
+        stack,
+        thunkName: "generateCompanyInterestThunk",
+        collection: "job",
+        entityId: jobId,
+        severity: "error",
+      });
       console.error("generateCompanyInterestThunk error:", error);
       return 500;
     }

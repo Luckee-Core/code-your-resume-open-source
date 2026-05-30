@@ -1,13 +1,12 @@
-import type { ApiResponse } from "@/api/types";
+import type { ApiResult } from "@/api/types";
 import type { JobApplication } from "@/model/job-application";
-import { parseApiJson } from "@/api/parse-api-json";
+import { requestApi } from "@/api/_shared/request-api";
 
 /**
  * GET /api/data/job-application/get?id=
  */
-export const getJobApplicationApi = async (id: string): Promise<ApiResponse<JobApplication>> => {
-  const res = await fetch(
+export const getJobApplicationApi = async (id: string): Promise<ApiResult<JobApplication>> => {
+  return requestApi<JobApplication>(
     `/api/data/job-application/get?id=${encodeURIComponent(id)}`,
   );
-  return parseApiJson<JobApplication>(res);
 };

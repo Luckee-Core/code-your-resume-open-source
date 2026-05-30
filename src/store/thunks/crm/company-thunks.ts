@@ -2,8 +2,6 @@ import {
   listCompaniesApi,
   postCompanyDiscoverSitePageUrls,
   postCompanyWebsiteResearch,
-  type PostCompanyDiscoverSitePageUrlsBody,
-  type PostCompanyWebsiteResearchBody,
 } from "@/api/company";
 import { createCompanyApi } from "@/api/company/create";
 import { deleteCompanyApi } from "@/api/company/delete";
@@ -33,46 +31,31 @@ export const runCompanyDiscoverSitePageUrlsThunk = (
     }
 
     try {
-      const res = await postCompanyDiscoverSitePageUrls(companyId);
-      const text = await res.text();
-      let json: PostCompanyDiscoverSitePageUrlsBody = {};
-      try {
-        json = JSON.parse(text) as PostCompanyDiscoverSitePageUrlsBody;
-      } catch {
-        return { ok: false, status: 400 };
-      }
+      const result = await postCompanyDiscoverSitePageUrls(companyId);
 
-      if (!res.ok) {
-        const status: 400 | 500 | 502 = res.status === 502 ? 502 : res.status >= 500 ? 500 : 400;
+      if (!result.success) {
+        const status: 400 | 500 | 502 =
+          result.httpStatus === 502 ? 502 : result.httpStatus >= 500 ? 500 : 400;
         return {
           ok: false,
           status,
-          error: typeof json.error === "string" ? json.error : undefined,
-          message: typeof json.message === "string" ? json.message : undefined,
+          error: result.error,
+          message: result.message,
         };
       }
 
-      if (json.success === false) {
-        return {
-          ok: false,
-          status: 400,
-          error: typeof json.error === "string" ? json.error : undefined,
-          message: typeof json.message === "string" ? json.message : undefined,
-        };
-      }
-
-      if (json.data) {
-        dispatch(CompaniesActions.upsertCompany(json.data));
+      if (result.data) {
+        dispatch(CompaniesActions.upsertCompany(result.data));
         const cur = getState().currentCompany;
-        if (cur.id === json.data.id) {
-          dispatch(CurrentCompanyActions.setCurrentCompany(json.data));
+        if (cur.id === result.data.id) {
+          dispatch(CurrentCompanyActions.setCurrentCompany(result.data));
         }
       }
 
       return {
         ok: true,
-        companyUpdated: json.companyUpdated === true,
-        linkCount: typeof json.linkCount === "number" ? json.linkCount : 0,
+        companyUpdated: result.companyUpdated === true,
+        linkCount: typeof result.linkCount === "number" ? result.linkCount : 0,
       };
     } catch {
       return { ok: false, status: 500 };
@@ -95,27 +78,16 @@ export const runCompanyWebsiteResearchThunk = (): AppThunk<Promise<200 | 400 | 5
 
     dispatch(CrmBuilderActions.setCompanyWebsiteResearchRunPhase("website"));
     try {
-      const res = await postCompanyWebsiteResearch(companyId);
-      const text = await res.text();
-      let json: PostCompanyWebsiteResearchBody = {};
-      try {
-        json = JSON.parse(text) as PostCompanyWebsiteResearchBody;
-      } catch {
-        return 400;
+      const result = await postCompanyWebsiteResearch(companyId);
+
+      if (!result.success || !result.data) {
+        return result.httpStatus >= 500 ? 500 : 400;
       }
 
-      if (!res.ok) {
-        return res.status >= 500 ? 500 : 400;
-      }
-
-      if (json.success === false || !json.data) {
-        return 400;
-      }
-
-      dispatch(CompaniesActions.upsertCompany(json.data));
+      dispatch(CompaniesActions.upsertCompany(result.data));
       const curId = getState().currentCompany.id;
-      if (curId === json.data.id) {
-        dispatch(CurrentCompanyActions.setCurrentCompany(json.data));
+      if (curId === result.data.id) {
+        dispatch(CurrentCompanyActions.setCurrentCompany(result.data));
       }
       return 200;
     } catch {

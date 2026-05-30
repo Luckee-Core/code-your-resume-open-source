@@ -1,63 +1,77 @@
+import type { ApiResult } from "@/api/types";
+import { requestApi } from "@/api/_shared/request-api";
 import type {
   TechnicalSkillItem,
   TechnicalSkillsStudioPayload,
 } from "@/model/technical-skills";
 
-type TechnicalSkillsApiResponse = {
-  success: boolean;
+type RawTechnicalSkillsResponse = ApiResult<TechnicalSkillsStudioPayload> & {
   skills?: TechnicalSkillItem[];
   messages?: TechnicalSkillsStudioPayload["messages"];
-  error?: string;
 };
 
-const normalizePayload = (raw: TechnicalSkillsApiResponse): TechnicalSkillsStudioPayload => ({
-  skills: raw.skills ?? [],
-  messages: raw.messages ?? [],
-});
-
-export async function getTechnicalSkillsStudioPayload(): Promise<TechnicalSkillsStudioPayload> {
-  const res = await fetch("/api/technical-skills");
-  const json = (await res.json()) as TechnicalSkillsApiResponse;
-  if (!json.success) {
-    throw new Error(json.error ?? "Failed to load technical skills");
+const normalizeTechnicalSkillsResult = (
+  result: RawTechnicalSkillsResponse,
+): ApiResult<TechnicalSkillsStudioPayload> => {
+  if (!result.success) {
+    return result;
   }
-  return normalizePayload(json);
-}
 
-export async function patchTechnicalSkills(payload: {
+  return {
+    success: true,
+    data: {
+      skills: result.skills ?? result.data?.skills ?? [],
+      messages: result.messages ?? result.data?.messages ?? [],
+    },
+    httpStatus: result.httpStatus,
+  };
+};
+
+/**
+ * GET /api/technical-skills
+ */
+export const getTechnicalSkillsStudioPayload = async (): Promise<
+  ApiResult<TechnicalSkillsStudioPayload>
+> => {
+  const result = await requestApi<TechnicalSkillsStudioPayload>("/api/technical-skills");
+  return normalizeTechnicalSkillsResult(result as RawTechnicalSkillsResponse);
+};
+
+/**
+ * PATCH /api/technical-skills/skills
+ */
+export const patchTechnicalSkills = async (payload: {
   technicalSkills: TechnicalSkillItem[];
-}): Promise<TechnicalSkillsStudioPayload> {
-  const res = await fetch("/api/technical-skills/skills", {
+}): Promise<ApiResult<TechnicalSkillsStudioPayload>> => {
+  const result = await requestApi<TechnicalSkillsStudioPayload>("/api/technical-skills/skills", {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ technicalSkills: payload.technicalSkills }),
   });
-  const json = (await res.json()) as TechnicalSkillsApiResponse;
-  if (!json.success) {
-    throw new Error(json.error ?? "Failed to save technical skills");
-  }
-  return normalizePayload(json);
-}
+  return normalizeTechnicalSkillsResult(result as RawTechnicalSkillsResponse);
+};
 
-export async function postTechnicalSkillsMessage(
+/**
+ * POST /api/technical-skills/messages
+ */
+export const postTechnicalSkillsMessage = async (
   content: string,
-): Promise<TechnicalSkillsStudioPayload> {
-  const res = await fetch("/api/technical-skills/messages", {
+): Promise<ApiResult<TechnicalSkillsStudioPayload>> => {
+  const result = await requestApi<TechnicalSkillsStudioPayload>("/api/technical-skills/messages", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ content }),
   });
-  const json = (await res.json()) as TechnicalSkillsApiResponse;
-  if (!json.success) {
-    throw new Error(json.error ?? "Failed to send message");
-  }
-  return normalizePayload(json);
-}
+  return normalizeTechnicalSkillsResult(result as RawTechnicalSkillsResponse);
+};
 
-export async function postAcceptTechnicalSkillSuggestion(
+/**
+ * POST /api/technical-skills/suggestions/:id/accept
+ */
+export const postAcceptTechnicalSkillSuggestion = async (
   suggestionId: string,
-): Promise<TechnicalSkillsStudioPayload> {
-  const res = await fetch(
+): Promise<ApiResult<TechnicalSkillsStudioPayload>> => {
+  const result = await requestApi<TechnicalSkillsStudioPayload>(
     `/api/technical-skills/suggestions/${encodeURIComponent(suggestionId)}/accept`,
     {
       method: "POST",
@@ -65,9 +79,5 @@ export async function postAcceptTechnicalSkillSuggestion(
       body: JSON.stringify({}),
     },
   );
-  const json = (await res.json()) as TechnicalSkillsApiResponse;
-  if (!json.success) {
-    throw new Error(json.error ?? "Failed to accept suggestion");
-  }
-  return normalizePayload(json);
-}
+  return normalizeTechnicalSkillsResult(result as RawTechnicalSkillsResponse);
+};

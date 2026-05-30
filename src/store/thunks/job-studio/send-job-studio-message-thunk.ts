@@ -15,13 +15,16 @@ export const sendJobStudioMessageThunk =
       if (!jobId || !content.trim()) return 400;
       dispatch(JobStudioBuilderActions.setPostingMessage(true));
       try {
-        const payload = await postJobStudioMessage({
+        const result = await postJobStudioMessage({
           jobId,
           userId: LOCAL_USER_ID,
           content: content.trim(),
         });
+        if (!result.success || !result.data) {
+          return 500;
+        }
         dispatch(CurrentJobStudioActions.setLoadedJobId(jobId));
-        dispatch(CurrentJobStudioActions.syncMessages(payload.messages));
+        dispatch(CurrentJobStudioActions.syncMessages(result.data.messages));
         dispatch(JobStudioBuilderActions.setLoaded());
         return 200;
       } catch {

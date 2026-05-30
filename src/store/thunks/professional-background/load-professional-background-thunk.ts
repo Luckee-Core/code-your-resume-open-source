@@ -11,9 +11,17 @@ export const loadProfessionalBackgroundThunk = (): AppThunk<Status> => {
   return async (dispatch): Status => {
     dispatch(ProfessionalBackgroundBuilderActions.setLoading());
     try {
-      const payload = await getProfessionalBackgroundPayload();
-      dispatch(CurrentProfessionalBackgroundActions.syncDraftSegments(payload.segments));
-      dispatch(CurrentProfessionalBackgroundActions.setUpdatedAt(payload.updatedAt));
+      const result = await getProfessionalBackgroundPayload();
+      if (!result.success || !result.data) {
+        dispatch(
+          ProfessionalBackgroundBuilderActions.setError(
+            result.error ?? "Failed to load Professional Background",
+          ),
+        );
+        return 500;
+      }
+      dispatch(CurrentProfessionalBackgroundActions.syncDraftSegments(result.data.segments));
+      dispatch(CurrentProfessionalBackgroundActions.setUpdatedAt(result.data.updatedAt));
       await dispatch(commitProfessionalBackgroundSegmentsFingerprintThunk());
       dispatch(ProfessionalBackgroundBuilderActions.setLoaded());
       return 200;

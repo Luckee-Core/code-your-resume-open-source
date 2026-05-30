@@ -12,6 +12,8 @@ Define one consistent API integration pattern for this Next.js codebase so data 
 4. **Error handling must be explicit and status-code driven.**
 5. **JSDoc is required on router factory, each route handler, and business logic functions.**
 
+**Client transport:** All outbound `src/api/**` browser fetch calls use `requestApi` ([016 – Client API error handling](./016-client-api-error-handling.md)). **Prod error persistence:** thunk `catch` + `reportThunkError` ([015 – Error event logging](./015-error-event-logging.md)).
+
 ---
 
 ## 1) File and Ownership Pattern

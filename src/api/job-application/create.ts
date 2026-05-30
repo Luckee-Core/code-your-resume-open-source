@@ -1,6 +1,6 @@
-import type { ApiResponse } from "@/api/types";
+import type { ApiResult } from "@/api/types";
 import type { JobApplication } from "@/model/job-application";
-import { parseApiJson } from "@/api/parse-api-json";
+import { requestApi } from "@/api/_shared/request-api";
 
 export type CreateJobApplicationBody = Pick<
   JobApplication,
@@ -12,11 +12,10 @@ export type CreateJobApplicationBody = Pick<
  */
 export const createJobApplicationApi = async (
   body: CreateJobApplicationBody,
-): Promise<ApiResponse<JobApplication>> => {
-  const res = await fetch("/api/data/job-application/create", {
+): Promise<ApiResult<JobApplication>> => {
+  return requestApi<JobApplication>("/api/data/job-application/create", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  return parseApiJson<JobApplication>(res);
 };

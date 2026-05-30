@@ -1,13 +1,13 @@
-import type { ApiResponse } from "@/api/types";
+import type { ApiResult } from "@/api/types";
 import type { Job } from "@/model/job";
+import { requestApi } from "@/api/_shared/request-api";
 
 export type CreateJobFromListingUrlBody = {
   companyId: string;
   url: string;
 };
 
-export type CreateJobFromListingUrlApiResult = ApiResponse<Job> & {
-  httpStatus: number;
+export type CreateJobFromListingUrlApiResult = ApiResult<Job> & {
   scrapeRunId?: string;
   exchangeId?: string | null;
 };
@@ -18,21 +18,9 @@ export type CreateJobFromListingUrlApiResult = ApiResponse<Job> & {
 export const createJobFromListingUrlApi = async (
   body: CreateJobFromListingUrlBody,
 ): Promise<CreateJobFromListingUrlApiResult> => {
-  const res = await fetch("/api/data/job/create-from-listing-url", {
+  return requestApi<Job>("/api/data/job/create-from-listing-url", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  try {
-    const json = (await res.json()) as ApiResponse<Job> & {
-      scrapeRunId?: string;
-      exchangeId?: string | null;
-    };
-    if (typeof json === "object" && json !== null && "success" in json) {
-      return { ...json, httpStatus: res.status };
-    }
-    return { success: false, error: "Invalid response shape", httpStatus: res.status };
-  } catch {
-    return { success: false, error: "Failed to parse JSON", httpStatus: res.status };
-  }
 };

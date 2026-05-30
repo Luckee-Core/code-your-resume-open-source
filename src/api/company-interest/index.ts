@@ -1,5 +1,2 @@
 export { generateCompanyInterest } from "./generate";
-export type {
-  GenerateCompanyInterestInput,
-  GenerateCompanyInterestResponse,
-} from "./generate";
+export type { GenerateByJobIdInput } from "@/api/generation/types";

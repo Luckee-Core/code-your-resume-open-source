@@ -10,7 +10,7 @@ Document how **Generate cover letter** on the job detail Applications section pr
 
 - **TSX graphic** via Cursor agent on `CURSOR_TARGET_REPO` (same repo as skills generation).
 - Component contract: `export default function GeneratedCoverLetterPreview()` with `"use client";`, Tailwind-only, no external imports.
-- Default canvas: **816×1056 px** (US Letter @ 96dpi). The thunk does **not** read `currentImageGraphic` dimensions.
+- Default canvas: **816×1056 px** (US Letter @ 96dpi). Canvas defaults live in Express `run-cover-letter-generation`; the client thunk uses the same dimensions when creating the graphic.
 
 ### 2) API surface
 
@@ -20,18 +20,18 @@ Document how **Generate cover letter** on the job detail Applications section pr
 | Next proxy | [`src/app/api/data/cover-letter/generate/route.ts`](../../src/app/api/data/cover-letter/generate/route.ts) — `maxDuration = 300` |
 | Express | `POST /api/data/cover-letter/generate` |
 
-Request body includes job context (`jobId`, `jobTitle`, `companyName`, `responsibilities`, `requirements`, `niceToHaves`), `professionalBackgroundSegments`, optional `skills` prompt lines, and optional canvas dimensions.
+**Request body:** `{ jobId: string }` only. Express loads job, company, bullets, professional background, and active technical skills from Supabase via `loadJobGenerationContext` before calling `runCoverLetterGeneration`.
 
-Response: `{ success: true, tsx: string }`.
+**Response:** `{ success: true, tsx: string }`.
+
+The same `{ jobId }` contract applies to **company interest** (`POST /api/data/company-interest/generate`, canvas 816×480) and **skills/resume** (`POST /api/data/skills-component/generate`, canvas 816×1150). Shared types: `GenerateByJobIdInput` in `src/api/generation/types.ts`.
 
 ### 3) Inputs
 
-- **Job** — `currentJob` (title, bullets, companyId).
-- **Company** — name from `companies[job.companyId]`.
-- **Professional background** — `currentProfessionalBackground.draftSegments` (required: at least `credibility_bio` or `voice_style` non-empty before generate).
-- **Technical skills** — optional active skill prompt lines (`title — body`), same format as skills generation.
+- **Server-loaded from `jobId`** — job title, company name, responsibility/requirement/nice-to-have bullets, active technical skill prompt lines, and professional background segments.
+- **Client pre-flight (UI only)** — job detail Applications sections still read Redux for friendly disable states (e.g. missing bio/voice or no active skills). The server returns **400** if required data is missing at generation time (source of truth is Supabase, not stale client state).
 
-Job detail page already dispatches `loadProfessionalBackgroundThunk` and `loadTechnicalSkillsThunk` on mount.
+Job detail page dispatches `loadProfessionalBackgroundThunk` and `loadTechnicalSkillsThunk` on mount so UI hints stay accurate.
 
 ### 4) Persistence
 
@@ -61,5 +61,5 @@ Reuse Supabase `resume_tsx_code_generation_*` tables and CRUD in Express `src/da
 
 - [ ] New generation uses Express `/api/data/cover-letter/generate`, not ad-hoc fetch from components.
 - [ ] Prompt outputs `GeneratedCoverLetterPreview`, not `GeneratedSkillsPreview`.
-- [ ] US Letter canvas defaults (816×1056) unless body overrides.
+- [ ] US Letter canvas defaults (816×1056) on server and graphic creation.
 - [ ] Graphic metadata includes `jobId` and `coverLetterSource: "cursor"`.

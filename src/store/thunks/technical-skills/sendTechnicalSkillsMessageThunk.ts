@@ -11,9 +11,12 @@ export const sendTechnicalSkillsMessageThunk = (
   return async (dispatch): Status => {
     dispatch(TechnicalSkillsBuilderActions.setPostingMessage(true));
     try {
-      const payload = await postTechnicalSkillsMessage(content);
-      dispatch(CurrentTechnicalSkillsActions.syncDraftTechnicalSkills(payload.skills));
-      dispatch(CurrentTechnicalSkillsActions.syncMessages(payload.messages));
+      const result = await postTechnicalSkillsMessage(content);
+      if (!result.success || !result.data) {
+        return 500;
+      }
+      dispatch(CurrentTechnicalSkillsActions.syncDraftTechnicalSkills(result.data.skills));
+      dispatch(CurrentTechnicalSkillsActions.syncMessages(result.data.messages));
       return 200;
     } catch {
       return 500;

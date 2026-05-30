@@ -1,2 +1,2 @@
-export { generateSkillsComponent } from './generate';
-export type { GenerateSkillsComponentInput, GenerateSkillsComponentResponse } from './generate';
+export { generateSkillsComponent } from "./generate";
+export type { GenerateByJobIdInput } from "@/api/generation/types";

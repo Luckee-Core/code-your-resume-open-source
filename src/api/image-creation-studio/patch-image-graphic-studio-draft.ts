@@ -1,5 +1,5 @@
-import type { ApiResponse } from "@/api/types";
-import { parseApiJson } from "@/api/parse-api-json";
+import type { ApiResult } from "@/api/types";
+import { requestApi } from "@/api/_shared/request-api";
 
 export type PatchImageGraphicStudioDraftData = {
   id: string;
@@ -13,11 +13,10 @@ export type PatchImageGraphicStudioDraftData = {
 export const patchImageGraphicStudioDraft = async (
   graphicId: string,
   tsx: string,
-): Promise<ApiResponse<PatchImageGraphicStudioDraftData>> => {
-  const res = await fetch("/api/data/image-graphic/patch-studio-draft", {
+): Promise<ApiResult<PatchImageGraphicStudioDraftData>> => {
+  return requestApi<PatchImageGraphicStudioDraftData>("/api/data/image-graphic/patch-studio-draft", {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ graphicId, tsx }),
   });
-  return parseApiJson<PatchImageGraphicStudioDraftData>(res);
 };

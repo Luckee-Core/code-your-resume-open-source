@@ -52,7 +52,9 @@ npm install && npm run dev`}</code>
         <p className={styles.p}>
           Companies and jobs: <code className={styles.code}>.data/crm/*.json</code> on Express. Graphics: Supabase table{" "}
           <code className={styles.code}>image_graphics</code> (run{" "}
-          <code className={styles.code}>docs/supabase-image-graphics-schema.sql</code> in your tenant project). Set{" "}
+          <code className={styles.code}>docs/supabase-image-graphics-schema.sql</code> in your tenant project). Production
+          thunk failures are stored in <code className={styles.code}>thunk_errors</code> (run{" "}
+          <code className={styles.code}>docs/supabase-error-log-schema.sql</code> on Express). Set{" "}
           <code className={styles.code}>SUPABASE_URL</code> and{" "}
           <code className={styles.code}>SUPABASE_SERVICE_ROLE_KEY</code> on Express only.
         </p>

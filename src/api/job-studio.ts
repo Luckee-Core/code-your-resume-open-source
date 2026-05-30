@@ -1,37 +1,43 @@
+import type { ApiResult } from "@/api/types";
+import { requestApi } from "@/api/_shared/request-api";
 import type { JobStudioPayload } from "@/model/job-studio";
 
-type JobStudioApiResponse = {
-  success: boolean;
+type RawJobStudioResponse = ApiResult<JobStudioPayload> & {
   messages?: JobStudioPayload["messages"];
-  error?: string;
 };
 
-const normalizePayload = (raw: JobStudioApiResponse): JobStudioPayload => ({
-  messages: raw.messages ?? [],
-});
+const normalizeJobStudioResult = (result: RawJobStudioResponse): ApiResult<JobStudioPayload> => {
+  if (!result.success) {
+    return result;
+  }
+
+  return {
+    success: true,
+    data: {
+      messages: result.messages ?? result.data?.messages ?? [],
+    },
+    httpStatus: result.httpStatus,
+  };
+};
 
 /**
  * Load Job Studio chat history for one CRM job.
  */
-export async function getJobStudioPayload(jobId: string): Promise<JobStudioPayload> {
+export const getJobStudioPayload = async (jobId: string): Promise<ApiResult<JobStudioPayload>> => {
   const qs = new URLSearchParams({ jobId });
-  const res = await fetch(`/api/job-studio?${qs.toString()}`);
-  const json = (await res.json()) as JobStudioApiResponse;
-  if (!json.success) {
-    throw new Error(json.error ?? "Failed to load Job Studio chat");
-  }
-  return normalizePayload(json);
-}
+  const result = await requestApi<JobStudioPayload>(`/api/job-studio?${qs.toString()}`);
+  return normalizeJobStudioResult(result as RawJobStudioResponse);
+};
 
 /**
  * Send a user message to the Job Studio coach and return the updated transcript.
  */
-export async function postJobStudioMessage(params: {
+export const postJobStudioMessage = async (params: {
   jobId: string;
   userId: string;
   content: string;
-}): Promise<JobStudioPayload> {
-  const res = await fetch("/api/job-studio/messages", {
+}): Promise<ApiResult<JobStudioPayload>> => {
+  const result = await requestApi<JobStudioPayload>("/api/job-studio/messages", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -40,9 +46,5 @@ export async function postJobStudioMessage(params: {
       content: params.content,
     }),
   });
-  const json = (await res.json()) as JobStudioApiResponse;
-  if (!json.success) {
-    throw new Error(json.error ?? "Failed to send message");
-  }
-  return normalizePayload(json);
-}
+  return normalizeJobStudioResult(result as RawJobStudioResponse);
+};

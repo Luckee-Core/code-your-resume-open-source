@@ -1,5 +1,1 @@
-export type ApiResponse<T> = {
-  success: boolean;
-  data?: T;
-  error?: string;
-};
+export type { ApiResponse, ApiResult } from "@/api/_shared/types";

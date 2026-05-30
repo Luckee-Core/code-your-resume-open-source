@@ -1,5 +1,5 @@
-import type { ApiResponse } from "@/api/types";
-import { parseApiJson } from "@/api/parse-api-json";
+import type { ApiResult } from "@/api/types";
+import { requestApi } from "@/api/_shared/request-api";
 
 export type CreateImageGraphicBody = {
   title: string;
@@ -14,8 +14,8 @@ export type CreateImageGraphicBody = {
  */
 export const createImageGraphicApi = async (
   body: CreateImageGraphicBody,
-): Promise<ApiResponse<{ id: string }>> => {
-  const res = await fetch("/api/data/image-graphic/create", {
+): Promise<ApiResult<{ id: string }>> => {
+  return requestApi<{ id: string }>("/api/data/image-graphic/create", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -26,5 +26,4 @@ export const createImageGraphicApi = async (
       metadata: body.metadata ?? {},
     }),
   });
-  return parseApiJson<{ id: string }>(res);
 };

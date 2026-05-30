@@ -11,8 +11,11 @@ export const saveTechnicalSkillsThunk = (): AppThunk<Status> => {
     const items = getState().currentTechnicalSkills.draftTechnicalSkills;
     dispatch(TechnicalSkillsBuilderActions.setSaving(true));
     try {
-      const payload = await patchTechnicalSkills({ technicalSkills: items });
-      dispatch(CurrentTechnicalSkillsActions.syncDraftTechnicalSkills(payload.skills));
+      const result = await patchTechnicalSkills({ technicalSkills: items });
+      if (!result.success || !result.data) {
+        return 500;
+      }
+      dispatch(CurrentTechnicalSkillsActions.syncDraftTechnicalSkills(result.data.skills));
       dispatch(CurrentTechnicalSkillsActions.commitSkillsFingerprint());
       return 200;
     } catch {

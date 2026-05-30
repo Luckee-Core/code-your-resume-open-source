@@ -1,19 +1,14 @@
 import { patchImageGraphicStudioDraft } from "@/api/image-creation-studio";
 import { generateCoverLetter } from "@/api/cover-letter";
-import type { ProfessionalBackgroundSegments } from "@/model/professional-background";
+import { coerceErrorFields, reportThunkError } from "@/api/thunk-errors";
 import type { AppThunk } from "@/store";
 import { CurrentStudioEditorActions } from "@/store/current/currentStudioEditor";
 import { createImageGraphicThunk } from "@/store/thunks/image-creation-studio/create-image-graphic-thunk";
 import { loadImageGraphicsThunk } from "@/store/thunks/image-creation-studio/load-image-graphics-thunk";
 import { openImageGraphicStudioByIdThunk } from "@/store/thunks/image-creation-studio/open-image-graphic-studio-by-id-thunk";
-import { collectSortedJobBulletBodies } from "@/utils/job";
 
 export type GenerateCoverLetterThunkInput = {
   jobId: string;
-  jobTitle: string;
-  companyName?: string;
-  skills?: string[];
-  professionalBackgroundSegments: ProfessionalBackgroundSegments;
 };
 
 /** US Letter width at 96dpi. */
@@ -23,7 +18,7 @@ const DEFAULT_CANVAS_H = 1056;
 
 /**
  * Launch a Cursor agent to generate a cover letter TSX component, save it
- * to a new Supabase-backed image graphic tagged with `jobId`, and open
+ * to a new server-backed image graphic tagged with `jobId`, and open
  * that graphic in studio state.
  *
  * @returns 200 on success, 400 if input invalid, 500 on API or persistence failure
@@ -31,47 +26,27 @@ const DEFAULT_CANVAS_H = 1056;
 export const generateCoverLetterThunk =
   (input: GenerateCoverLetterThunkInput): AppThunk<Promise<200 | 400 | 500>> =>
   async (dispatch, getState) => {
-    const { jobId, jobTitle, companyName, skills, professionalBackgroundSegments } = input;
-
-    if (!jobId.trim() || !jobTitle.trim()) {
+    const jobId = input.jobId.trim();
+    if (!jobId) {
       return 400;
     }
 
-    const credibility = professionalBackgroundSegments.credibility_bio?.trim() ?? "";
-    const voice = professionalBackgroundSegments.voice_style?.trim() ?? "";
-    if (!credibility && !voice) {
-      return 400;
-    }
-
-    const state = getState();
-    const responsibilities = collectSortedJobBulletBodies(
-      state.jobResponsibilities,
-      jobId.trim(),
-    );
-    const requirements = collectSortedJobBulletBodies(state.jobRequirements, jobId.trim());
-    const niceToHaves = collectSortedJobBulletBodies(state.jobNiceToHaves, jobId.trim());
+    const jobTitle = getState().currentJob.title?.trim() ?? "";
 
     try {
-      const { tsx } = await generateCoverLetter({
-        jobId: jobId.trim(),
-        jobTitle: jobTitle.trim(),
-        companyName,
-        responsibilities,
-        requirements,
-        niceToHaves,
-        skills,
-        canvasWidthPx: DEFAULT_CANVAS_W,
-        canvasHeightPx: DEFAULT_CANVAS_H,
-        professionalBackgroundSegments,
-      });
+      const generated = await generateCoverLetter({ jobId });
+      if (!generated.success || !generated.data?.tsx) {
+        return 500;
+      }
+      const tsx = generated.data.tsx;
 
-      const titleBase = jobTitle.trim();
+      const titleBase = jobTitle || `Job ${jobId.slice(0, 8)}`;
       const createStatus = await dispatch(
         createImageGraphicThunk({
           title: `Cover letter — ${titleBase}`,
           canvasWidthPx: DEFAULT_CANVAS_W,
           canvasHeightPx: DEFAULT_CANVAS_H,
-          jobId: jobId.trim(),
+          jobId,
           metadata: {
             coverLetterSource: "cursor",
           },
@@ -98,6 +73,16 @@ export const generateCoverLetterThunk =
 
       return 200;
     } catch (error) {
+      const { message, stack } = coerceErrorFields(error);
+      reportThunkError({
+        event: "failedToGenerateCoverLetter",
+        message,
+        stack,
+        thunkName: "generateCoverLetterThunk",
+        collection: "job",
+        entityId: jobId,
+        severity: "error",
+      });
       console.error("generateCoverLetterThunk error:", error);
       return 500;
     }

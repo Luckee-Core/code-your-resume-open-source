@@ -1,6 +1,6 @@
 import { patchImageGraphicStudioDraft } from "@/api/image-creation-studio";
 import { generateSkillsComponent } from "@/api/skills-component";
-import type { ProfessionalBackgroundSegments } from "@/model/professional-background";
+import { coerceErrorFields, reportThunkError } from "@/api/thunk-errors";
 import type { AppThunk } from "@/store";
 import { CurrentStudioEditorActions } from "@/store/current/currentStudioEditor";
 import { createImageGraphicThunk } from "@/store/thunks/image-creation-studio/create-image-graphic-thunk";
@@ -8,10 +8,7 @@ import { loadImageGraphicsThunk } from "@/store/thunks/image-creation-studio/loa
 import { openImageGraphicStudioByIdThunk } from "@/store/thunks/image-creation-studio/open-image-graphic-studio-by-id-thunk";
 
 export type GenerateSkillsComponentThunkInput = {
-  skills: string[];
   jobId: string;
-  jobTitle?: string;
-  professionalBackgroundSegments?: ProfessionalBackgroundSegments;
 };
 
 /** US Letter width at 96dpi. */
@@ -31,29 +28,29 @@ const RESUME_CANVAS_H = 1150;
 export const generateSkillsComponentThunk =
   (input: GenerateSkillsComponentThunkInput): AppThunk<Promise<200 | 400 | 500>> =>
   async (dispatch, getState) => {
-    const { skills, jobId, jobTitle, professionalBackgroundSegments } = input;
-    if (!skills.length || !jobId.trim()) {
+    const jobId = input.jobId.trim();
+    if (!jobId) {
       return 400;
     }
 
+    const jobTitle = getState().currentJob.title?.trim() ?? "";
     const w = RESUME_CANVAS_W;
     const h = RESUME_CANVAS_H;
 
     try {
-      const { tsx } = await generateSkillsComponent({
-        skills,
-        canvasWidthPx: w,
-        canvasHeightPx: h,
-        professionalBackgroundSegments,
-      });
+      const generated = await generateSkillsComponent({ jobId });
+      if (!generated.success || !generated.data?.tsx) {
+        return 500;
+      }
+      const tsx = generated.data.tsx;
 
-      const titleBase = jobTitle?.trim() ? jobTitle.trim() : `Job ${jobId.slice(0, 8)}`;
+      const titleBase = jobTitle || `Job ${jobId.slice(0, 8)}`;
       const createStatus = await dispatch(
         createImageGraphicThunk({
           title: `Skills — ${titleBase}`,
           canvasWidthPx: w,
           canvasHeightPx: h,
-          jobId: jobId.trim(),
+          jobId,
           metadata: {
             skillsComponentSource: "cursor",
           },
@@ -80,6 +77,16 @@ export const generateSkillsComponentThunk =
 
       return 200;
     } catch (error) {
+      const { message, stack } = coerceErrorFields(error);
+      reportThunkError({
+        event: "failedToGenerateSkillsComponent",
+        message,
+        stack,
+        thunkName: "generateSkillsComponentThunk",
+        collection: "job",
+        entityId: jobId,
+        severity: "error",
+      });
       console.error("generateSkillsComponentThunk error:", error);
       return 500;
     }

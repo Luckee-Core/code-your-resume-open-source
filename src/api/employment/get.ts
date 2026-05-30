@@ -1,12 +1,11 @@
-import type { ApiResponse } from "@/api/types";
+import type { ApiResult } from "@/api/types";
 import type { Employment } from "@/model/employment";
-import { parseApiJson } from "@/api/parse-api-json";
+import { requestApi } from "@/api/_shared/request-api";
 
 /**
  * GET /api/data/employment/get?id=
  */
-export const getEmploymentApi = async (id: string): Promise<ApiResponse<Employment>> => {
+export const getEmploymentApi = async (id: string): Promise<ApiResult<Employment>> => {
   const qs = new URLSearchParams({ id }).toString();
-  const res = await fetch(`/api/data/employment/get?${qs}`);
-  return parseApiJson<Employment>(res);
+  return requestApi<Employment>(`/api/data/employment/get?${qs}`);
 };

@@ -13,9 +13,16 @@ export const loadJobStudioChatThunk = (jobId: string): AppThunk<Status> => {
     if (!jobId) return 400;
     dispatch(JobStudioBuilderActions.setLoading());
     try {
-      const payload = await getJobStudioPayload(jobId);
+      const result = await getJobStudioPayload(jobId);
+      if (!result.success || !result.data) {
+        dispatch(
+          JobStudioBuilderActions.setError(result.error ?? "Failed to load Job Studio chat"),
+        );
+        dispatch(CurrentJobStudioActions.syncMessages([]));
+        return 500;
+      }
       dispatch(CurrentJobStudioActions.setLoadedJobId(jobId));
-      dispatch(CurrentJobStudioActions.syncMessages(payload.messages));
+      dispatch(CurrentJobStudioActions.syncMessages(result.data.messages));
       dispatch(JobStudioBuilderActions.setLoaded());
       return 200;
     } catch (e: unknown) {

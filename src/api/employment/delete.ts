@@ -1,11 +1,10 @@
-import type { ApiResponse } from "@/api/types";
-import { parseApiJson } from "@/api/parse-api-json";
+import type { ApiResult } from "@/api/types";
+import { requestApi } from "@/api/_shared/request-api";
 
 /**
  * DELETE /api/data/employment/delete?id=
  */
-export const deleteEmploymentApi = async (id: string): Promise<ApiResponse<{ id: string }>> => {
+export const deleteEmploymentApi = async (id: string): Promise<ApiResult<{ id: string }>> => {
   const qs = new URLSearchParams({ id }).toString();
-  const res = await fetch(`/api/data/employment/delete?${qs}`, { method: "DELETE" });
-  return parseApiJson<{ id: string }>(res);
+  return requestApi<{ id: string }>(`/api/data/employment/delete?${qs}`, { method: "DELETE" });
 };

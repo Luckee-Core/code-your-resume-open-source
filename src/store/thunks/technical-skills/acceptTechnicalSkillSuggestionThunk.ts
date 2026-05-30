@@ -11,9 +11,12 @@ export const acceptTechnicalSkillSuggestionThunk = (
   return async (dispatch): Status => {
     dispatch(TechnicalSkillsBuilderActions.setPostingMessage(true));
     try {
-      const payload = await postAcceptTechnicalSkillSuggestion(suggestionId);
-      dispatch(CurrentTechnicalSkillsActions.syncDraftTechnicalSkills(payload.skills));
-      dispatch(CurrentTechnicalSkillsActions.syncMessages(payload.messages));
+      const result = await postAcceptTechnicalSkillSuggestion(suggestionId);
+      if (!result.success || !result.data) {
+        return 500;
+      }
+      dispatch(CurrentTechnicalSkillsActions.syncDraftTechnicalSkills(result.data.skills));
+      dispatch(CurrentTechnicalSkillsActions.syncMessages(result.data.messages));
       return 200;
     } catch {
       return 500;

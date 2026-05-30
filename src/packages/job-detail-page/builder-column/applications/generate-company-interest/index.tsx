@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Loader2, Wand2 } from "lucide-react";
 import { toast } from "sonner";
 import { EXPERIENCE_BACKGROUND_PATH } from "@/config/routes";
@@ -21,26 +21,12 @@ export const GenerateCompanyInterest = () => {
   const loadStatus = useAppSelector((s) => s.professionalBackgroundBuilder.loadStatus);
   const loadError = useAppSelector((s) => s.professionalBackgroundBuilder.error);
   const draftSegments = useAppSelector((s) => s.currentProfessionalBackground.draftSegments);
-  const draftTechnicalSkills = useAppSelector((s) => s.currentTechnicalSkills.draftTechnicalSkills);
   const job = useAppSelector((s) => s.currentJob);
-  const companies = useAppSelector((s) => s.companies);
   const [isGenerating, setIsGenerating] = useState(false);
-
-  const companyName = job.companyId ? companies[job.companyId]?.name : undefined;
 
   const hasBackgroundVoice =
     Boolean(draftSegments.credibility_bio?.trim()) ||
     Boolean(draftSegments.voice_style?.trim());
-
-  const skillPromptLines = useMemo(
-    () =>
-      draftTechnicalSkills
-        .filter((sk) => sk.status === "active")
-        .map((sk) =>
-          sk.body?.trim() ? `${sk.title} — ${sk.body.trim()}` : sk.title,
-        ),
-    [draftTechnicalSkills],
-  );
 
   const handleGenerate = async () => {
     if (!hasBackgroundVoice) {
@@ -62,10 +48,6 @@ export const GenerateCompanyInterest = () => {
       const status = await dispatch(
         generateCompanyInterestThunk({
           jobId: job.id,
-          jobTitle: job.title,
-          companyName: companyName?.trim() || undefined,
-          skills: skillPromptLines.length > 0 ? skillPromptLines : undefined,
-          professionalBackgroundSegments: draftSegments,
         }),
       );
 
