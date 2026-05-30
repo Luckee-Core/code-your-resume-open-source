@@ -4,7 +4,7 @@
 Accepted
 
 ## Context
-This ADR defines the required file-organization standard for **google-maps-scraper-web** so module ownership, exports, and imports stay predictable as the codebase grows.
+This ADR defines the required file-organization standard for **code-your-resume-open-source** so module ownership, exports, and imports stay predictable as the codebase grows.
 
 ## Decision
 
@@ -41,46 +41,56 @@ src/services/*
 
 ---
 
-### 2) One function per file
-Each file must own one primary function (or one primary React component) to keep responsibilities clear.
+### 2) One function or component per file; kebab-case filenames
+Each file must own one primary function or one primary React component. File names use **kebab-case** (e.g. `load-jobs-thunk.ts`, `job-list-row.tsx`).
 
 ✅ **Do**
 ```ts
-// src/utils/orders/normalizeOrder.ts
-export function normalizeOrder(input: OrderDto): Order {
-  return {
-    id: input.id,
-    status: input.status,
-  };
-}
+// src/utils/orders/normalize-order.ts
+export const normalizeOrder = (input: OrderDto): Order => ({
+  id: input.id,
+  status: input.status,
+});
 ```
 
 ```ts
-// src/utils/orders/isOrderOpen.ts
-export function isOrderOpen(status: Order["status"]): boolean {
-  return status === "OPEN";
-}
+// src/store/thunks/crm/load-jobs-thunk.ts
+export const loadJobsThunk = (): AppThunk<Promise<200 | 400 | 500>> => async (dispatch) => {
+  // ...
+};
 ```
 
 ❌ **Don't**
 ```ts
-// src/utils/orders/orderHelpers.ts
-export function normalizeOrder(input: OrderDto): Order {
-  return { id: input.id, status: input.status };
-}
+// src/utils/orders/orderHelpers.ts — multiple exports in one file
+export const normalizeOrder = (input: OrderDto): Order => ({ ... });
+export const isOrderOpen = (status: Order["status"]): boolean => status === "OPEN";
+```
 
-export function isOrderOpen(status: Order["status"]): boolean {
-  return status === "OPEN";
-}
+---
 
-export function formatOrderLabel(order: Order): string {
-  return `${order.id} - ${order.status}`;
+### 3) Use `type`, not `interface`
+For consistency across the codebase, use `type` for object shapes and props.
+
+✅ **Do**
+```ts
+type Job = {
+  id: string;
+  title: string;
+};
+```
+
+❌ **Don't**
+```ts
+interface Job {
+  id: string;
+  title: string;
 }
 ```
 
 ---
 
-### 3) Barrel exports are required (`index.ts` in every folder)
+### 4) Barrel exports are required (`index.ts` in every folder)
 Every folder in `packages/`, `components/`, `utils/`, `store/`, and `api/` must include an `index.ts` that re-exports the folder's public API.
 
 ✅ **Do**
@@ -114,7 +124,7 @@ import { OrdersTable } from "@/packages/orders/ui/OrdersTable";
 
 ---
 
-### 4) Named exports only
+### 5) Named exports only
 Use named exports everywhere. `default` exports are forbidden **except** Next.js page files (`src/app/**/page.tsx`), where Next.js requires default export.
 
 ✅ **Do**
@@ -124,9 +134,9 @@ type ButtonProps = {
   label: string;
 };
 
-export function Button({ label }: ButtonProps) {
-  return <button>{label}</button>;
-}
+export const Button = ({ label }: ButtonProps) => {
+  return <button className={styles.button}>{label}</button>;
+};
 ```
 
 ```tsx
@@ -148,7 +158,7 @@ export default function Button() {
 
 ---
 
-### 5) Import boundaries
+### 6) Import boundaries
 Consumers must import through folder barrels (`index.ts`) instead of deep relative paths.
 
 ✅ **Do**

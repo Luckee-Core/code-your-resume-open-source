@@ -4,7 +4,7 @@
 Accepted
 
 ## Context
-This document defines component composition rules for **google-maps-scraper-web** to keep routing, feature logic, and shared UI consistent and scalable.
+This document defines component composition rules for **code-your-resume-open-source** to keep routing, feature logic, and shared UI consistent and scalable.
 
 ## Decision
 
@@ -169,7 +169,32 @@ import { OrdersScreen } from "@/packages/orders/ui/OrdersScreen"; // bypasses pa
 
 ---
 
-### 6) JSDoc is required on router factory, handlers, and business logic
+---
+
+### 7) Use `export const` for React components
+Prefer `export const ComponentName = () => { ... }` over `export function`. Use `type` for props, not `interface`.
+
+✅ **Do**
+```tsx
+type JobHeaderProps = {
+  title: string;
+};
+
+export const JobHeader = ({ title }: JobHeaderProps) => {
+  return <header className={styles.header}>{title}</header>;
+};
+```
+
+❌ **Don't**
+```tsx
+export function JobHeader({ title }: { title: string }) {
+  return <header>{title}</header>;
+}
+```
+
+---
+
+### 8) JSDoc is required on router factory, handlers, and business logic
 For server-side routing and business logic, add JSDoc comments to:
 
 - Router factory function
