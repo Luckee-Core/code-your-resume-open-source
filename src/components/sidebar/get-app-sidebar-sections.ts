@@ -2,6 +2,7 @@ import type { SidebarSection } from "./types";
 
 import {
   COMPANIES_PATH,
+  DASHBOARD_PATH,
   DOCS_PATH,
   EMPLOYEES_PATH,
   EXPERIENCE_PATH,
@@ -13,14 +14,14 @@ import {
 } from "@/config/routes";
 
 /**
- * Primary nav: Graphics, Docs, and job-search CRM list routes (detail uses fixed `*-detail-page` URLs from lists).
+ * Primary nav: Dashboard, Docs, and job-search CRM list routes (detail uses fixed `*-detail-page` URLs from lists).
  */
 export const getAppSidebarSections = (): SidebarSection[] => {
   return [
     {
       title: "",
       links: [
-        { name: "Graphics", href: "/" },
+        { name: "Dashboard", href: DASHBOARD_PATH },
         { name: "Docs", href: DOCS_PATH },
       ],
     },

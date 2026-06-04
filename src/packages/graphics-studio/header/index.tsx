@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { MoreHorizontal } from "lucide-react";
 import { toast } from "sonner";
-import { JOB_DETAIL_PAGE_PATH } from "@/config/routes";
+import { DASHBOARD_PATH, JOB_DETAIL_PAGE_PATH } from "@/config/routes";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { CurrentJobActions } from "@/store/current/currentJob";
 import { deleteImageGraphicThunk } from "@/store/thunks";
@@ -50,7 +50,7 @@ export const ImageCreationStudioHeader = () => {
       const status = await dispatch(deleteImageGraphicThunk(graphic.id));
       if (status === 200) {
         toast.success("Graphic deleted");
-        void router.push("/");
+        void router.push(DASHBOARD_PATH);
       } else {
         toast.error("Could not delete graphic");
       }

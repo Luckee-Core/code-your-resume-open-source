@@ -18,6 +18,7 @@ import {
 import {
   COMPANIES_PATH,
   COMPANY_DETAIL_PAGE_PATH,
+  DASHBOARD_PATH,
   COMPANY_EMPLOYEE_DETAIL_PAGE_PATH,
   DOCS_PATH,
   EMPLOYEES_PATH,
@@ -38,8 +39,8 @@ const isDocsActive = (pathname: string): boolean => {
   return false;
 };
 
-const isGraphicsActive = (pathname: string): boolean => {
-  if (pathname === "/") return true;
+const isDashboardActive = (pathname: string): boolean => {
+  if (pathname === DASHBOARD_PATH) return true;
   if (pathname === "/studio" || pathname.startsWith("/studio/")) return true;
   return false;
 };
@@ -49,7 +50,7 @@ const navIcon = (name: string, active: boolean) => {
   switch (name) {
     case "Docs":
       return <BookOpen className={cls} />;
-    case "Graphics":
+    case "Dashboard":
       return <Rows3 className={cls} />;
     case "Companies":
       return <Building2 className={cls} />;
@@ -80,7 +81,7 @@ export const Sidebar = () => {
 
   const isActiveHref = useCallback(
     (href: string, name: string) => {
-      if (name === "Graphics") return isGraphicsActive(pathname);
+      if (name === "Dashboard") return isDashboardActive(pathname);
       if (name === "Docs") return isDocsActive(pathname);
       if (name === "Companies") {
         return pathname === COMPANIES_PATH || pathname === COMPANY_DETAIL_PAGE_PATH;
@@ -99,7 +100,7 @@ export const Sidebar = () => {
       }
       if (name === "Background Studio") return pathname === EXPERIENCE_STUDIO_PATH;
       if (name === "Work History") return pathname === EXPERIENCE_PATH;
-      if (href === "/") return pathname === "/";
+      if (href === DASHBOARD_PATH) return pathname === DASHBOARD_PATH;
       return pathname === href;
     },
     [pathname],
@@ -108,7 +109,7 @@ export const Sidebar = () => {
   return (
     <aside className={styles.sidebar(collapsed)}>
       <div className={styles.logoArea}>
-        <Link href="/" className={styles.logoLink}>
+        <Link href={DASHBOARD_PATH} className={styles.logoLink}>
           <span className={styles.logoMark}>
             <svg
               className={styles.logoSvg}

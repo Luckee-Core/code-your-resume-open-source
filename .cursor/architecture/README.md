@@ -27,6 +27,7 @@ This folder contains Architecture Decision Records (ADRs) for the **code-your-re
 16. [015 – Error event logging](./015-error-event-logging.md) — Supabase `reportThunkError` / prod persistence
 17. [016 – Client API error handling](./016-client-api-error-handling.md) — `requestApi`, never throw
 18. [017 – Job application questions](./017-job-application-questions.md) — reusable prompts + per-job answers
+19. [018 – Marketing landing package](./018-marketing-landing-package.md) — `/` marketing, `/dashboard` app home
 
 > **Note:** Express server CRM ADRs use a different index ([009 – `/api/data`](../../code-your-resume-open-source-express-server/.cursor/architecture/009-crm-file-vault-api-data.md) there). Do not confuse with Next **009 – CRM detail UI parity** above.
 

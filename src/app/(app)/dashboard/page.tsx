@@ -2,7 +2,10 @@
 
 import { ImageGraphicsListPage } from "@/packages/graphics";
 
-export default function HomePage() {
+/**
+ * App home: graphics list (formerly root `/`).
+ */
+export default function DashboardPage() {
   return (
     <div className={styles.wrap}>
       <ImageGraphicsListPage />

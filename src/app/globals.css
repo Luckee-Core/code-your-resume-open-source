@@ -3,11 +3,37 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --card: #ffffff;
+  --card-foreground: #171717;
+  --primary: #ff7c1e;
+  --primary-hover: #e66b10;
+  --primary-foreground: #ffffff;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --border: #e4e4e7;
+  --input: #e4e4e7;
+  --ring: #ff7c1e;
+  --orange-50: #fff4ed;
+  --orange-100: #ffead9;
+  --ink: #171717;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-orange-50: var(--orange-50);
+  --color-orange-100: var(--orange-100);
+  --color-ink: var(--ink);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -16,4 +42,28 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+@utility kicker {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--primary);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+@utility hero-grid-bg {
+  background-image:
+    linear-gradient(to right, rgb(23 23 23 / 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(23 23 23 / 0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+@utility hero-orb-left {
+  background: radial-gradient(closest-side, #ff7c1e, transparent);
+}
+
+@utility hero-orb-right {
+  background: radial-gradient(closest-side, #ffb37a, transparent);
 }

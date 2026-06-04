@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "sonner";
-import { AppShell } from "@/components/AppShell";
 import { ReduxProvider } from "@/components/ReduxProvider";
 import "./globals.css";
 
@@ -16,8 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Luckee - NextJS to Preview",
-  description: "TSX preview and PNG download — graphics persisted in Supabase",
+  title: "Code Your Resume — Open-source job application studio",
+  description:
+    "Tailored resumes, cover letters, and job-search CRM. TSX graphics with live preview and PNG export.",
   icons: {
     icon: [{ url: "/logo.svg", type: "image/svg+xml" }],
   },
@@ -34,7 +34,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-zinc-50 text-gray-900`}
       >
         <ReduxProvider>
-          <AppShell>{children}</AppShell>
+          {children}
           <Toaster richColors position="top-center" />
         </ReduxProvider>
       </body>

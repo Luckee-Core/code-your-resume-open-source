@@ -2,6 +2,7 @@ import type { BreadcrumbItem } from "@/model/breadcrumb";
 import {
   COMPANIES_PATH,
   COMPANY_DETAIL_PAGE_PATH,
+  DASHBOARD_PATH,
   COMPANY_EMPLOYEE_DETAIL_PAGE_PATH,
   DOCS_GETTING_STARTED_PATH,
   DOCS_PATH,
@@ -22,11 +23,11 @@ const docsBase = (): BreadcrumbItem => ({ label: "Docs", href: DOCS_PATH });
  * Mirrors primary nav sections from the sidebar.
  */
 export const resolveDefaultDashboardBreadcrumbForPathname = (pathname: string): BreadcrumbItem[] => {
-  if (pathname === "/") {
-    return [{ label: "Graphics" }];
+  if (pathname === DASHBOARD_PATH) {
+    return [{ label: "Dashboard" }];
   }
   if (pathname.startsWith("/studio")) {
-    return [{ label: "Graphics", href: "/" }, { label: "Studio" }];
+    return [{ label: "Dashboard", href: DASHBOARD_PATH }, { label: "Studio" }];
   }
 
   if (pathname === DOCS_PATH) {
