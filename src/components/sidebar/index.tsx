@@ -8,6 +8,7 @@ import {
   Briefcase,
   Building2,
   FileText,
+  MessageCircleQuestion,
   PanelLeft,
   PanelLeftClose,
   Rows3,
@@ -25,6 +26,7 @@ import {
   JOB_APPLICATIONS_PATH,
   JOB_APPLICATION_DETAIL_PAGE_PATH,
   JOB_DETAIL_PAGE_PATH,
+  JOB_QUESTIONS_PATH,
   JOBS_PATH,
 } from "@/config/routes";
 import { getAppSidebarSections } from "./get-app-sidebar-sections";
@@ -43,7 +45,7 @@ const isGraphicsActive = (pathname: string): boolean => {
 };
 
 const navIcon = (name: string, active: boolean) => {
-  const cls = `h-4 w-4 shrink-0 ${active ? "text-orange-400" : "text-zinc-500"}`;
+  const cls = active ? styles.navIconActive : styles.navIconIdle;
   switch (name) {
     case "Docs":
       return <BookOpen className={cls} />;
@@ -57,6 +59,8 @@ const navIcon = (name: string, active: boolean) => {
       return <UserSquare2 className={cls} />;
     case "Applications":
       return <FileText className={cls} />;
+    case "Job questions":
+      return <MessageCircleQuestion className={cls} />;
     case "Work History":
       return <Briefcase className={cls} />;
     case "Background Studio":
@@ -89,6 +93,9 @@ export const Sidebar = () => {
       }
       if (name === "Applications") {
         return pathname === JOB_APPLICATIONS_PATH || pathname === JOB_APPLICATION_DETAIL_PAGE_PATH;
+      }
+      if (name === "Job questions") {
+        return pathname === JOB_QUESTIONS_PATH;
       }
       if (name === "Background Studio") return pathname === EXPERIENCE_STUDIO_PATH;
       if (name === "Work History") return pathname === EXPERIENCE_PATH;
@@ -126,7 +133,7 @@ export const Sidebar = () => {
           className={styles.collapseBtn}
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
-          {collapsed ? <PanelLeft className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
+          {collapsed ? <PanelLeft className={styles.panelIcon} /> : <PanelLeftClose className={styles.panelIcon} />}
         </button>
       </div>
 
@@ -189,4 +196,7 @@ const styles = {
   footer: `mt-auto shrink-0 border-t border-zinc-800 px-2 py-3`,
   footerText: `text-center text-[11px] leading-relaxed text-zinc-500`,
   mono: `rounded bg-zinc-800 px-0.5 font-mono text-[10px] text-zinc-300`,
-};
+  navIconIdle: `h-4 w-4 shrink-0 text-zinc-500`,
+  navIconActive: `h-4 w-4 shrink-0 text-orange-400`,
+  panelIcon: `h-4 w-4`,
+} as const;

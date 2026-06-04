@@ -13,15 +13,16 @@ export type GenerateSkillsComponentThunkInput = {
 
 /** US Letter width at 96dpi. */
 const RESUME_CANVAS_W = 816;
-/** Fixed resume document height (816×1150 preview canvas). */
-const RESUME_CANVAS_H = 1150;
+/** Minimum resume canvas height; grows to fit measured TSX content in Graphics Studio. */
+const RESUME_CANVAS_MIN_H = 1150;
 
 /**
  * Launch a Cursor agent to generate a skills showcase TSX component, save it
  * to a new server-backed image graphic tagged with `jobId`, and open
  * that graphic in studio state.
  *
- * Canvas is always 816×1150 for generated resumes.
+ * Canvas starts at 816×1150 minimum; Graphics Studio measures TSX content and
+ * auto-expands persisted height when the resume needs more space.
  *
  * @returns 200 on success, 400 if input invalid, 500 on API or persistence failure
  */
@@ -35,7 +36,7 @@ export const generateSkillsComponentThunk =
 
     const jobTitle = getState().currentJob.title?.trim() ?? "";
     const w = RESUME_CANVAS_W;
-    const h = RESUME_CANVAS_H;
+    const h = RESUME_CANVAS_MIN_H;
 
     try {
       const generated = await generateSkillsComponent({ jobId });

@@ -4,8 +4,12 @@ import { ProfessionalBackgroundStudio } from "@/packages/professional-background
 
 export default function ExperienceBackgroundPage() {
   return (
-    <div className="flex min-h-0 min-w-0 flex-1 overflow-auto">
+    <div className={styles.wrap}>
       <ProfessionalBackgroundStudio />
     </div>
   );
 }
+
+const styles = {
+  wrap: `flex min-h-0 min-w-0 flex-1 overflow-auto`,
+} as const;

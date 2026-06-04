@@ -1,6 +1,7 @@
 "use client";
 
 import { ApplicationsSection } from "../builder-column/applications";
+import { ApplicationQuestionsSection } from "../builder-column/application-questions";
 import { GenerateCompanyInterest } from "../builder-column/applications/generate-company-interest";
 import { GenerateCoverLetter } from "../builder-column/applications/generate-cover-letter";
 import { GenerateResume } from "../builder-column/applications/generate-resume";
@@ -38,6 +39,7 @@ export const JobDetailGraphicsColumn = () => {
               >
                 <GenerateCompanyInterest />
               </JobDetailSectionCard>
+              <ApplicationQuestionsSection />
               <ApplicationsSection />
             </ul>
           </div>

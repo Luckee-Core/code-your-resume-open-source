@@ -23,3 +23,4 @@ export const EMPLOYEES_PATH = "/employees";
 export const COMPANY_EMPLOYEE_DETAIL_PAGE_PATH = "/company-employee-detail-page";
 export const JOB_APPLICATIONS_PATH = "/job-applications";
 export const JOB_APPLICATION_DETAIL_PAGE_PATH = "/job-application-detail-page";
+export const JOB_QUESTIONS_PATH = "/job-questions";

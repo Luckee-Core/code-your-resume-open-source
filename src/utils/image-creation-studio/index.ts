@@ -1,5 +1,6 @@
 export * from "./compute-preview-display-scale";
 export * from "./build-tsx-react-preview-src-doc";
+export * from "./compute-studio-preview-content-height";
 export * from "./measure-studio-preview-iframe-content-height";
 export * from "./normalize-studio-preview-clone-for-png-capture";
 export * from "./compile-image-studio-tsx";

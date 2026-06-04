@@ -46,6 +46,21 @@ Stable DOM ids live in `@/utils/image-creation-studio` so thunks can `document.g
 6. **`useCORS: true`**  
    Helps when remote assets participate in the preview; required for some CDN-loaded resources during clone/paint.
 
+## Dynamic canvas height (content-driven)
+
+Generated resumes (and all studio graphics) use a **minimum** stored canvas height. The live preview **measures rendered TSX** and expands when content needs more space.
+
+| Piece | Role |
+|--------|------|
+| `build-tsx-react-preview-src-doc.ts` | `#root` uses `min-height` + `height: auto`; boot script posts `IMAGE_STUDIO_PREVIEW_HEIGHT_POST_MESSAGE_TYPE` via `ResizeObserver`. |
+| `measure-studio-preview-iframe-content-height.ts` | Fallback read of iframe `scrollHeight`. |
+| `resolveStudioPreviewHeightPx` | Effective preview height = measured content when known, else stored canvas height. |
+| `use-studio-preview-measured-height.ts` | Listens for postMessage + polls; writes `currentStudioEditor.previewMeasuredContentHeightPx`. |
+| `syncImageGraphicCanvasHeightThunk` | Debounced PATCH when measured height differs from persisted `canvasHeightPx`. |
+| `saveImageGraphicStudioDraftThunk` | Also syncs canvas height on save. |
+
+Resume generation still creates graphics at **816×1150 minimum**; Graphics Studio grows height after the first successful measure.
+
 ## Operational notes
 
 - **Compile first**: the thunk requires `iframe.contentDocument` and a usable `body`; if TSX does not compile, there is nothing to capture.

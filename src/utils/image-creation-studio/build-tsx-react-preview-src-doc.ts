@@ -1,4 +1,5 @@
 import { escapeForInlineScript } from "./escape-for-inline-script";
+import { STUDIO_PREVIEW_CONTENT_HEIGHT_BOOT_FN } from "./compute-studio-preview-content-height";
 
 /** Matches the preview mount node in {@link buildTsxReactPreviewSrcDoc} HTML (`#root`). */
 export const IMAGE_STUDIO_PREVIEW_ROOT_ELEMENT_ID = "root";
@@ -108,6 +109,7 @@ export const buildTsxReactPreviewSrcDoc = (
 
   const bootScript = `
 ${previewRequireShim}
+${STUDIO_PREVIEW_CONTENT_HEIGHT_BOOT_FN}
 (function () {
   var rootEl = document.getElementById('${IMAGE_STUDIO_PREVIEW_ROOT_ELEMENT_ID}');
   function showErr(err) {
@@ -142,13 +144,36 @@ ${previewRequireShim}
       showErr('React UMD failed to load (check network or CDN). Preview iframe uses React ${PREVIEW_REACT_UMD_VERSION} UMD because React 19 has no official UMD on unpkg.');
       return;
     }
-    if (typeof ReactDOM.createRoot === 'function') {
-      ReactDOM.createRoot(rootEl).render(React.createElement(Comp));
-    } else if (typeof ReactDOM.render === 'function') {
-      ReactDOM.render(React.createElement(Comp), rootEl);
-    } else {
-      showErr('ReactDOM has neither createRoot nor render');
+    function reportContentHeight() {
+      if (!rootEl) return;
+      var h = __measureStudioPreviewContentHeight(rootEl);
+      if (!h || !isFinite(h)) return;
+      try {
+        window.parent.postMessage(
+          { type: '${IMAGE_STUDIO_PREVIEW_HEIGHT_POST_MESSAGE_TYPE}', heightPx: h },
+          '*'
+        );
+      } catch (_) {}
     }
+    function mountPreview() {
+      if (typeof ReactDOM.createRoot === 'function') {
+        ReactDOM.createRoot(rootEl).render(React.createElement(Comp));
+      } else if (typeof ReactDOM.render === 'function') {
+        ReactDOM.render(React.createElement(Comp), rootEl);
+      } else {
+        showErr('ReactDOM has neither createRoot nor render');
+        return;
+      }
+      setTimeout(reportContentHeight, 100);
+      setTimeout(reportContentHeight, 500);
+      setTimeout(reportContentHeight, 1200);
+      if (typeof ResizeObserver === 'function' && rootEl) {
+        new ResizeObserver(function () {
+          reportContentHeight();
+        }).observe(rootEl);
+      }
+    }
+    mountPreview();
   } catch (e) {
     showErr(e);
   }
@@ -169,8 +194,9 @@ ${previewRequireShim}
   <style>
     html, body {
       margin: 0;
-      height: 100%;
-      overflow: hidden;
+      min-height: 0;
+      height: auto;
+      overflow: visible;
     }
     @media print {
       @page {
@@ -184,8 +210,8 @@ ${previewRequireShim}
       }
       #${rootId} {
         width: ${w}px !important;
-        height: ${h}px !important;
-        overflow: hidden;
+        height: auto !important;
+        overflow: visible;
       }
     }
     body {
@@ -195,7 +221,7 @@ ${previewRequireShim}
   </style>
 </head>
 <body class="bg-white text-gray-900 antialiased">
-  <div id="${rootId}" style="width:${w}px;height:${h}px;overflow:auto;box-sizing:border-box"></div>
+  <div id="${rootId}" style="width:${w}px;height:auto;overflow:visible;box-sizing:border-box"></div>
   <script>${safeBoot}</script>
 </body>
 </html>`;

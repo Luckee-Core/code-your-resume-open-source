@@ -14,6 +14,8 @@ import {
   loadProfessionalBackgroundThunk,
   loadTechnicalSkillsThunk,
   loadJobStudioChatThunk,
+  loadJobQuestionsThunk,
+  loadJobQuestionAnswersForJobThunk,
   openCompanyThunk,
   openJobThunk,
 } from "@/store/thunks";
@@ -72,6 +74,8 @@ export const JobDetailPage = () => {
   useEffect(() => {
     if (job.id) {
       void dispatch(loadJobBulletsThunk(job.id));
+      void dispatch(loadJobQuestionsThunk());
+      void dispatch(loadJobQuestionAnswersForJobThunk(job.id));
     }
   }, [dispatch, job.id]);
 

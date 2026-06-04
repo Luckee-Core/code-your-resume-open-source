@@ -32,7 +32,7 @@ export const EmploymentTableRow = ({ employmentId }: Props) => {
         {typeof jobDisplay === "string" ? (
           jobDisplay
         ) : jobDisplay ? (
-          <span className="flex items-center gap-1.5">
+          <span className={styles.jobTitleRow}>
             {jobDisplay.title}
             {jobDisplay.isContract && (
               <span className={styles.contractBadge}>Contract</span>
@@ -66,4 +66,5 @@ const styles = {
   tdRight: `border-b border-zinc-100 px-3 py-2.5 text-right`,
   dangerBtn: `text-sm text-red-600 hover:text-red-700 disabled:opacity-50`,
   contractBadge: `inline-flex items-center rounded-full bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-800`,
-};
+  jobTitleRow: `flex items-center gap-1.5`,
+} as const;

@@ -4,6 +4,8 @@ export type CurrentStudioEditorState = {
   graphicId: string;
   tsxDraft: string;
   tsxBaselineForPreview: string;
+  /** Live content height from preview iframe (null until measured). */
+  previewMeasuredContentHeightPx: number | null;
   isSavingDraft: boolean;
   isDownloadingPreviewPng: boolean;
 };
@@ -12,6 +14,7 @@ const initialState: CurrentStudioEditorState = {
   graphicId: "",
   tsxDraft: "",
   tsxBaselineForPreview: "",
+  previewMeasuredContentHeightPx: null,
   isSavingDraft: false,
   isDownloadingPreviewPng: false,
 };
@@ -24,6 +27,7 @@ const currentStudioEditorSlice = createSlice({
       state.graphicId = action.payload.graphicId;
       state.tsxDraft = action.payload.tsx;
       state.tsxBaselineForPreview = action.payload.tsx;
+      state.previewMeasuredContentHeightPx = null;
     },
     resetStudioEditorState: () => initialState,
     setTsxDraft: (state, action: PayloadAction<string>) => {
@@ -37,6 +41,9 @@ const currentStudioEditorSlice = createSlice({
     },
     setIsDownloadingPreviewPng: (state, action: PayloadAction<boolean>) => {
       state.isDownloadingPreviewPng = action.payload;
+    },
+    setPreviewMeasuredContentHeightPx: (state, action: PayloadAction<number | null>) => {
+      state.previewMeasuredContentHeightPx = action.payload;
     },
     syncTsxBaselineAfterSave: (state) => {
       state.tsxBaselineForPreview = state.tsxDraft;

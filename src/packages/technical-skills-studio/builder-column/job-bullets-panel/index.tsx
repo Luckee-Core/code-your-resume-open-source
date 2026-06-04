@@ -51,9 +51,9 @@ const JobGroup = ({
         aria-expanded={open}
       >
         {open ? (
-          <ChevronDown className="h-3.5 w-3.5 shrink-0 text-gray-400" />
+          <ChevronDown className={styles.chevron} />
         ) : (
-          <ChevronRight className="h-3.5 w-3.5 shrink-0 text-gray-400" />
+          <ChevronRight className={styles.chevron} />
         )}
         <span className={styles.groupCompany}>{group.companyName}</span>
         <span className={styles.groupDivider}>·</span>
@@ -141,9 +141,9 @@ export const JobBulletsPanel = ({ isSaving }: { isSaving: boolean }) => {
         aria-expanded={open}
       >
         {open ? (
-          <ChevronDown className="h-3.5 w-3.5 shrink-0 text-gray-400" />
+          <ChevronDown className={styles.chevron} />
         ) : (
-          <ChevronRight className="h-3.5 w-3.5 shrink-0 text-gray-400" />
+          <ChevronRight className={styles.chevron} />
         )}
         <span className={styles.panelLabel}>Job bullets</span>
         <span className={styles.panelMeta}>
@@ -180,4 +180,5 @@ const styles = {
   bulletRow: `flex items-start gap-2 group`,
   bulletText: `flex-1 min-w-0 text-[11px] leading-relaxed text-gray-700`,
   addSkillBtn: `shrink-0 rounded border border-gray-200 bg-white px-1.5 py-0.5 text-[10px] font-medium text-orange-600 opacity-0 group-hover:opacity-100 hover:bg-orange-50 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity`,
-};
+  chevron: `h-3.5 w-3.5 shrink-0 text-gray-400`,
+} as const;

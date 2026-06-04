@@ -10,8 +10,12 @@ These rules define how styling must be written in this repository's Next.js code
 2. Use **template literals** (backticks) for style values.
 3. Define the **component first**, then define `styles` **after** the component function.
 4. Group responsive utilities so each breakpoint is on a separate line.
-5. Do **not** use inline `style={{ ... }}`.
+5. Do **not** use inline `style={{ ... }}` except the [Graphics Studio preview exception](#exception-graphics-studio-preview-scale) below.
 6. Do **not** create separate CSS files (`.css`, `.module.css`, `.scss`) for component styling.
+
+### Exception: Graphics Studio preview scale
+
+In `src/packages/graphics-studio/builder-column/index.tsx` only, the preview iframe wrapper may set runtime `width`, `height`, and `transform` via inline `style` when values come from measured TSX layout and canvas scale. Do not copy this pattern to other components. See [007 – Studio preview PNG export](./007-studio-preview-png-export.md).
 
 ---
 

@@ -4,8 +4,12 @@ import { ImageGraphicsListPage } from "@/packages/graphics";
 
 export default function HomePage() {
   return (
-    <div className="flex min-h-0 flex-1 flex-col">
+    <div className={styles.wrap}>
       <ImageGraphicsListPage />
     </div>
   );
 }
+
+const styles = {
+  wrap: `flex min-h-0 flex-1 flex-col`,
+} as const;

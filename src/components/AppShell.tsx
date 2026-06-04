@@ -16,15 +16,19 @@ export const AppShell = (props: AppShellProps) => {
 
   return (
     <>
-      <div className="flex h-screen w-full overflow-hidden bg-zinc-50">
+      <div className={styles.shell}>
         <Sidebar />
-        <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+        <div className={styles.mainColumn}>
           <AppShellBreadcrumbHeader />
-          <main className="flex min-h-0 flex-1 flex-col overflow-y-auto">
-            {children}
-          </main>
+          <main className={styles.main}>{children}</main>
         </div>
       </div>
     </>
   );
 };
+
+const styles = {
+  shell: `flex h-screen w-full overflow-hidden bg-zinc-50`,
+  mainColumn: `flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden`,
+  main: `flex min-h-0 flex-1 flex-col overflow-y-auto`,
+} as const;

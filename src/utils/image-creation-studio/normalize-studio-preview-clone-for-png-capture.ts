@@ -1,16 +1,9 @@
 import { IMAGE_STUDIO_PREVIEW_ROOT_ELEMENT_ID } from "./build-tsx-react-preview-src-doc";
 
-/** Tailwind utilities tied to the viewport / iframe height — safe to drop on the PNG clone only. */
-const VIEWPORT_HEIGHT_TAILWIND_CLASSES = [
-  "min-h-screen",
-  "h-screen",
-  "min-h-svh",
-  "min-h-lvh",
-  "min-h-dvh",
-  "h-svh",
-  "h-lvh",
-  "h-dvh",
-];
+import { STUDIO_PREVIEW_VIEWPORT_HEIGHT_CLASSES } from "./compute-studio-preview-content-height";
+
+/** @deprecated Use STUDIO_PREVIEW_VIEWPORT_HEIGHT_CLASSES */
+const VIEWPORT_HEIGHT_TAILWIND_CLASSES = [...STUDIO_PREVIEW_VIEWPORT_HEIGHT_CLASSES];
 
 /**
  * The live preview iframe is sized tall so users can scroll the studio; TSX often uses `min-h-screen` / `h-screen`,

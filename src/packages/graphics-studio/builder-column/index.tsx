@@ -3,16 +3,21 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { CurrentStudioEditorActions } from "@/store/current/currentStudioEditor";
+import { syncImageGraphicCanvasHeightThunk } from "@/store/thunks";
 import {
   clampStudioPreviewDimension,
   compileImageStudioTsx,
   computePreviewDisplayScale,
   computeStudioIframeSrcDoc,
+  resolveStudioPreviewHeightPx,
   IMAGE_STUDIO_PREVIEW_IFRAME_ELEMENT_ID,
 } from "@/utils/image-creation-studio";
 import { ImageCreationStudioBuilderColumnActions } from "./actions";
+import { useStudioPreviewMeasuredHeight } from "./use-studio-preview-measured-height";
 
 const TSX_PREVIEW_DEBOUNCE_MS = 400;
+/** Debounce before persisting measured canvas height to the server. */
+const CANVAS_HEIGHT_SYNC_DEBOUNCE_MS = 1500;
 
 /**
  * Tracks an element's content-box width via `ResizeObserver` so the preview can fit-to-container.
@@ -48,9 +53,13 @@ export const ImageCreationStudioBuilderColumn = () => {
   const graphicId = useAppSelector((s) => s.currentImageGraphic.id);
   const canvasWidthPx = useAppSelector((s) => s.currentImageGraphic.canvasWidthPx);
   const canvasHeightPx = useAppSelector((s) => s.currentImageGraphic.canvasHeightPx);
+  const previewMeasuredContentHeightPx = useAppSelector(
+    (s) => s.currentStudioEditor.previewMeasuredContentHeightPx,
+  );
 
   const previewW = clampStudioPreviewDimension(canvasWidthPx, 960);
-  const previewH = clampStudioPreviewDimension(canvasHeightPx, 540);
+  const storedPreviewH = clampStudioPreviewDimension(canvasHeightPx, 540);
+  const previewH = resolveStudioPreviewHeightPx(storedPreviewH, previewMeasuredContentHeightPx);
 
   const [previewAreaRef, previewAreaWidth] = useElementWidth<HTMLDivElement>();
 
@@ -85,10 +94,30 @@ export const ImageCreationStudioBuilderColumn = () => {
       computeStudioIframeSrcDoc({
         tsxDraft: debouncedTsxDraft,
         previewW,
-        previewH,
+        previewH: storedPreviewH,
       }),
-    [debouncedTsxDraft, previewW, previewH],
+    [debouncedTsxDraft, previewW, storedPreviewH],
   );
+
+  useStudioPreviewMeasuredHeight({
+    graphicId,
+    canvasHeightPx: storedPreviewH,
+    iframeSrcDoc,
+  });
+
+  /** Persist measured height when content outgrows stored canvas dimensions. */
+  useEffect(() => {
+    if (previewMeasuredContentHeightPx == null) {
+      return;
+    }
+    if (previewMeasuredContentHeightPx === storedPreviewH) {
+      return;
+    }
+    const id = window.setTimeout(() => {
+      void dispatch(syncImageGraphicCanvasHeightThunk(previewMeasuredContentHeightPx));
+    }, CANVAS_HEIGHT_SYNC_DEBOUNCE_MS);
+    return () => window.clearTimeout(id);
+  }, [dispatch, previewMeasuredContentHeightPx, storedPreviewH]);
 
   const tsxCompileError = useMemo(() => {
     const trimmed = debouncedTsxDraft.trim();
@@ -113,6 +142,10 @@ export const ImageCreationStudioBuilderColumn = () => {
               <h2 className={styles.h2}>Preview</h2>
               <p className={styles.canvasMeta}>
                 Canvas {previewW}×{previewH}px
+                {previewMeasuredContentHeightPx != null &&
+                previewMeasuredContentHeightPx !== storedPreviewH
+                  ? " (height fits content)"
+                  : null}
               </p>
             </div>
             <ImageCreationStudioBuilderColumnActions previewHasContent={previewHasContent} />
@@ -227,4 +260,4 @@ const styles = {
   previewFrame: `
     absolute left-0 top-0 block border-0 bg-white
   `,
-};
+} as const;

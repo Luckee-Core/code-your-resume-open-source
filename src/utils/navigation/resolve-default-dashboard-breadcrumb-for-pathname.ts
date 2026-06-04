@@ -11,6 +11,7 @@ import {
   JOB_APPLICATIONS_PATH,
   JOB_APPLICATION_DETAIL_PAGE_PATH,
   JOB_DETAIL_PAGE_PATH,
+  JOB_QUESTIONS_PATH,
   JOBS_PATH,
 } from "@/config/routes";
 
@@ -52,6 +53,9 @@ export const resolveDefaultDashboardBreadcrumbForPathname = (pathname: string): 
   }
   if (pathname === JOB_APPLICATIONS_PATH || pathname === JOB_APPLICATION_DETAIL_PAGE_PATH) {
     return [{ label: "Applications", href: JOB_APPLICATIONS_PATH }];
+  }
+  if (pathname === JOB_QUESTIONS_PATH) {
+    return [{ label: "Job questions", href: JOB_QUESTIONS_PATH }];
   }
   if (pathname === EXPERIENCE_PATH) {
     return [{ label: "Experience", href: EXPERIENCE_PATH }];

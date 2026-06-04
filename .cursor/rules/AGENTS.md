@@ -61,3 +61,4 @@ BEFORE implementing ANY feature, you MUST:
 - Cover letter generation → `.cursor/architecture/014-cover-letter-generation.md`
 - Error event logging → `.cursor/architecture/015-error-event-logging.md`
 - Client API error handling → `.cursor/architecture/016-client-api-error-handling.md`
+- Job application questions → `.cursor/architecture/017-job-application-questions.md`

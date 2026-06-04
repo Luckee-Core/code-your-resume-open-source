@@ -3,6 +3,7 @@ import type { AppThunk } from "@/store";
 import { CurrentStudioEditorActions } from "@/store/current/currentStudioEditor";
 import { CurrentImageGraphicActions } from "@/store/current/currentImageGraphic";
 import { ImageGraphicsActions } from "@/store/dumps/imageGraphics";
+import { syncImageGraphicCanvasHeightThunk } from "./sync-image-graphic-canvas-height-thunk";
 
 type Status = Promise<200 | 400 | 500>;
 
@@ -39,6 +40,12 @@ export const saveImageGraphicStudioDraftThunk = (): AppThunk<Status> => {
       dispatch(CurrentImageGraphicActions.setCurrentImageGraphic(nextGraphic));
       dispatch(ImageGraphicsActions.upsertImageGraphics([nextGraphic]));
       dispatch(CurrentStudioEditorActions.syncTsxBaselineAfterSave());
+
+      const measuredH = getState().currentStudioEditor.previewMeasuredContentHeightPx;
+      if (measuredH != null) {
+        await dispatch(syncImageGraphicCanvasHeightThunk(measuredH));
+      }
+
       return 200;
     } finally {
       dispatch(CurrentStudioEditorActions.setIsSavingDraft(false));

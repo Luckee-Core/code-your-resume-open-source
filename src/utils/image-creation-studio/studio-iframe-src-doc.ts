@@ -3,11 +3,16 @@ import {
   IMAGE_STUDIO_PREVIEW_HEIGHT_POST_MESSAGE_TYPE,
 } from "./build-tsx-react-preview-src-doc";
 import { compileImageStudioTsx } from "./compile-image-studio-tsx";
+import {
+  isStudioPreviewMeasuredHeightCredible,
+  STUDIO_PREVIEW_MIN_CREDIBLE_HEIGHT_PX,
+} from "./compute-studio-preview-content-height";
 
 /** Stable `id` on the studio preview iframe so thunks can locate it without React refs. */
 export const IMAGE_STUDIO_PREVIEW_IFRAME_ELEMENT_ID = "image-studio-preview-iframe";
 
 export { IMAGE_STUDIO_PREVIEW_HEIGHT_POST_MESSAGE_TYPE };
+export { STUDIO_PREVIEW_MIN_CREDIBLE_HEIGHT_PX } from "./compute-studio-preview-content-height";
 
 export const clampStudioPreviewDimension = (n: number, fallback: number): number => {
   if (!Number.isFinite(n)) return fallback;
@@ -15,6 +20,30 @@ export const clampStudioPreviewDimension = (n: number, fallback: number): number
   if (r < 64) return 64;
   if (r > 8192) return 8192;
   return r;
+};
+
+/**
+ * Preview iframe height: measured content height when credible, otherwise stored canvas height.
+ *
+ * @param canvasHeightPx - Persisted graphic height (fallback before first measure)
+ * @param measuredContentHeightPx - Live layout height from iframe (null until measured)
+ */
+export const resolveStudioPreviewHeightPx = (
+  canvasHeightPx: number,
+  measuredContentHeightPx: number | null,
+): number => {
+  const fallback = clampStudioPreviewDimension(canvasHeightPx, 540);
+  const displayFallback = Math.max(fallback, STUDIO_PREVIEW_MIN_CREDIBLE_HEIGHT_PX);
+
+  if (measuredContentHeightPx == null) {
+    return displayFallback;
+  }
+
+  const measured = clampStudioPreviewDimension(measuredContentHeightPx, fallback);
+  if (!isStudioPreviewMeasuredHeightCredible(measured, fallback)) {
+    return displayFallback;
+  }
+  return measured;
 };
 
 type ComputeStudioIframeSrcDocParams = {

@@ -26,6 +26,8 @@ import jobApplicationsReducer from "./dumps/jobApplications";
 import jobResponsibilitiesReducer from "./dumps/jobResponsibilities";
 import jobRequirementsReducer from "./dumps/jobRequirements";
 import jobNiceToHavesReducer from "./dumps/jobNiceToHaves";
+import jobQuestionsReducer from "./dumps/jobQuestions";
+import jobQuestionAnswersReducer from "./dumps/jobQuestionAnswers";
 import employmentsReducer from "./dumps/employments";
 
 export const rootReducer = combineReducers({
@@ -47,6 +49,8 @@ export const rootReducer = combineReducers({
   jobResponsibilities: jobResponsibilitiesReducer,
   jobRequirements: jobRequirementsReducer,
   jobNiceToHaves: jobNiceToHavesReducer,
+  jobQuestions: jobQuestionsReducer,
+  jobQuestionAnswers: jobQuestionAnswersReducer,
   employments: employmentsReducer,
   studioBuilder: studioBuilderReducer,
   crmBuilder: crmBuilderReducer,
