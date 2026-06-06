@@ -1,12 +1,12 @@
-# 008 – Job-search CRM (local vault + Express `/api/data`)
+# 008 – Job-search CRM (Supabase + Express `/api/data`)
 
 ## Objective
 
 Document how **Companies → Employees / Jobs → Job applications → Employment** and **image graphics** are implemented: **CRM core tables** and **graphics** live in tenant **Supabase**; Express uses the service role and exposes **`/api/data/{entity}/{action}`**. The Next app uses `fetch` only — no `localStorage`, no Supabase client in the browser.
 
-**Employment** rows (`employments.json`) link an existing **company** and **job** with tenure dates; create/update handlers enforce `job.companyId === employment.companyId`.
+**Employment** rows link an existing **company** and **job** with tenure dates; create/update handlers enforce `job.companyId === employment.companyId`.
 
-**User Background Studio** is **not** CRM data: the Next app calls **`mentorai-server`** at **`/api/user-background-studio/**`** via a separate Next rewrite (`MENTORAI_INTERNAL_URL`, default dev `http://127.0.0.1:3005`). Redux uses split slices (`userBackgroundProfiles`, `userBackgroundStudioBuilder`, `currentUserBackground`). The browser sends `NEXT_PUBLIC_MENTORAI_USER_ID` for local/dev parity with mentorai’s expected `userId`.
+**User Background Studio** is **not** CRM data. The companion Express server includes a `user-background-studio` router (mount at `/api/user-background-studio` when enabled). Default `next.config.ts` rewrites CRM and studio paths to Express on port **3053** — it does **not** include a separate mentorai rewrite. Optional dev env: `NEXT_PUBLIC_MENTORAI_USER_ID` for legacy integration stubs in `src/config/mentorai-user.ts`.
 
 ## Decisions
 
@@ -19,7 +19,7 @@ Document how **Companies → Employees / Jobs → Job applications → Employmen
 
 - **Per-entity action paths**: `/api/data/company/list`, `/api/data/employee/create`, etc.
 - Client modules (e.g. [`src/api/company/list.ts`](../../src/api/company/list.ts)) call **relative** URLs such as `fetch("/api/data/company/list")` — no shared CRM URL helper.
-- **Next config:** `CRM_EXPRESS_INTERNAL_URL` overrides the CRM rewrite target. In **`next dev`**, if unset, Next defaults CRM rewrites to **`http://127.0.0.1:3053`** (same as Express default `PORT`). **`MENTORAI_INTERNAL_URL`** overrides the User Background Studio rewrite; in **`next dev`**, if unset, defaults to **`http://127.0.0.1:3005`**. For production, set both explicitly when proxying.
+- **Next config:** `EXPRESS_API_URL` or `CRM_EXPRESS_INTERNAL_URL` overrides the Express rewrite target. In **`next dev`**, if unset, Next defaults rewrites to **`http://127.0.0.1:3053`** (same as Express default `PORT`). Rewrites cover `/api/data/*`, `/api/technical-skills/*`, `/api/professional-background/*`, and `/api/job-studio/*`. For production (Vercel), set `EXPRESS_API_URL` to the public Railway URL.
 
 ### 3) Redux
 
@@ -45,4 +45,4 @@ Document how **Companies → Employees / Jobs → Job applications → Employmen
 
 - [ ] CRM reads/writes go through thunks → `src/api/**` → Express `/api/data/**` (or rewrite), not components calling `fetch` ad hoc.
 - [ ] Graphics require `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` on Express (tenant DB).
-- [ ] `.data/` remains gitignored; document first-run behavior if empty.
+- [ ] Supabase schema applied per Express `docs/` runbook before first CRM load.

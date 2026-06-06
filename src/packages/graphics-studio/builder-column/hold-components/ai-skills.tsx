@@ -12,8 +12,8 @@ export default function GeneratedSkillsPreview() {
 
   const experience = [
     {
-      role: "Founder & Hands-on Engineer",
-      organization: "TroutHouseTech",
+      role: "Software Engineer",
+      organization: "Acme Labs",
       period: "Recent",
       bullets: [
         "Help teams reduce repetitive work through AI automation, workflow tooling, and practical engineering across Node.js, React Native, and Next.js applications.",
@@ -25,13 +25,13 @@ export default function GeneratedSkillsPreview() {
       organization: "Independent product and client work",
       period: "Recent",
       bullets: [
-        "Built and shipped 12+ React Native and Expo apps since 2022, using TypeScript, Redux, React Navigation, Expo Router, Firebase, Supabase, Stripe, MapBox, and push-enabled real-time backends.",
-        "Delivered products across TeenPros, BoxBets, Swizzy Golf, Women Heart Sister Match, painter/DIY marketplaces, and field-service workflows involving leads, quotes, scheduling, rentals, payments, chat, groups, and notifications.",
+        "Built dashboard and mobile prototypes with TypeScript, React, Redux, PostgreSQL, and Stripe integrations.",
+        "Delivered sample marketplace and scheduling apps with authentication, notifications, and admin tooling.",
       ],
     },
     {
       role: "Salesforce BA / Trainer / Developer",
-      organization: "Revature",
+      organization: "Example Training Co.",
       period: "Earlier",
       bullets: [
         "Coordinated with large development groups, delivered Salesforce training workshops and curriculum, and contributed measurable process improvements.",
@@ -73,7 +73,7 @@ export default function GeneratedSkillsPreview() {
             </p>
             <div className="mt-2">
               <h1 className="text-3xl font-semibold tracking-tight text-slate-950">
-                Matt Ruiz
+                Alex Chen
               </h1>
             </div>
           </header>

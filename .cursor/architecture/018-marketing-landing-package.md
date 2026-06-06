@@ -6,7 +6,7 @@ Accepted
 
 ## Context
 
-Public visitors need a marketing home that explains the OSS job-application studio. The Lovable prototype lives in `tailored-career-studio`; production UI belongs in this Next app following Luckee/Roads landing package conventions.
+Public visitors need a marketing home that explains the OSS job-application studio. Production UI lives in this Next app under `src/packages/landing/`, following TroutHouse OSS landing package conventions (section folders + thin route).
 
 ## Decision
 
@@ -22,7 +22,7 @@ Public visitors need a marketing home that explains the OSS job-application stud
 
 ### Package layout
 
-Mirror [luckee-marketing `src/packages/landing/`](../../../luckee/luckee-marketing/src/packages/landing/):
+Canonical layout in this repo (`src/packages/landing/`):
 
 - `marketing-landing.tsx` — composer only
 - One folder per section (`hero/`, `feature-crm/`, …)
@@ -47,8 +47,8 @@ Per [003 – Styling rules](./003-styling-rules.md): `styles` object after each 
 
 ## References
 
-- Luckee marketing landing composer and section folders
-- Roads marketing `welcome-page.tsx` (header / main / footer composition)
+- Implementation: `src/packages/landing/marketing-landing.tsx` and section folders
+- OSS benchmark: [mentorai-server OSS package benchmark](https://github.com/luckee/mentorai-server/blob/main/docs/OSS_PACKAGE_BENCHMARK.md)
 
 ## PR checklist
 

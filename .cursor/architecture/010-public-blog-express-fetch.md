@@ -23,4 +23,4 @@ Accepted
 
 ## References
 
-- Prior art: luckee-marketing `src/api/public-blogs/*`, philly-ai-consulting `src/api/blogs/*`
+- Pattern: Server Component read + Redux list hydration (Lead Studio / TroutHouse OSS apps)

@@ -72,7 +72,7 @@ const navIcon = (name: string, active: boolean) => {
 };
 
 /**
- * App shell sidebar (Luckee-style collapse, primary nav + job search CRM).
+ * App shell sidebar (collapsible primary nav + job search CRM).
  */
 export const Sidebar = () => {
   const pathname = usePathname();
@@ -126,7 +126,7 @@ export const Sidebar = () => {
               />
             </svg>
           </span>
-          {!collapsed && <span className={styles.logoText}>Luckee</span>}
+          {!collapsed && <span className={styles.logoText}>Code Your Resume</span>}
         </Link>
         <button
           type="button"
@@ -164,7 +164,7 @@ export const Sidebar = () => {
       <div className={styles.footer}>
         {!collapsed ? (
           <p className={styles.footerText}>
-            CRM: <span className={styles.mono}>.data/crm/</span>. Graphics: Supabase via Express (3053).
+            CRM & graphics via Express (Supabase, port 3053).
           </p>
         ) : null}
       </div>

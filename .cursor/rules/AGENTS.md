@@ -54,7 +54,7 @@ BEFORE implementing ANY feature, you MUST:
 - Studio PNG export → `.cursor/architecture/007-studio-preview-png-export.md`
 - Job-search CRM → `.cursor/architecture/008-job-search-crm.md`
 - CRM detail UI → `.cursor/architecture/009-crm-detail-ui-parity.md`
-- Breadcrumbs → `.cursor/architecture/010-app-shell-breadcrumbs.md`
+- Breadcrumbs → `.cursor/architecture/019-app-shell-breadcrumbs.md`
 - Technical Skills Studio → `.cursor/architecture/011-technical-skills-studio.md`
 - Professional Background Studio → `.cursor/architecture/012-professional-background-studio.md`
 - Job Studio → `.cursor/architecture/013-job-studio.md`

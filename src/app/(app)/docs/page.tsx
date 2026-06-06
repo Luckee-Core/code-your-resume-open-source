@@ -3,7 +3,7 @@ import Link from "next/link";
 import { DOCS_GETTING_STARTED_PATH, DOCS_SECURITY_TSX_PREVIEW_PATH } from "@/config/routes";
 
 export const metadata: Metadata = {
-  title: "Documentation | Luckee — NextJS to Preview",
+  title: "Documentation | Code Your Resume",
   description: "Guides for the open-source TSX preview studio: getting started, persistence, and security.",
 };
 

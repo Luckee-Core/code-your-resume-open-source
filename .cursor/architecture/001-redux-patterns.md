@@ -78,7 +78,7 @@ State is organized as **top-level slices** under `src/store/`, not nested `dumps
 | **Builders** | `src/store/builders/{feature}Builder.ts` | UI flags, wizard steps, modal open state — **primitives only** (see exception below) |
 | **Config** | `src/store/config/` | Env / app-level settings |
 
-**Exception:** `breadcrumbBuilder.items: BreadcrumbItem[]` is allowed per [010 – App shell breadcrumbs](./010-app-shell-breadcrumbs.md). Do not use this as precedent for other builder slices.
+**Exception:** `breadcrumbBuilder.items: BreadcrumbItem[]` is allowed per [019 – App shell breadcrumbs](./019-app-shell-breadcrumbs.md). Do not use this as precedent for other builder slices.
 
 ✅ **Do**
 ```ts
@@ -121,7 +121,7 @@ type OrdersState = {
 ### 4) Current slices hold the editing object; builders hold primitives only
 For detail screens, store the full entity in a dedicated `current*` slice. Builder slices hold IDs, booleans, strings, and literal unions — never nested objects or maps.
 
-**Exception:** `breadcrumbBuilder` stores `BreadcrumbItem[]` for the app-shell trail ([ADR 010](./010-app-shell-breadcrumbs.md)). Large editable document strings (e.g. studio TSX drafts) belong in a `current*` slice, not a builder.
+**Exception:** `breadcrumbBuilder` stores `BreadcrumbItem[]` for the app-shell trail ([ADR 019](./019-app-shell-breadcrumbs.md)). Large editable document strings (e.g. studio TSX drafts) belong in a `current*` slice, not a builder.
 
 ✅ **Do**
 ```ts

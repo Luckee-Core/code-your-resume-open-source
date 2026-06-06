@@ -2,7 +2,7 @@ import { DASHBOARD_PATH, DOCS_GETTING_STARTED_PATH } from "@/config/routes";
 
 /** Default OSS repo when env is unset. */
 const DEFAULT_GITHUB_URL =
-  "https://github.com/matthewruiz/code-your-resume-open-source";
+  "https://github.com/Luckee-Core/code-your-resume-open-source";
 
 /**
  * Public GitHub URL for landing CTAs (`NEXT_PUBLIC_LANDING_GITHUB_URL`).

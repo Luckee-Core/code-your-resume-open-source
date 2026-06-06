@@ -39,6 +39,14 @@ const nextConfig: NextConfig = {
         source: "/api/job-studio",
         destination: `${base}/api/job-studio`,
       });
+      rules.push({
+        source: "/api/user-background-studio/:path*",
+        destination: `${base}/api/user-background-studio/:path*`,
+      });
+      rules.push({
+        source: "/api/user-background-studio",
+        destination: `${base}/api/user-background-studio`,
+      });
     }
 
     return rules;

@@ -14,9 +14,19 @@ Do **not** post exploit details in public issues before a fix is coordinated.
 ## Scope and limitations
 
 - This document does **not** replace a professional security assessment for production.
-- **TSX live preview** runs arbitrary code in the browser; see `/docs/security/tsx-preview` and in-app notes on the graphics studio.
-- **`NEXT_PUBLIC_*`** variables are visible in the client bundle.
-- **CRM Express** has **no per-user authentication**. Optional **`CRM_API_SECRET`** gates `/api/data/*` and `/api/technical-skills/*` when Express is reachable beyond localhost; pair it with the same **`CRM_API_SECRET`** in Next (BFF route handlers inject `X-CRM-API-Key` server-side). This protects **network access to Express**, not malicious use of the Next UI.
+- **TSX live preview** runs arbitrary code in the browser via `@babel/standalone`; treat editor content as trusted operator input. See `/docs/security/tsx-preview` and in-app notes on the graphics studio.
+- **`NEXT_PUBLIC_*`** variables are visible in the client bundle — never put Supabase service keys, Anthropic keys, or Cursor API keys here.
+- **CRM Express** has **no per-user authentication**. Optional **`CRM_API_SECRET`** gates `/api/data/*` when Express is reachable beyond localhost; Next BFF route handlers inject `X-CRM-API-Key` server-side when configured.
+- **HTML / user content:** Resume and studio content is rendered through React; do not paste untrusted HTML expecting sanitization beyond default React escaping.
+
+## OSS security audit notes (2026-06-05)
+
+| Area | Status | Notes |
+|------|--------|-------|
+| Env split | Pass | Supabase keys Express-only; web uses rewrites |
+| Live code preview | Documented | Babel standalone in graphics studio — trusted operator model |
+| CDN scripts | N/A | No third-party CDN scripts in core app path |
+| README honesty | Pass | Threat model matches behavior |
 
 ## Versions
 

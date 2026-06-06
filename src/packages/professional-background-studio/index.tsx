@@ -35,45 +35,44 @@ const SEGMENTS: {
     key: "voice_style",
     title: "Voice, channels & style notes",
     hint:
-      "Summarize TroutHouse cold email rules, n8n persona, tutorial vs plain-text modes — condensed from your unified voice doc.",
+      "Summarize outreach voice rules, channel-specific tone, and tutorial vs plain-text modes.",
   },
   {
     key: "portfolio_github",
     title: "Portfolio / GitHub narrative",
     hint:
-      "Project blurbs and tools (TeenPros, BoxBets, open source) — same spirit as a GitHub portfolio README.",
+      "Project blurbs and tools — same spirit as a GitHub portfolio README.",
   },
 ];
 
 const STARTER_SEGMENTS: ProfessionalBackgroundSegments = {
-  education: `B.S. Computer Science, West Chester University of Pennsylvania (2018)
+  education: `B.S. Computer Science, Example State University (2020)
 
-Before tech, spent weekends/summers apprenticing in a family contracting business (electrical + field operations).`,
-  credibility_bio: `Matt Ruiz — founder of TroutHouseTech in Philly.
+Completed coursework in algorithms, databases, and software engineering.`,
+  credibility_bio: `Alex Chen — software engineer at Acme Labs (remote).
 
-Hands-on builder across React Native, TypeScript/JavaScript, Firebase, Stripe, Salesforce, Node.js, and Twilio/MapBox integrations.
+Hands-on builder across React, TypeScript, Node.js, PostgreSQL, and cloud deployment workflows.
 
-Build focus: shipping mobile + web products, translating operations pain into usable workflows, and mentoring engineering teams.`,
+Build focus: shipping full-stack products, improving developer workflows, and mentoring junior engineers.`,
   voice_style: `Core voice:
 - Consultative peer, concrete over abstract, one clear CTA.
 - Explain what's possible without hype.
 
 Channel notes:
-- TroutHouse cold email: "Hola hola!", short plain-language opener, repetitive-work framing.
-- Automation / n8n outreach: practitioner tone, pain-to-ROI framing, simple technical detail.
-- Tutorials/blogs: outcome-led headings, practical constraints, copy-paste examples.
-- Plain-text channels (Upwork/DM): no markdown formatting, direct and concise.`,
+- Email outreach: short plain-language opener, problem-first framing.
+- Technical blogs: outcome-led headings, practical constraints, copy-paste examples.
+- Plain-text channels: no markdown formatting, direct and concise.`,
   portfolio_github: `Portfolio highlights:
-- TeenPros: two-sided marketplace app (Requester + Worker), early Swift/Firebase foundation, sprint-driven shipping.
-- BoxBets: social betting app with feeds/media + in-app purchases.
+- TaskFlow: team workflow dashboard (React, Node.js, PostgreSQL).
+- MetricsKit: internal analytics tooling with charting and export.
 
 Representative tooling:
-- React Native, TypeScript/JavaScript, Redux, React Navigation
-- Firebase + Node.js / Cloud Functions
-- Stripe, MapBox, CI/testing workflows
+- React, TypeScript, Redux, Next.js
+- Node.js, PostgreSQL, Supabase
+- CI/testing, Vercel deployment workflows
 
 Open-source note:
-- Limited bandwidth historically, but continued interest via published npm modules and reusable tooling.`,
+- Maintainer of small npm utilities and sample OSS apps.`,
 };
 
 /**
