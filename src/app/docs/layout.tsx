@@ -4,7 +4,7 @@ import { DocsCatalogProvider, DocsShell } from "@/packages/docs";
 import { buildApiGroupSidebarChildren } from "@/utils/api-docs";
 
 /**
- * Docs segment layout: inner sidebar + article column; loads API catalog once for sidebar + /docs/api.
+ * Standalone docs layout (outside AppShell): sidebar + article column; loads API catalog once.
  */
 export default async function DocsLayout(props: { children: ReactNode }) {
   const { children } = props;

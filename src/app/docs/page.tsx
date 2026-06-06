@@ -48,7 +48,7 @@ export default function DocsHomePage() {
 
 const styles = {
   article: `
-    max-w-3xl mx-auto w-full px-6 py-10 lg:px-12 lg:py-12
+    max-w-3xl
   `,
   h1: `
     text-2xl font-semibold tracking-tight text-zinc-900

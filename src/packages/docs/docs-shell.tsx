@@ -8,7 +8,7 @@ type DocsShellProps = {
 };
 
 /**
- * Docs layout: inner sidebar + scrollable article column (nested under AppShell).
+ * Standalone docs layout: sticky sidebar + scrollable main content (outside AppShell).
  */
 export const DocsShell = (props: DocsShellProps) => {
   const { children, apiGroupNav } = props;
@@ -23,11 +23,11 @@ export const DocsShell = (props: DocsShellProps) => {
 
 const styles = {
   root: `
-    flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden
+    min-h-screen bg-background text-foreground flex flex-col
     lg:flex-row
   `,
   main: `
-    min-h-0 min-w-0 flex-1 overflow-y-auto bg-white
-    lg:border-l lg:border-zinc-200
+    min-w-0 flex-1 px-6 py-10
+    lg:px-12 lg:py-12
   `,
 };

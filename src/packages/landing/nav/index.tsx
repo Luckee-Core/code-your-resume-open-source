@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Code2, ExternalLink } from "lucide-react";
-import { LANDING_PATH } from "@/config/routes";
+import { DOCS_PATH, LANDING_PATH } from "@/config/routes";
 import { getLandingGithubUrl, LANDING_CTA_PATHS } from "@/packages/landing/constants";
 
 /**
@@ -28,9 +28,9 @@ export const MarketingNav = () => {
           <a href="#open-source" className={styles.navLink}>
             Open Source
           </a>
-          <a href="#docs" className={styles.navLink}>
+          <Link href={DOCS_PATH} className={styles.navLink}>
             Docs
-          </a>
+          </Link>
         </nav>
         <div className={styles.ctaRow}>
           <a href={githubUrl} className={styles.githubBtn} target="_blank" rel="noopener noreferrer">

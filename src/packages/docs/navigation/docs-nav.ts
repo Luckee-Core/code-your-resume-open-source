@@ -1,4 +1,5 @@
 import {
+  DOCS_API_PATH,
   DOCS_GETTING_STARTED_PATH,
   DOCS_PATH,
   DOCS_SECURITY_TSX_PREVIEW_PATH,
@@ -31,4 +32,5 @@ export const DOCS_NAV_ENTRIES: DocsNavEntry[] = [
   { kind: "link", name: "Getting started", href: DOCS_GETTING_STARTED_PATH },
   { kind: "label", text: "Security" },
   { kind: "link", name: "TSX live preview", href: DOCS_SECURITY_TSX_PREVIEW_PATH },
+  { kind: "link", name: "API reference", href: DOCS_API_PATH },
 ];

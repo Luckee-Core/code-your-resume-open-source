@@ -32,13 +32,6 @@ import {
 } from "@/config/routes";
 import { getAppSidebarSections } from "./get-app-sidebar-sections";
 
-const isDocsActive = (pathname: string): boolean => {
-  if (pathname === "/docs" || pathname.startsWith("/docs/")) {
-    return true;
-  }
-  return false;
-};
-
 const isDashboardActive = (pathname: string): boolean => {
   if (pathname === DASHBOARD_PATH) return true;
   if (pathname === "/studio" || pathname.startsWith("/studio/")) return true;
@@ -82,7 +75,7 @@ export const Sidebar = () => {
   const isActiveHref = useCallback(
     (href: string, name: string) => {
       if (name === "Dashboard") return isDashboardActive(pathname);
-      if (name === "Docs") return isDocsActive(pathname);
+      if (name === "Docs") return pathname === DOCS_PATH || pathname.startsWith(`${DOCS_PATH}/`);
       if (name === "Companies") {
         return pathname === COMPANIES_PATH || pathname === COMPANY_DETAIL_PAGE_PATH;
       }

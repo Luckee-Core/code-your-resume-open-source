@@ -9,9 +9,10 @@ Accepted
 ## Decision
 
 ### 1) Docs shell and routes
-- Shared layout: `src/app/(app)/docs/layout.tsx` wraps all docs routes in `DocsShell` from `src/packages/docs/`.
-- Prose pages are Server Components under `src/app/(app)/docs/**/page.tsx`.
-- API reference: `src/app/(app)/docs/api/page.tsx` → `ApiDocsView` (client) from `src/packages/api-docs/`.
+- Shared layout: `src/app/docs/layout.tsx` wraps all docs routes in `DocsShell` from `src/packages/docs/`.
+- Docs live **outside** `(app)/` — no `AppShell`, no dashboard breadcrumbs (ADR 018).
+- Prose pages are Server Components under `src/app/docs/**/page.tsx`.
+- API reference: `src/app/docs/api/page.tsx` → `ApiDocsView` (client) from `src/packages/api-docs/`.
 
 ### 2) Package layout
 | Package | Role |
@@ -21,12 +22,12 @@ Accepted
 
 ### 3) Sidebar navigation
 - Two sections in `DocsSidebar`: **Guides** (`DOCS_NAV_ENTRIES`) and **API** (catalog groups).
-- API entities are injected from the Express catalog in `src/app/(app)/docs/layout.tsx` via `buildApiGroupSidebarChildren()`.
+- API entities are injected from the Express catalog in `src/app/docs/layout.tsx` via `buildApiGroupSidebarChildren()`.
 - Path constants in `src/config/routes.ts` (`DOCS_API_PATH`, `DOCS_*`).
 - `DocsSidebar` is a client component using `usePathname()` and `hashchange` for active states on `#group-*` anchors.
 
 ### 4) Data fetching (single layout fetch)
-- `src/app/(app)/docs/layout.tsx` calls `getApiDocsCatalogCached()` once and passes the snapshot to `DocsCatalogProvider`.
+- `src/app/docs/layout.tsx` calls `getApiDocsCatalogCached()` once and passes the snapshot to `DocsCatalogProvider`.
 - `ApiDocsView` reads that context — **no second fetch** on `/docs/api`.
 - **No Redux slice or thunk** — catalog is ephemeral page data (extends ADR 010 server-read exception; not domain dashboard state).
 - Do **not** add `src/app/api/**` route handlers for the catalog.
@@ -40,7 +41,7 @@ Accepted
 - Named exports only; default export only on `app/docs/**/page.tsx`.
 - Styles object pattern (ADR 003); one primary component per file (ADR 005).
 - Overview group renders as **h1** with version, baseUrl, envelope; descriptions split on `\n\n`.
-- Docs live inside `(app)/` AppShell; breadcrumb fallback via ADR 019 resolver.
+- Docs sidebar includes brand link back to landing (`/`).
 
 ## Consequences
 - Express must be running for `/docs/api` and the API sidebar section to populate; prose guide pages work without Express.

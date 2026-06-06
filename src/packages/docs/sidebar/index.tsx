@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { DOCS_API_PATH, DOCS_PATH } from "@/config/routes";
+import { DOCS_PATH, LANDING_PATH } from "@/config/routes";
 import { DOCS_NAV_ENTRIES, type DocsNavEntry, type DocsSidebarLeaf } from "@/packages/docs/navigation";
 
 const getHrefHash = (href: string): string => {
@@ -79,12 +79,16 @@ export const DocsSidebar = (props: DocsSidebarProps) => {
     [apiGroupNav, pathname, hash],
   );
 
-  const onApiPage = pathname === DOCS_API_PATH;
-
   return (
-    <aside className={styles.aside}>
+    <aside className={styles.sidebar}>
       <div className={styles.inner}>
-        <p className={styles.kicker}>Documentation</p>
+        <Link href={LANDING_PATH} prefetch={false} className={styles.brand}>
+          <span className={styles.logoMark}>C</span>
+          <span className={styles.brandTextBlock}>
+            <span className={styles.brandTitle}>Code Your Resume</span>
+            <span className={styles.brandSub}>Documentation</span>
+          </span>
+        </Link>
         <nav className={styles.nav} aria-label="Guides">
           <p className={styles.sectionLabel}>Guides</p>
           <ul className={styles.list}>{guideItems}</ul>
@@ -92,35 +96,43 @@ export const DocsSidebar = (props: DocsSidebarProps) => {
         <nav className={styles.nav} aria-label="API">
           <p className={styles.sectionLabel}>API</p>
           <ul className={styles.list}>{apiItems}</ul>
-          {onApiPage && apiGroupNav.length === 0 ? (
+          {apiGroupNav.length === 0 ? (
             <p className={styles.apiHint}>Start Express to load API entities.</p>
           ) : null}
         </nav>
+        <Link href={LANDING_PATH} prefetch={false} className={styles.back}>
+          ← Back to site
+        </Link>
       </div>
     </aside>
   );
 };
 
 const styles = {
-  aside: `
-    w-full shrink-0 border-b border-zinc-200 bg-zinc-50
+  sidebar: `
+    w-full shrink-0 border-b border-border bg-muted/40
     lg:w-56 lg:border-b-0 lg:border-r
   `,
-  inner: `flex flex-col gap-6 px-4 py-6 lg:py-8`,
-  kicker: `
-    text-[11px] font-semibold uppercase tracking-wide text-zinc-500
+  inner: `flex flex-col gap-6 p-4 lg:sticky lg:top-0 lg:h-screen lg:max-h-screen lg:overflow-y-auto`,
+  brand: `flex items-center gap-2`,
+  logoMark: `
+    flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary text-sm font-bold text-primary-foreground
   `,
+  brandTextBlock: `flex min-w-0 flex-col leading-tight`,
+  brandTitle: `text-sm font-semibold text-foreground tracking-tight truncate`,
+  brandSub: `text-xs text-muted-foreground truncate`,
   nav: `flex flex-col gap-2`,
-  list: `space-y-1`,
-  labelRow: `pt-3 pb-1 first:pt-0`,
-  sectionLabel: `text-[11px] font-semibold uppercase tracking-wide text-zinc-400`,
+  list: `flex flex-col gap-0.5`,
+  labelRow: `mt-1 list-none first:mt-0`,
+  sectionLabel: `text-[11px] font-semibold uppercase tracking-wide text-muted-foreground`,
   link: `
-    block rounded-md px-2.5 py-2 text-sm font-medium text-zinc-700
-    hover:bg-white hover:text-zinc-900
+    block rounded-md px-2.5 py-2 text-sm font-medium text-muted-foreground
+    hover:bg-muted hover:text-foreground
   `,
   linkActive: `
     block rounded-md px-2.5 py-2 text-sm font-semibold text-orange-700
     bg-orange-50 ring-1 ring-orange-200/80
   `,
-  apiHint: `text-xs text-zinc-500 leading-relaxed`,
+  apiHint: `text-xs text-muted-foreground leading-relaxed`,
+  back: `text-xs text-muted-foreground hover:text-foreground transition-colors mt-auto`,
 };

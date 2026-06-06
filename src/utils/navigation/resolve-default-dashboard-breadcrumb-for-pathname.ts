@@ -4,10 +4,6 @@ import {
   COMPANY_DETAIL_PAGE_PATH,
   DASHBOARD_PATH,
   COMPANY_EMPLOYEE_DETAIL_PAGE_PATH,
-  DOCS_API_PATH,
-  DOCS_GETTING_STARTED_PATH,
-  DOCS_PATH,
-  DOCS_SECURITY_TSX_PREVIEW_PATH,
   EMPLOYEES_PATH,
   EXPERIENCE_PATH,
   JOB_APPLICATIONS_PATH,
@@ -16,8 +12,6 @@ import {
   JOB_QUESTIONS_PATH,
   JOBS_PATH,
 } from "@/config/routes";
-
-const docsBase = (): BreadcrumbItem => ({ label: "Docs", href: DOCS_PATH });
 
 /**
  * Fallback trail when no screen has registered Redux breadcrumbs yet.
@@ -29,22 +23,6 @@ export const resolveDefaultDashboardBreadcrumbForPathname = (pathname: string): 
   }
   if (pathname.startsWith("/studio")) {
     return [{ label: "Dashboard", href: DASHBOARD_PATH }, { label: "Studio" }];
-  }
-
-  if (pathname === DOCS_PATH) {
-    return [docsBase(), { label: "Overview" }];
-  }
-  if (pathname === DOCS_GETTING_STARTED_PATH) {
-    return [docsBase(), { label: "Getting started" }];
-  }
-  if (pathname === DOCS_SECURITY_TSX_PREVIEW_PATH) {
-    return [docsBase(), { label: "TSX live preview" }];
-  }
-  if (pathname === DOCS_API_PATH) {
-    return [docsBase(), { label: "API reference" }];
-  }
-  if (pathname.startsWith(`${DOCS_PATH}/`)) {
-    return [docsBase()];
   }
 
   if (pathname === COMPANIES_PATH || pathname === COMPANY_DETAIL_PAGE_PATH) {

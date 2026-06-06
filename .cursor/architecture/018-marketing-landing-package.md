@@ -16,6 +16,7 @@ Public visitors need a marketing home that explains the OSS job-application stud
 |------|--------|---------|
 | `/` | Root only (no `AppShell`) | `MarketingLanding` in `src/packages/landing/` |
 | `/dashboard` | `(app)/layout.tsx` + `AppShell` | Graphics list (former root home) |
+| `/docs/**` | Root only (no `AppShell`) | Standalone docs site in `src/app/docs/` |
 | All other app routes | `(app)/` route group | Unchanged URLs, inherit `AppShell` |
 
 `src/app/api/**` stays at the app root (no shell; not affected).
@@ -38,7 +39,7 @@ Landing uses CSS variables in `src/app/globals.css`: primary `#FF7C1E`, muted `#
 ### Links
 
 - **Get started** → `DASHBOARD_PATH` (`/dashboard`)
-- **Docs** → `DOCS_GETTING_STARTED_PATH`
+- **Docs** → `DOCS_PATH` (`/docs`) from marketing nav; hero CTAs may use `DOCS_GETTING_STARTED_PATH`
 - **GitHub** → `NEXT_PUBLIC_LANDING_GITHUB_URL` or default repo URL in `landing-links.ts`
 
 ### Styling

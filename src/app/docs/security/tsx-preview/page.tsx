@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 /**
- * Security notes for TSX live preview (canonical in-app copy).
+ * Security notes for TSX live preview (canonical docs copy).
  */
 export default function DocsSecurityTsxPreviewPage() {
   return (
@@ -53,7 +53,7 @@ export default function DocsSecurityTsxPreviewPage() {
 
 const styles = {
   article: `
-    max-w-3xl mx-auto w-full px-6 py-10 lg:px-12 lg:py-12
+    max-w-3xl
   `,
   breadcrumb: `
     text-xs text-zinc-500
