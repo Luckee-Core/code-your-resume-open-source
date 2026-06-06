@@ -1,10 +1,22 @@
 import type { ReactNode } from "react";
-import { DocsShell } from "@/packages/docs";
+import { getApiDocsCatalogCached } from "@/api/api-docs";
+import { DocsCatalogProvider, DocsShell } from "@/packages/docs";
+import { buildApiGroupSidebarChildren } from "@/utils/api-docs";
 
 /**
- * Docs segment layout: inner sidebar + article column.
+ * Docs segment layout: inner sidebar + article column; loads API catalog once for sidebar + /docs/api.
  */
-export default function DocsLayout(props: { children: ReactNode }) {
+export default async function DocsLayout(props: { children: ReactNode }) {
   const { children } = props;
-  return <DocsShell>{children}</DocsShell>;
+  const result = await getApiDocsCatalogCached();
+  const apiGroupNav = result.success && result.data ? buildApiGroupSidebarChildren(result.data.groups) : [];
+
+  return (
+    <DocsCatalogProvider
+      catalog={result.success && result.data ? result.data : null}
+      catalogStatus={result.httpStatus}
+    >
+      <DocsShell apiGroupNav={apiGroupNav}>{children}</DocsShell>
+    </DocsCatalogProvider>
+  );
 }

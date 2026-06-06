@@ -14,6 +14,7 @@ Documented seam between the **Next.js web app** and the **companion Express API*
 | **API base env (web)** | `EXPRESS_API_URL` or `CRM_EXPRESS_INTERNAL_URL` (not `NEXT_PUBLIC_SERVER_URL`) |
 | **Proxy mechanism** | Next.js `rewrites()` in `next.config.ts` — browser calls same-origin `/api/data/*`, Next forwards to Express |
 | **Health endpoint** | `GET /api/health` (also `GET /`) |
+| **API docs catalog** | `GET /api-docs.json` on Express; web renders at `/docs/api` |
 | **Success JSON** | `{ success: true, data?, count?, message? }` |
 | **Error JSON** | `{ success: false, error: string, message? }` |
 | **Auth (OSS default)** | Local/trusted dev; optional `CRM_API_SECRET` shared between Next BFF and Express |
@@ -67,6 +68,7 @@ Full list: each repo’s `.env.example`.
 
 ```text
 GET  /api/health
+GET  /api-docs.json          → API documentation catalog (no CRM secret)
 GET  /api/data/company/list
 POST /api/data/company/create
 …    (see Express ADR 009)
@@ -75,6 +77,12 @@ POST /api/professional-background/*
 POST /api/job-studio/*
 POST /api/user-background-studio/*
 ```
+
+### Web docs fetch (server-only)
+
+The docs layout at `/docs/**` loads the catalog once via `getApiDocsCatalogCached()` in `src/api/api-docs/client.ts`, calling `${EXPRESS_API_URL or http://127.0.0.1:3053}/api-docs.json` with `requestApi`. This does **not** use Next rewrites or a BFF route.
+
+Human-readable reference: **http://localhost:3000/docs/api** (requires Express running locally).
 
 ## Supabase runbook (Express `docs/`)
 
@@ -95,9 +103,11 @@ Optional seed: `npm run seed:sql` in Express repo (generates SQL from demo JSON 
 1. Express: copy `.env.example` → `.env`, set Supabase vars, `npm run dev`, then:
    ```bash
    curl http://127.0.0.1:3053/api/health
+   curl -s http://127.0.0.1:3053/api-docs.json | head -c 200
    ```
 2. Web: `npm run dev`, open http://localhost:3000/dashboard — CRM companies list should load.
-3. Express CRM matrix:
+3. API docs: with Express running, open http://localhost:3000/docs/api — sidebar should list all catalog groups.
+4. Express CRM matrix:
    ```bash
    CRM_BASE=http://127.0.0.1:3053 npm run verify:crm
    ```

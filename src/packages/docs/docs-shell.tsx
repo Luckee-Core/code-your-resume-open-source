@@ -1,19 +1,21 @@
 import type { ReactNode } from "react";
+import type { DocsSidebarLeaf } from "./navigation";
 import { DocsSidebar } from "./sidebar";
 
 type DocsShellProps = {
   children: ReactNode;
+  apiGroupNav: DocsSidebarLeaf[];
 };
 
 /**
  * Docs layout: inner sidebar + scrollable article column (nested under AppShell).
  */
 export const DocsShell = (props: DocsShellProps) => {
-  const { children } = props;
+  const { children, apiGroupNav } = props;
 
   return (
     <div className={styles.root}>
-      <DocsSidebar />
+      <DocsSidebar apiGroupNav={apiGroupNav} />
       <div className={styles.main}>{children}</div>
     </div>
   );

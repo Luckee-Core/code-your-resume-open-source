@@ -4,6 +4,9 @@ export const LANDING_PATH = "/";
 /** App home — graphics list and primary nav entry. */
 export const DASHBOARD_PATH = "/dashboard";
 
+/** Live API reference (catalog from Express). */
+export const DOCS_API_PATH = "/docs/api";
+
 /** Top-level docs index. */
 export const DOCS_PATH = "/docs";
 

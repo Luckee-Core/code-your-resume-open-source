@@ -4,6 +4,11 @@ import {
   DOCS_SECURITY_TSX_PREVIEW_PATH,
 } from "@/config/routes";
 
+export type DocsSidebarLeaf = {
+  name: string;
+  href: string;
+};
+
 export type DocsNavLabel = {
   kind: "label";
   text: string;

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { DOCS_GETTING_STARTED_PATH, DOCS_SECURITY_TSX_PREVIEW_PATH } from "@/config/routes";
+import { DOCS_API_PATH, DOCS_GETTING_STARTED_PATH, DOCS_SECURITY_TSX_PREVIEW_PATH } from "@/config/routes";
 
 export const metadata: Metadata = {
   title: "Documentation | Code Your Resume",
@@ -33,6 +33,12 @@ export default function DocsHomePage() {
               TSX live preview (security)
             </Link>
             <span className={styles.span}> — trust model, iframe sandbox, CDN trust.</span>
+          </li>
+          <li className={styles.li}>
+            <Link href={DOCS_API_PATH} className={styles.a}>
+              API reference
+            </Link>
+            <span className={styles.span}> — live catalog from Express (requires server on port 3053).</span>
           </li>
         </ul>
       </section>

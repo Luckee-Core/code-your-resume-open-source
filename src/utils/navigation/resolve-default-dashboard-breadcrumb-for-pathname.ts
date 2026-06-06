@@ -4,6 +4,7 @@ import {
   COMPANY_DETAIL_PAGE_PATH,
   DASHBOARD_PATH,
   COMPANY_EMPLOYEE_DETAIL_PAGE_PATH,
+  DOCS_API_PATH,
   DOCS_GETTING_STARTED_PATH,
   DOCS_PATH,
   DOCS_SECURITY_TSX_PREVIEW_PATH,
@@ -38,6 +39,9 @@ export const resolveDefaultDashboardBreadcrumbForPathname = (pathname: string): 
   }
   if (pathname === DOCS_SECURITY_TSX_PREVIEW_PATH) {
     return [docsBase(), { label: "TSX live preview" }];
+  }
+  if (pathname === DOCS_API_PATH) {
+    return [docsBase(), { label: "API reference" }];
   }
   if (pathname.startsWith(`${DOCS_PATH}/`)) {
     return [docsBase()];

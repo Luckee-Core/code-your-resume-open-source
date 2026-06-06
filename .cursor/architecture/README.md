@@ -28,6 +28,7 @@ This folder contains Architecture Decision Records (ADRs) for the **code-your-re
 17. [017 – Job application questions](./017-job-application-questions.md) — reusable prompts + per-job answers
 18. [018 – Marketing landing package](./018-marketing-landing-package.md) — `/` marketing, `/dashboard` app home
 19. [019 – App shell breadcrumbs](./019-app-shell-breadcrumbs.md)
+20. [020 – Documentation site API reference](./020-api-docs-page.md) — `/docs/api`, Express catalog fetch
 
 > **Pair ADR note:** Express server ADR **009** covers `/api/data` entity routers ([009-api-data-entity-routers.md](https://github.com/Luckee-Core/code-your-resume-open-source-express-server/blob/main/.cursor/architecture/009-api-data-entity-routers.md)). Next **009** here is CRM detail UI parity — different topic.
 
