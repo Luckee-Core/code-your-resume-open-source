@@ -10,7 +10,7 @@ export default function GeneratedCompanyInterestPreview() {
           What interests you about working for this company?
         </p>
         <p className={styles.answer}>
-          I’m interested in Respan because this role lines up with the kind of work I enjoy
+          I'm interested in Respan because this role lines up with the kind of work I enjoy
           most: shipping useful product across the full stack, staying close to users, and
           improving the system as it grows. The mix of React, Next.js, Python, PostgreSQL,
           APIs, data pipelines, and real-time systems is a strong fit for my background
