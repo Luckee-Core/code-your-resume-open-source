@@ -1,26 +1,8 @@
 import { ArrowRight, FileText, Mail, Sparkles } from "lucide-react";
 import { LandingSectionLabel } from "@/packages/landing/components";
+import { LANDING_GENERATE } from "@/packages/landing/constants";
 
-const GENERATE_CARDS = [
-  {
-    icon: FileText,
-    t: "Resume",
-    size: "816 × 1150",
-    d: "Bullets pulled from job + your background + active technical skills.",
-  },
-  {
-    icon: Mail,
-    t: "Cover letter",
-    size: "816 × 1056",
-    d: "Voice and style tuned to the role, not a copy-paste template.",
-  },
-  {
-    icon: Sparkles,
-    t: "Company interest",
-    size: "816 × 480",
-    d: "Short, specific note about why this company — sent on its own or attached.",
-  },
-] as const;
+const GENERATE_ICONS = [FileText, Mail, Sparkles] as const;
 
 /**
  * Section 03 — generate resume, cover letter, company interest per job.
@@ -29,31 +11,31 @@ export const MarketingGeneratePerJob = () => {
   return (
     <section className={styles.section}>
       <div className={styles.inner}>
-        <LandingSectionLabel num="03" topic="Generate per job" />
+        <LandingSectionLabel num="03" topic={LANDING_GENERATE.label} />
         <div className={styles.headerRow}>
-          <h2 className={styles.h2}>Three documents. Tailored every time. Edited as TSX.</h2>
-          <p className={styles.aside}>
-            Each opens in Graphics Studio. The server stitches job bullets, your professional
-            background, and active technical skills into editable TSX you can ship as PNG.
-          </p>
+          <h2 className={styles.h2}>{LANDING_GENERATE.headline}</h2>
+          <p className={styles.aside}>{LANDING_GENERATE.aside}</p>
         </div>
         <div className={styles.cards}>
-          {GENERATE_CARDS.map(({ icon: Icon, t, size, d }) => (
-            <div key={t} className={styles.card}>
-              <div className={styles.cardTop}>
-                <span className={styles.cardIconWrap}>
-                  <Icon className={styles.cardIcon} />
-                </span>
-                <span className={styles.cardSize}>{size}</span>
+          {LANDING_GENERATE.cards.map(({ title, size, description }, index) => {
+            const Icon = GENERATE_ICONS[index] ?? FileText;
+            return (
+              <div key={title} className={styles.card}>
+                <div className={styles.cardTop}>
+                  <span className={styles.cardIconWrap}>
+                    <Icon className={styles.cardIcon} />
+                  </span>
+                  <span className={styles.cardSize}>{size}</span>
+                </div>
+                <h3 className={styles.cardTitle}>{title}</h3>
+                <p className={styles.cardDesc}>{description}</p>
+                <div className={styles.cardLink}>
+                  {LANDING_GENERATE.cardLink}
+                  <ArrowRight className={styles.cardLinkIcon} />
+                </div>
               </div>
-              <h3 className={styles.cardTitle}>{t}</h3>
-              <p className={styles.cardDesc}>{d}</p>
-              <div className={styles.cardLink}>
-                Open in Graphics Studio
-                <ArrowRight className={styles.cardLinkIcon} />
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

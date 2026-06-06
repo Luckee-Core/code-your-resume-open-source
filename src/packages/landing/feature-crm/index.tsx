@@ -1,5 +1,6 @@
 import { Briefcase, Building2, FileText } from "lucide-react";
 import { LandingSectionLabel } from "@/packages/landing/components";
+import { LANDING_CRM } from "@/packages/landing/constants";
 
 const CRM_CARDS = [
   { icon: Building2, t: "Stripe", s: "12 jobs · 4 contacts" },
@@ -8,13 +9,6 @@ const CRM_CARDS = [
   { icon: Briefcase, t: "Infra Eng", s: "Drafting · Linear" },
   { icon: FileText, t: "Application", s: "Resume + cover sent" },
   { icon: FileText, t: "Application", s: "Follow-up scheduled" },
-] as const;
-
-const CRM_BULLETS = [
-  "Companies, employees, jobs, applications",
-  "Add jobs from a posting URL",
-  "Employment history that feeds every draft",
-  "Per-job notes, status, and timeline",
 ] as const;
 
 /**
@@ -26,15 +20,11 @@ export const MarketingFeatureCrm = () => {
       <div className={styles.inner}>
         <div className={styles.grid}>
           <div className={styles.copy}>
-            <LandingSectionLabel num="01" topic="Job-search CRM" />
-            <h2 className={styles.h2}>A real CRM for the job search.</h2>
-            <p className={styles.p}>
-              Track companies, employees, jobs, applications, and your employment history in one
-              place. Add jobs straight from a posting URL. Pull company website research before you
-              draft the next letter.
-            </p>
+            <LandingSectionLabel num="01" topic={LANDING_CRM.label} />
+            <h2 className={styles.h2}>{LANDING_CRM.headline}</h2>
+            <p className={styles.p}>{LANDING_CRM.body}</p>
             <ul className={styles.list}>
-              {CRM_BULLETS.map((t) => (
+              {LANDING_CRM.bullets.map((t) => (
                 <li key={t} className={styles.listItem}>
                   <span className={styles.bullet} />
                   {t}

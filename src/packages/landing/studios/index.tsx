@@ -1,28 +1,8 @@
 import { GraduationCap, ImageIcon, ListChecks, Wrench } from "lucide-react";
 import { LandingSectionLabel } from "@/packages/landing/components";
+import { LANDING_STUDIOS } from "@/packages/landing/constants";
 
-const STUDIOS = [
-  {
-    icon: Wrench,
-    t: "Technical Skills Studio",
-    d: "A coach chat plus a structured skills table. Mark what's active per job — drafts pull from that set only.",
-  },
-  {
-    icon: GraduationCap,
-    t: "Professional Background",
-    d: "Education, credibility bio, voice/style, portfolio, GitHub. One canonical source feeds every document.",
-  },
-  {
-    icon: ImageIcon,
-    t: "Graphics Studio",
-    d: "TSX source on the left, live iframe preview on the right. Download as PNG when it's right.",
-  },
-  {
-    icon: ListChecks,
-    t: "Application Questions",
-    d: "A bank of answers for the questions every portal re-asks. Reuse, refine, never start from zero.",
-  },
-] as const;
+const STUDIO_ICONS = [Wrench, GraduationCap, ImageIcon, ListChecks] as const;
 
 /**
  * Section 04 — studios grid.
@@ -31,22 +11,25 @@ export const MarketingStudios = () => {
   return (
     <section id="studios" className={styles.section}>
       <div className={styles.inner}>
-        <LandingSectionLabel num="04" topic="Studios" />
-        <h2 className={styles.h2}>Four studios. One pipeline from background to PNG.</h2>
+        <LandingSectionLabel num="04" topic={LANDING_STUDIOS.label} />
+        <h2 className={styles.h2}>{LANDING_STUDIOS.headline}</h2>
         <div className={styles.grid}>
-          {STUDIOS.map(({ icon: Icon, t, d }) => (
-            <div key={t} className={styles.card}>
-              <div className={styles.cardRow}>
-                <span className={styles.cardIconWrap}>
-                  <Icon className={styles.cardIcon} />
-                </span>
-                <div>
-                  <h3 className={styles.cardTitle}>{t}</h3>
-                  <p className={styles.cardDesc}>{d}</p>
+          {LANDING_STUDIOS.items.map(({ title, description }, index) => {
+            const Icon = STUDIO_ICONS[index] ?? Wrench;
+            return (
+              <div key={title} className={styles.card}>
+                <div className={styles.cardRow}>
+                  <span className={styles.cardIconWrap}>
+                    <Icon className={styles.cardIcon} />
+                  </span>
+                  <div>
+                    <h3 className={styles.cardTitle}>{title}</h3>
+                    <p className={styles.cardDesc}>{description}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

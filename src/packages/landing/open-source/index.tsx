@@ -1,8 +1,12 @@
 import Link from "next/link";
 import { ExternalLink, Terminal } from "lucide-react";
 import { LandingSectionLabel } from "@/packages/landing/components";
-import { LANDING_CLI_SNIPPET } from "@/packages/landing/constants";
-import { getLandingGithubUrl, LANDING_CTA_PATHS } from "@/packages/landing/constants";
+import {
+  getLandingGithubUrl,
+  LANDING_CLI_SNIPPET,
+  LANDING_CTA_PATHS,
+  LANDING_OPEN_SOURCE,
+} from "@/packages/landing/constants";
 
 /**
  * Section 05 — open source self-host block.
@@ -16,12 +20,9 @@ export const MarketingOpenSource = () => {
         <div className={styles.panel}>
           <div className={styles.grid}>
             <div className={styles.copy}>
-              <LandingSectionLabel num="05" topic="Open source" />
-              <h2 className={styles.h2}>Clone it. Run it. Own the stack.</h2>
-              <p className={styles.p}>
-                Next + Express with Supabase for graphics and CRM. Run locally, deploy where you
-                want. No secrets in NEXT_PUBLIC. Operators are trusted — self-host your data.
-              </p>
+              <LandingSectionLabel num="05" topic={LANDING_OPEN_SOURCE.label} />
+              <h2 className={styles.h2}>{LANDING_OPEN_SOURCE.headline}</h2>
+              <p className={styles.p}>{LANDING_OPEN_SOURCE.body}</p>
               <div className={styles.ctaRow}>
                 <a
                   href={githubUrl}
@@ -30,10 +31,10 @@ export const MarketingOpenSource = () => {
                   rel="noopener noreferrer"
                 >
                   <ExternalLink className={styles.btnIcon} />
-                  View on GitHub
+                  {LANDING_OPEN_SOURCE.primaryCta}
                 </a>
                 <Link href={LANDING_CTA_PATHS.docsGettingStarted} className={styles.secondaryBtn}>
-                  Read docs
+                  {LANDING_OPEN_SOURCE.secondaryCta}
                 </Link>
               </div>
             </div>
@@ -41,7 +42,7 @@ export const MarketingOpenSource = () => {
               <div className={styles.terminal}>
                 <div className={styles.terminalHead}>
                   <Terminal className={styles.terminalIcon} />
-                  two terminals
+                  {LANDING_OPEN_SOURCE.terminalLabel}
                 </div>
                 <pre className={styles.pre}>
                   <code>{LANDING_CLI_SNIPPET}</code>

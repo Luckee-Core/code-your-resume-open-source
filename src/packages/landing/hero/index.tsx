@@ -9,7 +9,7 @@ import {
   Wrench,
 } from "lucide-react";
 import { LandingKicker } from "@/packages/landing/components";
-import { LANDING_CTA_PATHS, LANDING_HERO_STAT_CHIPS } from "@/packages/landing/constants";
+import { LANDING_CTA_PATHS, LANDING_HERO, LANDING_HERO_STAT_CHIPS } from "@/packages/landing/constants";
 
 /**
  * Marketing hero with product mock and primary CTAs.
@@ -22,22 +22,19 @@ export const MarketingHero = () => {
       <div className={`${styles.orbRight} hero-orb-right`} aria-hidden />
       <div className={styles.inner}>
         <div className={styles.copyCol}>
-          <LandingKicker>Open-source job application studio</LandingKicker>
+          <LandingKicker>{LANDING_HERO.kicker}</LandingKicker>
           <h1 className={styles.h1}>
-            Every role gets a resume — and cover letter —{" "}
-            <span className={styles.accent}>that actually fits.</span>
+            {LANDING_HERO.headline}{" "}
+            <span className={styles.accent}>{LANDING_HERO.headlineAccent}</span>
           </h1>
-          <p className={styles.lead}>
-            A job-search CRM, AI studios, and TSX graphics you edit and export. Generate tailored
-            materials per job — not generic templates spammed across the internet.
-          </p>
+          <p className={styles.lead}>{LANDING_HERO.lead}</p>
           <div className={styles.ctaRow}>
             <Link href={LANDING_CTA_PATHS.dashboard} className={styles.primaryCta}>
-              Get started
+              {LANDING_HERO.primaryCta}
               <ArrowRight className={styles.ctaIcon} />
             </Link>
             <Link href={LANDING_CTA_PATHS.docsGettingStarted} className={styles.secondaryCta}>
-              Read docs
+              {LANDING_HERO.secondaryCta}
             </Link>
           </div>
           <div className={styles.chips}>

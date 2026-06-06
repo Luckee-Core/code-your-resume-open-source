@@ -1,2 +1,13 @@
-export { LANDING_CLI_SNIPPET, LANDING_HERO_STAT_CHIPS } from "./landing-content";
+export {
+  LANDING_CLI_SNIPPET,
+  LANDING_CRM,
+  LANDING_FINAL_CTA,
+  LANDING_GENERATE,
+  LANDING_HERO,
+  LANDING_HERO_STAT_CHIPS,
+  LANDING_JOB_STUDIO,
+  LANDING_OPEN_SOURCE,
+  LANDING_PAGE_METADATA,
+  LANDING_STUDIOS,
+} from "./landing-content";
 export { getLandingGithubUrl, LANDING_CTA_PATHS } from "./landing-links";

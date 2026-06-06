@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Code2, Download, ExternalLink } from "lucide-react";
 import { LandingKicker } from "@/packages/landing/components";
-import { getLandingGithubUrl, LANDING_CTA_PATHS } from "@/packages/landing/constants";
+import { getLandingGithubUrl, LANDING_CTA_PATHS, LANDING_FINAL_CTA } from "@/packages/landing/constants";
 
 /**
  * Final CTA band and footer strip.
@@ -14,14 +14,12 @@ export const MarketingFinalCta = () => {
       <div className={styles.inner}>
         <div className={styles.row}>
           <div>
-            <LandingKicker>Get started</LandingKicker>
+            <LandingKicker>{LANDING_FINAL_CTA.kicker}</LandingKicker>
             <h2 className={styles.h2}>
-              Clone it. Run it. <span className={styles.accent}>Apply with intent.</span>
+              {LANDING_FINAL_CTA.headline}{" "}
+              <span className={styles.accent}>{LANDING_FINAL_CTA.headlineAccent}</span>
             </h2>
-            <p className={styles.p}>
-              Stop firing the same resume into every portal. Tailor per job, edit in TSX, export to
-              PNG, and keep the receipts in your own database.
-            </p>
+            <p className={styles.p}>{LANDING_FINAL_CTA.body}</p>
           </div>
           <div className={styles.ctaRow}>
             <a
@@ -31,14 +29,14 @@ export const MarketingFinalCta = () => {
               rel="noopener noreferrer"
             >
               <ExternalLink className={styles.ctaIcon} />
-              View on GitHub
+              {LANDING_FINAL_CTA.githubCta}
               <ArrowRight className={styles.ctaArrow} />
             </a>
             <Link id="docs" href={LANDING_CTA_PATHS.docsGettingStarted} className={styles.secondaryCta}>
-              Getting started
+              {LANDING_FINAL_CTA.docsCta}
             </Link>
             <Link href={LANDING_CTA_PATHS.dashboard} className={styles.tertiaryCta}>
-              Open app
+              {LANDING_FINAL_CTA.appCta}
             </Link>
           </div>
         </div>
@@ -49,11 +47,11 @@ export const MarketingFinalCta = () => {
             <span className={styles.footerMark}>
               <Code2 className={styles.footerMarkIcon} />
             </span>
-            Code Your Resume — open source, self-hosted.
+            {LANDING_FINAL_CTA.footerBrand}
           </div>
           <div className={styles.footerMeta}>
             <Download className={styles.footerMetaIcon} />
-            PNG export · TSX editable
+            {LANDING_FINAL_CTA.footerMeta}
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { LandingSectionLabel } from "@/packages/landing/components";
+import { LANDING_JOB_STUDIO } from "@/packages/landing/constants";
 
 /**
  * Section 02 — Job Studio.
@@ -10,18 +11,13 @@ export const MarketingFeatureJobStudio = () => {
       <div className={styles.inner}>
         <div className={styles.grid}>
           <div className={styles.copy}>
-            <LandingSectionLabel num="02" topic="Job Studio" />
-            <h2 className={styles.h2}>One workspace per role.</h2>
-            <p className={styles.p}>
-              Import a listing, break it into responsibilities, requirements, and nice-to-haves.
-              Keep an applications log. Generate graphics scoped to this job. Ask the AI coach when
-              you&apos;re stuck.
-            </p>
+            <LandingSectionLabel num="02" topic={LANDING_JOB_STUDIO.label} />
+            <h2 className={styles.h2}>{LANDING_JOB_STUDIO.headline}</h2>
+            <p className={styles.p}>{LANDING_JOB_STUDIO.body}</p>
             <ul className={styles.list}>
-              <li>· Listing import &amp; structured parse</li>
-              <li>· Responsibilities / requirements / nice-to-haves</li>
-              <li>· Applications log per job</li>
-              <li>· Job-scoped graphics</li>
+              {LANDING_JOB_STUDIO.bullets.map((item) => (
+                <li key={item}>· {item}</li>
+              ))}
             </ul>
           </div>
           <div className={styles.mockCol}>

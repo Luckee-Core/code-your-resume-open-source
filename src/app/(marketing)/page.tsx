@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 import { MarketingLanding } from "@/packages/landing";
+import { LANDING_PAGE_METADATA } from "@/packages/landing/constants";
 
 export const metadata: Metadata = {
-  title: "Code Your Resume — Open-source job application studio",
-  description:
-    "Tailored resumes, cover letters, and graphics per job. CRM, AI studios, and editable TSX you can export to PNG. Self-hosted, open source.",
+  title: LANDING_PAGE_METADATA.title,
+  description: LANDING_PAGE_METADATA.description,
   openGraph: {
-    title: "Code Your Resume — Open-source job application studio",
-    description:
-      "Every role gets a resume — and cover letter — that actually fits. CRM + AI studios + TSX graphics, fully self-hosted.",
+    title: LANDING_PAGE_METADATA.title,
+    description: LANDING_PAGE_METADATA.openGraphDescription,
     type: "website",
   },
 };
