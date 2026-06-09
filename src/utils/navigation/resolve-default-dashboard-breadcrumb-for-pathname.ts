@@ -10,6 +10,8 @@ import {
   JOB_APPLICATION_DETAIL_PAGE_PATH,
   JOB_DETAIL_PAGE_PATH,
   JOB_QUESTIONS_PATH,
+  AI_COSTS_PATH,
+  AI_PROMPTS_PATH,
   JOB_NEWSLETTERS_PATH,
   JOB_NEWSLETTER_DETAIL_PAGE_PATH,
   JOBS_PATH,
@@ -44,6 +46,12 @@ export const resolveDefaultDashboardBreadcrumbForPathname = (pathname: string): 
   }
   if (pathname === JOB_NEWSLETTERS_PATH || pathname === JOB_NEWSLETTER_DETAIL_PAGE_PATH) {
     return [{ label: "Job newsletters", href: JOB_NEWSLETTERS_PATH }];
+  }
+  if (pathname === AI_PROMPTS_PATH) {
+    return [{ label: "AI prompts", href: AI_PROMPTS_PATH }];
+  }
+  if (pathname === AI_COSTS_PATH) {
+    return [{ label: "AI costs", href: AI_COSTS_PATH }];
   }
   if (pathname === EXPERIENCE_PATH) {
     return [{ label: "Experience", href: EXPERIENCE_PATH }];

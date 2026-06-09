@@ -10,6 +10,8 @@ import {
   EXPERIENCE_STUDIO_PATH,
   JOB_APPLICATIONS_PATH,
   JOB_QUESTIONS_PATH,
+  AI_COSTS_PATH,
+  AI_PROMPTS_PATH,
   JOB_NEWSLETTERS_PATH,
   JOBS_PATH,
 } from "@/config/routes";
@@ -35,6 +37,8 @@ export const getAppSidebarSections = (): SidebarSection[] => {
         { name: "Applications", href: JOB_APPLICATIONS_PATH },
         { name: "Job questions", href: JOB_QUESTIONS_PATH },
         { name: "Job newsletters", href: JOB_NEWSLETTERS_PATH },
+        { name: "AI prompts", href: AI_PROMPTS_PATH },
+        { name: "AI costs", href: AI_COSTS_PATH },
         { name: "Work History", href: EXPERIENCE_PATH },
         { name: "Professional background", href: EXPERIENCE_BACKGROUND_PATH },
         { name: "Technical skills", href: EXPERIENCE_STUDIO_PATH },

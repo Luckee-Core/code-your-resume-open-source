@@ -52,7 +52,7 @@ export const GenerateCompanyInterest = () => {
       );
 
       if (status === 200) {
-        toast.success("Company interest saved — open Graphics Studio to edit or export.");
+        toast.success("Company interest generation started — it will appear below in a few minutes.");
       } else if (status === 400) {
         toast.error("Add professional background (bio or voice) before generating.");
       } else {
@@ -111,7 +111,7 @@ export const GenerateCompanyInterest = () => {
         {isGenerating ? (
           <>
             <Loader2 className={styles.iconSpin} aria-hidden />
-            Generating…
+            Starting…
           </>
         ) : (
           <>
@@ -121,11 +121,10 @@ export const GenerateCompanyInterest = () => {
         )}
       </button>
 
-      {isGenerating ? (
-        <p className={styles.runningNote} role="status">
-          Writing a short answer. This typically takes 1–3 minutes.
-        </p>
-      ) : null}
+      <p className={styles.runningNote}>
+        Generation runs on the server — you can leave this page. Refresh to see new answers when
+        ready (usually 1–3 minutes).
+      </p>
 
       <JobDetailGraphicList
         jobId={job.id}

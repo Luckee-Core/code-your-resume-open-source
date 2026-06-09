@@ -12,6 +12,7 @@ import { CrmBuilderActions } from "@/store/builders/crmBuilder";
 import { CurrentJobActions } from "@/store/current/currentJob";
 import { JobsActions } from "@/store/dumps/jobs";
 import { loadJobBulletsThunk } from "./load-job-bullets-thunk";
+import { loadJobListingSectionCountsThunk } from "./load-job-listing-section-counts-thunk";
 import {
   normalizeJobListingUrlInput,
   validateNormalizedJobListingUrlForSubmit,
@@ -47,6 +48,8 @@ export const createJobFromListingUrlThunk = (input: {
       dispatch(JobsActions.upsertJob(result.data));
       dispatch(CurrentJobActions.setCurrentJob(result.data));
       dispatch(CrmBuilderActions.clearLastJobImportWarning());
+      await dispatch(loadJobBulletsThunk(result.data.id));
+      await dispatch(loadJobListingSectionCountsThunk());
       console.log("[CRM] createJobFromListingUrl: done", { jobId: result.data.id });
       return 200;
     }
@@ -216,6 +219,7 @@ export const importJobDescriptionThunk = (input: {
     dispatch(JobsActions.upsertJob(result.data));
     dispatch(CurrentJobActions.setCurrentJob(result.data));
     await dispatch(loadJobBulletsThunk(jobId));
+    await dispatch(loadJobListingSectionCountsThunk());
     return 200;
   };
 };
@@ -238,6 +242,8 @@ export const importJobListingThunk = (id?: string): AppThunk<Status> => {
     if (cur.id === result.data.id) {
       dispatch(CurrentJobActions.setCurrentJob(result.data));
     }
+    await dispatch(loadJobBulletsThunk(jobId));
+    await dispatch(loadJobListingSectionCountsThunk());
     return 200;
   };
 };

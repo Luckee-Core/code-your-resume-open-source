@@ -1,18 +1,19 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { JOB_NEWSLETTERS_PATH } from "@/config/routes";
-import type { JobNewsletterIngestEmailResult } from "@/model/job-newsletter-ingest-result";
 import { crmDetailPageTokens as t } from "@/packages/crm-detail-ui";
 import { useAppDispatch, useAppSelector } from "@/store";
 import {
+  loadJobNewsletterIngestRunsThunk,
   processJobNewsletterFromEmailManagerThunk,
   updateJobNewsletterSourceThunk,
 } from "@/store/thunks";
 import { useRegisterBreadcrumbTrail } from "@/utils/navigation";
 import { formatDateMedium } from "@/utils/date-time";
 import { SourceModal, type SourceModalValues } from "@/packages/job-newsletter-sources-list/source-modal";
+import { IngestRunsTable } from "./ingest-runs-table";
 
 export const JobNewsletterDetailPage = () => {
   const dispatch = useAppDispatch();
@@ -20,7 +21,6 @@ export const JobNewsletterDetailPage = () => {
   const [processing, setProcessing] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [editBusy, setEditBusy] = useState(false);
-  const [lastResults, setLastResults] = useState<JobNewsletterIngestEmailResult[]>([]);
 
   useRegisterBreadcrumbTrail(
     () => {
@@ -31,19 +31,20 @@ export const JobNewsletterDetailPage = () => {
     [source.id, source.name],
   );
 
-  const sourceEmailResults = useMemo(
-    () =>
-      lastResults.filter(
-        (row) =>
-          row.sourceId === source.id ||
-          row.sourceName?.toLowerCase() === source.name.toLowerCase(),
-      ),
-    [lastResults, source.id, source.name],
-  );
+  const reloadDetailData = useCallback(async () => {
+    if (!source.id) return;
+    await dispatch(loadJobNewsletterIngestRunsThunk({ sourceId: source.id }));
+  }, [dispatch, source.id]);
+
+  useEffect(() => {
+    void reloadDetailData();
+  }, [reloadDetailData]);
 
   const handleProcess = useCallback(async () => {
     setProcessing(true);
-    const outcome = await dispatch(processJobNewsletterFromEmailManagerThunk());
+    const outcome = await dispatch(
+      processJobNewsletterFromEmailManagerThunk({ senderEmail: source.senderEmail }),
+    );
     setProcessing(false);
 
     if (outcome.status !== 200) {
@@ -51,17 +52,14 @@ export const JobNewsletterDetailPage = () => {
       return;
     }
 
-    setLastResults(outcome.result.emailResults);
+    await reloadDetailData();
 
     const forSource = outcome.result.emailResults.filter(
-      (row: JobNewsletterIngestEmailResult) =>
+      (row) =>
         row.sourceId === source.id ||
         row.sourceName?.toLowerCase() === source.name.toLowerCase(),
     );
-    const listingsForSource = forSource.reduce(
-      (sum: number, row: JobNewsletterIngestEmailResult) => sum + row.listingsFound,
-      0,
-    );
+    const listingsForSource = forSource.reduce((sum, row) => sum + row.listingsFound, 0);
 
     toast.success(
       `Processed ${outcome.result.emailsProcessed} email(s) — ${outcome.result.jobsCreated} job(s) created, ${outcome.result.jobsSkipped} skipped`,
@@ -69,13 +67,15 @@ export const JobNewsletterDetailPage = () => {
 
     if (forSource.length === 0 && outcome.result.emailsProcessed === 0) {
       toast.message("No unprocessed emails in Email Manager");
-    } else if (listingsForSource === 0 && forSource.some((r: JobNewsletterIngestEmailResult) => r.status === "parse_error")) {
+    } else if (
+      listingsForSource === 0 &&
+      forSource.some((row) => row.status === "parse_error")
+    ) {
       toast.error(
-        forSource.find((r: JobNewsletterIngestEmailResult) => r.parseError)?.parseError ??
-          "Parse failed for this source",
+        forSource.find((row) => row.parseError)?.parseError ?? "Parse failed for this source",
       );
     }
-  }, [dispatch, source.id, source.name]);
+  }, [dispatch, reloadDetailData, source.id, source.name, source.senderEmail]);
 
   const handleUpdate = useCallback(
     async (values: SourceModalValues) => {
@@ -95,7 +95,7 @@ export const JobNewsletterDetailPage = () => {
 
   if (!source.id) {
     return (
-      <div className={t.pageWrap}>
+      <div className={styles.wrap}>
         <p className={t.emptyMessage}>
           Select a newsletter source from the list, or create one on Job newsletters.
         </p>
@@ -104,7 +104,7 @@ export const JobNewsletterDetailPage = () => {
   }
 
   return (
-    <div className={t.pageWrap}>
+    <div className={styles.wrap}>
       <div className={t.headerCard}>
         <div className={t.headerOneLine}>
           <div className={t.headerTitleRow}>
@@ -134,34 +134,9 @@ export const JobNewsletterDetailPage = () => {
       </div>
 
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>Parse instructions</h2>
-        <pre className={styles.instructionsBlock}>{source.parseInstructions}</pre>
+        <h2 className={styles.sectionTitle}>Previous ingest runs</h2>
+        <IngestRunsTable sourceId={source.id} />
       </section>
-
-      {sourceEmailResults.length > 0 ? (
-        <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>Last run (this source)</h2>
-          <ul className={styles.resultsList}>
-            {sourceEmailResults.map((row) => (
-              <li key={row.gmailMessageId} className={styles.resultItem}>
-                <p className={styles.resultMeta}>
-                  {row.status} · {row.listingsFound} listing(s) · {row.jobs.length} job row(s)
-                </p>
-                {row.parseError ? <p className={styles.resultError}>{row.parseError}</p> : null}
-                {row.jobs.length > 0 ? (
-                  <ul className={styles.jobList}>
-                    {row.jobs.map((job) => (
-                      <li key={`${row.gmailMessageId}-${job.url}-${job.title}`}>
-                        {job.title || "Untitled"} @ {job.companyName || "Unknown"} — {job.status}
-                      </li>
-                    ))}
-                  </ul>
-                ) : null}
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
 
       {editOpen ? (
         <SourceModal
@@ -177,18 +152,10 @@ export const JobNewsletterDetailPage = () => {
 };
 
 const styles = {
+  wrap: t.pageWrapFullWidth,
   statusOn: `text-xs font-medium text-green-700`,
   statusOff: `text-xs font-medium text-gray-500`,
   mono: `font-mono text-sm text-gray-800`,
-  section: `rounded-lg border border-gray-200 bg-white p-5 space-y-3`,
+  section: `space-y-3`,
   sectionTitle: `text-sm font-semibold text-gray-900 uppercase tracking-wider`,
-  instructionsBlock: `
-    whitespace-pre-wrap text-sm leading-relaxed text-gray-800 font-sans
-    rounded-md border border-gray-100 bg-gray-50 p-4
-  `,
-  resultsList: `space-y-3`,
-  resultItem: `rounded-md border border-gray-200 p-3 text-sm`,
-  resultMeta: `font-medium text-gray-900`,
-  resultError: `mt-1 text-red-600`,
-  jobList: `mt-2 list-disc pl-5 text-gray-700 space-y-1`,
 } as const;

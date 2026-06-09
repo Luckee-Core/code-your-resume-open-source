@@ -52,7 +52,7 @@ export const GenerateCoverLetter = () => {
       );
 
       if (status === 200) {
-        toast.success("Cover letter saved — open Graphics Studio to edit or export.");
+        toast.success("Cover letter generation started — it will appear below in a few minutes.");
       } else if (status === 400) {
         toast.error("Add professional background (bio or voice) before generating.");
       } else {
@@ -107,7 +107,7 @@ export const GenerateCoverLetter = () => {
         {isGenerating ? (
           <>
             <Loader2 className={styles.iconSpin} aria-hidden />
-            Generating…
+            Starting…
           </>
         ) : (
           <>
@@ -117,11 +117,10 @@ export const GenerateCoverLetter = () => {
         )}
       </button>
 
-      {isGenerating ? (
-        <p className={styles.runningNote} role="status">
-          The Cursor agent is writing your cover letter. This typically takes 1–3 minutes.
-        </p>
-      ) : null}
+      <p className={styles.runningNote}>
+        Generation runs on the server — you can leave this page. Refresh to see new cover letters
+        when ready (usually 1–3 minutes).
+      </p>
 
       <JobDetailGraphicList
         jobId={job.id}

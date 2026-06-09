@@ -1,4 +1,7 @@
-import { processJobNewsletterFromEmailManagerApi } from "@/api/job-newsletter-ingest";
+import {
+  processJobNewsletterFromEmailManagerApi,
+  type ProcessJobNewsletterFromEmailManagerInput,
+} from "@/api/job-newsletter-ingest";
 import type { JobNewsletterIngestResult } from "@/model/job-newsletter-ingest-result";
 import type { AppThunk } from "@/store";
 import { loadCrmVaultThunk } from "@/store/thunks/crm";
@@ -8,11 +11,14 @@ export type ProcessFromEmailManagerOutcome =
   | { status: 400 | 500; error?: string };
 
 /**
- * Pull emails from email-manager, parse newsletters, ingest CRM jobs, refresh vault.
+ * Sync Gmail via email-manager, parse newsletters, ingest CRM jobs, refresh vault.
  */
 export const processJobNewsletterFromEmailManagerThunk =
-  (): AppThunk<Promise<ProcessFromEmailManagerOutcome>> => async (dispatch) => {
-    const response = await processJobNewsletterFromEmailManagerApi();
+  (
+    input: ProcessJobNewsletterFromEmailManagerInput = {},
+  ): AppThunk<Promise<ProcessFromEmailManagerOutcome>> =>
+  async (dispatch) => {
+    const response = await processJobNewsletterFromEmailManagerApi(input);
 
     if (response.httpStatus === 0) {
       return { status: 500, error: response.error };

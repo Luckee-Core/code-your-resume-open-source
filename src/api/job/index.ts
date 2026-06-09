@@ -1,4 +1,5 @@
 export { listJobsApi } from "./list";
+export { listJobListingSectionCountsApi } from "./list-section-counts";
 export { createJobApi } from "./create";
 export type { CreateJobBody } from "./create";
 export { createJobFromListingUrlApi } from "./create-from-listing-url";

@@ -81,6 +81,16 @@ export const JobDetailPage = () => {
 
   useEffect(() => {
     if (!job.id) {
+      return;
+    }
+    const intervalId = window.setInterval(() => {
+      void dispatch(loadImageGraphicsThunk());
+    }, 45_000);
+    return () => window.clearInterval(intervalId);
+  }, [dispatch, job.id]);
+
+  useEffect(() => {
+    if (!job.id) {
       dispatch(CurrentJobStudioActions.resetCurrentJobStudio());
       dispatch(JobStudioBuilderActions.reset());
       dispatch(JobDetailChatFabActions.resetForJobChange());

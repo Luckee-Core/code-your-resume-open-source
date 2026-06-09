@@ -1,1 +1,4 @@
-export { processJobNewsletterFromEmailManagerApi } from "./process-from-email-manager";
+export {
+  processJobNewsletterFromEmailManagerApi,
+  type ProcessJobNewsletterFromEmailManagerInput,
+} from "./process-from-email-manager";

@@ -12,6 +12,8 @@ import { updateJobThunk } from "@/store/thunks";
 import { crmDetailPageTokens as t } from "@/packages/crm-detail-ui";
 import { getJobPostingHref } from "@/utils/job/get-job-posting-href";
 import { filterImageGraphicsByJobId } from "@/utils/image-graphics";
+import { JobListingImportStatusCell } from "./job-listing-import-status-cell";
+import { JobListRowResumeColumn } from "./job-list-row-resume-column";
 
 type JobListRowProps = {
   job: Job;
@@ -27,6 +29,7 @@ export const JobListRow = ({ job, rowNumber }: JobListRowProps) => {
   const [savingStatus, setSavingStatus] = useState(false);
   const companyName = useAppSelector((s) => s.companies[job.companyId]?.name);
   const imageGraphics = useAppSelector((s) => s.imageGraphics);
+  const sectionCounts = useAppSelector((s) => s.jobListingSectionCounts[job.id]);
   const graphicCount = useMemo(
     () => filterImageGraphicsByJobId(imageGraphics, job.id).length,
     [imageGraphics, job.id],
@@ -82,8 +85,12 @@ export const JobListRow = ({ job, rowNumber }: JobListRowProps) => {
           ))}
         </select>
       </td>
+      <JobListRowResumeColumn job={job} />
       <td className={styles.graphicsCell} onClick={stopRowClick}>
         <span className={graphicCount > 0 ? styles.graphicsCount : styles.graphicsMuted}>{graphicCount}</span>
+      </td>
+      <td className={styles.listingCell} onClick={stopRowClick}>
+        <JobListingImportStatusCell job={job} counts={sectionCounts} />
       </td>
       <td className={styles.cell} onClick={stopRowClick}>
         {postingHref ? (
@@ -112,6 +119,7 @@ const styles = {
   rowNumberCell: `px-2 py-2 text-xs text-gray-500 tabular-nums`,
   cell: `px-3 py-2 text-sm text-gray-700`,
   graphicsCell: `px-3 py-2 text-right text-sm tabular-nums`,
+  listingCell: `px-3 py-2 text-center text-sm`,
   graphicsCount: `font-medium text-gray-900`,
   graphicsMuted: `text-gray-400`,
   titleText: `font-medium text-gray-900`,

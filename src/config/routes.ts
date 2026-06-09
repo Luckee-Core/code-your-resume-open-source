@@ -35,3 +35,5 @@ export const JOB_APPLICATION_DETAIL_PAGE_PATH = "/job-application-detail-page";
 export const JOB_QUESTIONS_PATH = "/job-questions";
 export const JOB_NEWSLETTERS_PATH = "/job-newsletters";
 export const JOB_NEWSLETTER_DETAIL_PAGE_PATH = "/job-newsletter-detail-page";
+export const AI_PROMPTS_PATH = "/ai-prompts";
+export const AI_COSTS_PATH = "/ai-costs";

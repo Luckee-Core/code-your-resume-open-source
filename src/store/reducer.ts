@@ -3,6 +3,7 @@ import { appReducer } from "./appSlice";
 import studioBuilderReducer from "./builders/studioBuilder";
 import crmBuilderReducer from "./builders/crmBuilder";
 import companiesListBuilderReducer from "./builders/companiesListBuilder";
+import jobsListBuilderReducer from "./builders/jobsListBuilder";
 import breadcrumbBuilderReducer from "./builders/breadcrumbBuilder";
 import experienceBuilderReducer from "./builders/experienceBuilder";
 import technicalSkillsBuilderReducer from "./builders/technicalSkillsBuilder";
@@ -26,8 +27,14 @@ import jobApplicationsReducer from "./dumps/jobApplications";
 import jobResponsibilitiesReducer from "./dumps/jobResponsibilities";
 import jobRequirementsReducer from "./dumps/jobRequirements";
 import jobNiceToHavesReducer from "./dumps/jobNiceToHaves";
+import jobListingSectionCountsReducer from "./dumps/jobListingSectionCounts";
 import jobQuestionsReducer from "./dumps/jobQuestions";
 import jobNewsletterSourcesReducer from "./dumps/jobNewsletterSources";
+import jobNewsletterIngestRunsReducer from "./dumps/jobNewsletterIngestRuns";
+import jobNewsletterIngestAiPromptsReducer from "./dumps/jobNewsletterIngestAiPrompts";
+import jobNewsletterIngestAiCostsReducer from "./dumps/jobNewsletterIngestAiCosts";
+import aiPromptsReducer from "./dumps/aiPrompts";
+import aiExchangeCostsReducer from "./dumps/aiExchangeCosts";
 import jobQuestionAnswersReducer from "./dumps/jobQuestionAnswers";
 import employmentsReducer from "./dumps/employments";
 import currentJobNewsletterSourceReducer from "./current/currentJobNewsletterSource";
@@ -52,13 +59,20 @@ export const rootReducer = combineReducers({
   jobResponsibilities: jobResponsibilitiesReducer,
   jobRequirements: jobRequirementsReducer,
   jobNiceToHaves: jobNiceToHavesReducer,
+  jobListingSectionCounts: jobListingSectionCountsReducer,
   jobQuestions: jobQuestionsReducer,
   jobNewsletterSources: jobNewsletterSourcesReducer,
+  jobNewsletterIngestRuns: jobNewsletterIngestRunsReducer,
+  jobNewsletterIngestAiPrompts: jobNewsletterIngestAiPromptsReducer,
+  jobNewsletterIngestAiCosts: jobNewsletterIngestAiCostsReducer,
+  aiPrompts: aiPromptsReducer,
+  aiExchangeCosts: aiExchangeCostsReducer,
   jobQuestionAnswers: jobQuestionAnswersReducer,
   employments: employmentsReducer,
   studioBuilder: studioBuilderReducer,
   crmBuilder: crmBuilderReducer,
   companiesListBuilder: companiesListBuilderReducer,
+  jobsListBuilder: jobsListBuilderReducer,
   breadcrumbBuilder: breadcrumbBuilderReducer,
   experienceBuilder: experienceBuilderReducer,
   technicalSkillsBuilder: technicalSkillsBuilderReducer,

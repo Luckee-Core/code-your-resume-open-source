@@ -2,8 +2,14 @@
 
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { loadCrmVaultThunk, loadImageGraphicsThunk } from "@/store/thunks";
+import {
+  loadCrmVaultThunk,
+  loadImageGraphicsThunk,
+  loadJobListingSectionCountsThunk,
+  loadTechnicalSkillsThunk,
+} from "@/store/thunks";
 import { JobsTable } from "./table";
+import { JobsListToolbar } from "./toolbar";
 
 export { JobsTable } from "./table";
 
@@ -18,12 +24,22 @@ export const JobsList = () => {
   useEffect(() => {
     void dispatch(loadCrmVaultThunk());
     void dispatch(loadImageGraphicsThunk());
+    void dispatch(loadJobListingSectionCountsThunk());
+    void dispatch(loadTechnicalSkillsThunk());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      void dispatch(loadImageGraphicsThunk());
+    }, 45_000);
+    return () => window.clearInterval(intervalId);
   }, [dispatch]);
 
   return (
     <div className={styles.pageContainer}>
       {loadStatus === "loading" ? <p className={styles.muted}>Loading…</p> : null}
       {listError ? <p className={styles.err}>{listError}</p> : null}
+      <JobsListToolbar />
       <JobsTable />
     </div>
   );

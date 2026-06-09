@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useAppSelector } from "@/store";
+import { jobMatchesJobsListStatusFilter } from "@/utils/job";
 import { JobListRow } from "./job-list-row";
 
 type SortColumn = "title" | "company" | "status" | "updatedAt";
@@ -12,10 +13,16 @@ const getTime = (date: string | undefined): number => (date ? new Date(date).get
 export const JobsTable = () => {
   const jobsRecord = useAppSelector((s) => s.jobs);
   const companiesRecord = useAppSelector((s) => s.companies);
+  const statusFilter = useAppSelector((s) => s.jobsListBuilder.statusFilter);
   const [sortColumn, setSortColumn] = useState<SortColumn>("updatedAt");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
 
   const jobsList = useMemo(() => Object.values(jobsRecord), [jobsRecord]);
+
+  const filteredJobs = useMemo(
+    () => jobsList.filter((job) => jobMatchesJobsListStatusFilter(job, statusFilter)),
+    [jobsList, statusFilter],
+  );
 
   const handleSort = (column: SortColumn) => {
     if (sortColumn === column) {
@@ -27,7 +34,7 @@ export const JobsTable = () => {
   };
 
   const sortedJobs = useMemo(() => {
-    return [...jobsList].sort((a, b) => {
+    return [...filteredJobs].sort((a, b) => {
       let comparison = 0;
       if (sortColumn === "title") {
         comparison = (a.title || "").toLowerCase().localeCompare((b.title || "").toLowerCase());
@@ -42,7 +49,7 @@ export const JobsTable = () => {
       }
       return sortDirection === "asc" ? comparison : -comparison;
     });
-  }, [jobsList, sortColumn, sortDirection, companiesRecord]);
+  }, [filteredJobs, sortColumn, sortDirection, companiesRecord]);
 
   if (jobsList.length === 0) {
     return (
@@ -50,6 +57,17 @@ export const JobsTable = () => {
         <p className={styles.emptyTitle}>No jobs yet</p>
         <p className={styles.emptyDescription}>
           Add jobs from a company detail page to track postings and applications.
+        </p>
+      </div>
+    );
+  }
+
+  if (filteredJobs.length === 0) {
+    return (
+      <div className={styles.emptyState}>
+        <p className={styles.emptyTitle}>No jobs match this filter</p>
+        <p className={styles.emptyDescription}>
+          Change the status filter above or add jobs from a company detail page.
         </p>
       </div>
     );
@@ -79,7 +97,9 @@ export const JobsTable = () => {
                 {sortColumn === "status" ? (sortDirection === "asc" ? " ↑" : " ↓") : " ↕"}
               </span>
             </th>
+            <th className={styles.resumeHeader}>Resume</th>
             <th className={styles.graphicsHeader}>Graphics</th>
+            <th className={styles.listingHeader}>Listing</th>
             <th className={styles.headerCell}>Posting</th>
           </tr>
         </thead>
@@ -106,9 +126,17 @@ const styles = {
     px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wide
     bg-gray-100 border-b border-gray-300 cursor-pointer hover:bg-gray-200 transition-colors select-none
   `,
+  resumeHeader: `
+    px-2 py-2 text-center text-xs font-semibold text-gray-600 uppercase tracking-wide
+    bg-gray-100 border-b border-gray-300 w-14
+  `,
   graphicsHeader: `
     px-3 py-2 text-right text-xs font-semibold text-gray-600 uppercase tracking-wide
     bg-gray-100 border-b border-gray-300 w-20
+  `,
+  listingHeader: `
+    px-3 py-2 text-center text-xs font-semibold text-gray-600 uppercase tracking-wide
+    bg-gray-100 border-b border-gray-300 w-28
   `,
   headerCell: `
     px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wide

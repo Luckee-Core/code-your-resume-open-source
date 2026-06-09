@@ -22,7 +22,7 @@ Document how **Generate cover letter** on the job detail Applications section pr
 
 **Request body:** `{ jobId: string }` only. Express loads job, company, bullets, professional background, and active technical skills from Supabase via `loadJobGenerationContext` before calling `runCoverLetterGeneration`.
 
-**Response:** `{ success: true, tsx: string }`.
+**Response:** `202 { success: true, accepted: true, jobId }` — generation and graphic persistence run on Express in the background; the client does not receive TSX.
 
 The same `{ jobId }` contract applies to **company interest** (`POST /api/data/company-interest/generate`, canvas 816×480) and **skills/resume** (`POST /api/data/skills-component/generate`, canvas 816×1150). Shared types: `GenerateByJobIdInput` in `src/api/generation/types.ts`.
 
@@ -35,17 +35,23 @@ Job detail page dispatches `loadProfessionalBackgroundThunk` and `loadTechnicalS
 
 ### 4) Persistence
 
-After generation:
-
-1. `createImageGraphicThunk` — title `Cover letter — {jobTitle}`, metadata `{ jobId, coverLetterSource: "cursor" }`.
-2. `patchImageGraphicStudioDraft` — TSX in `metadata.studioDraft.tsx`.
-3. `loadImageGraphicsThunk`, `openImageGraphicStudioByIdThunk`, `hydrateStudioForGraphic`.
+Express persists graphics after the Cursor agent finishes (`persistGeneratedJobGraphic` in express-server `src/services/job-graphic-generation/`). The browser only queues generation and refreshes `imageGraphics` periodically.
 
 Graphics persist in Supabase `image_graphics` (ADR 008). No CRM `JobApplication` field for cover letters in MVP.
 
 ### 5) Ledger
 
-Reuse Supabase `resume_tsx_code_generation_*` tables and CRUD in Express `src/data/resume-tsx-code-generation/`. The `skills` column stores optional technical-skill prompt lines for audit; cover letter prompts are stored in `prompt_text`.
+Each Cursor generation flow has its own Supabase ledger (requests / exchanges / responses):
+
+| Flow | Tables |
+|------|--------|
+| Cover letter | `cover_letter_generation_requests`, `cover_letter_generation_exchanges`, `cover_letter_generation_responses` |
+| Company interest | `company_interest_generation_requests`, `company_interest_generation_exchanges`, `company_interest_generation_responses` |
+| Skills / resume TSX | `skills_component_generation_requests`, `skills_component_generation_exchanges`, `skills_component_generation_responses` |
+
+Express CRUD lives in `src/data/cover-letter-generation/`, `src/data/company-interest-generation/`, and `src/data/skills-component-generation/`. Each request and exchange row includes `job_id` for per-job cost filtering. The `skills` column stores optional technical-skill prompt lines for audit; full prompts are stored in `prompt_text`. Cursor runs record `cost_estimate` on the exchange row (not Anthropic token columns).
+
+DDL and registry seeds: express-server `docs/supabase-exchange-registry-update.sql`.
 
 ### 6) TSX extraction
 

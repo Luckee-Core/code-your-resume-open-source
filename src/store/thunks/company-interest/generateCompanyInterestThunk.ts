@@ -1,75 +1,35 @@
-import { patchImageGraphicStudioDraft } from "@/api/image-creation-studio";
 import { generateCompanyInterest } from "@/api/company-interest";
 import { coerceErrorFields, reportThunkError } from "@/api/thunk-errors";
 import type { AppThunk } from "@/store";
-import { CurrentStudioEditorActions } from "@/store/current/currentStudioEditor";
-import { createImageGraphicThunk } from "@/store/thunks/image-creation-studio/create-image-graphic-thunk";
 import { loadImageGraphicsThunk } from "@/store/thunks/image-creation-studio/load-image-graphics-thunk";
-import { openImageGraphicStudioByIdThunk } from "@/store/thunks/image-creation-studio/open-image-graphic-studio-by-id-thunk";
 
 export type GenerateCompanyInterestThunkInput = {
   jobId: string;
 };
 
-/** US Letter width at 96dpi. */
-const DEFAULT_CANVAS_W = 816;
-/** Shorter than cover letter — half-page answer block. */
-const DEFAULT_CANVAS_H = 480;
-
 /**
- * Launch a Cursor agent to generate a short company-interest TSX component,
- * save it as a job-tagged graphic, and open it in studio state.
+ * Queues company-interest generation on Express. Graphic persistence runs server-side.
  *
- * @returns 200 on success, 400 if input invalid, 500 on API or persistence failure
+ * @returns 200 when queued, 400 if input invalid, 500 on API failure
  */
 export const generateCompanyInterestThunk =
   (input: GenerateCompanyInterestThunkInput): AppThunk<Promise<200 | 400 | 500>> =>
-  async (dispatch, getState) => {
+  async (dispatch) => {
     const jobId = input.jobId.trim();
     if (!jobId) {
       return 400;
     }
 
-    const jobTitle = getState().currentJob.title?.trim() ?? "";
-
     try {
-      const generated = await generateCompanyInterest({ jobId });
-      if (!generated.success || !generated.data?.tsx) {
-        return 500;
+      const result = await generateCompanyInterest({ jobId });
+      if (result.httpStatus === 400) {
+        return 400;
       }
-      const tsx = generated.data.tsx;
-
-      const titleBase = jobTitle || `Job ${jobId.slice(0, 8)}`;
-      const createStatus = await dispatch(
-        createImageGraphicThunk({
-          title: `Company interest — ${titleBase}`,
-          canvasWidthPx: DEFAULT_CANVAS_W,
-          canvasHeightPx: DEFAULT_CANVAS_H,
-          jobId,
-          metadata: {
-            companyInterestSource: "cursor",
-          },
-        }),
-      );
-
-      if (createStatus !== 200) {
+      if (!result.success || result.httpStatus !== 202) {
         return 500;
       }
 
-      const newId = getState().currentImageGraphic.id;
-      if (!newId) {
-        return 500;
-      }
-
-      const patch = await patchImageGraphicStudioDraft(newId, tsx);
-      if (!patch.success) {
-        return 500;
-      }
-
-      await dispatch(loadImageGraphicsThunk());
-      await dispatch(openImageGraphicStudioByIdThunk(newId));
-      dispatch(CurrentStudioEditorActions.hydrateStudioForGraphic({ graphicId: newId, tsx }));
-
+      void dispatch(loadImageGraphicsThunk());
       return 200;
     } catch (error) {
       const { message, stack } = coerceErrorFields(error);

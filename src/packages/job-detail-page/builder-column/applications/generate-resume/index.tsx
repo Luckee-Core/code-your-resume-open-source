@@ -47,7 +47,7 @@ export const GenerateResume = () => {
       );
 
       if (status === 200) {
-        toast.success("Resume saved — open Graphics Studio to edit or export.");
+        toast.success("Resume generation started — it will appear below in a few minutes.");
       } else if (status === 400) {
         toast.error("No skills or job to generate from.");
       } else {
@@ -98,7 +98,7 @@ export const GenerateResume = () => {
         {isGenerating ? (
           <>
             <Loader2 className={styles.iconSpin} aria-hidden />
-            Generating…
+            Starting…
           </>
         ) : (
           <>
@@ -108,11 +108,10 @@ export const GenerateResume = () => {
         )}
       </button>
 
-      {isGenerating ? (
-        <p className={styles.runningNote} role="status">
-          The Cursor agent is writing your resume. This typically takes 1–3 minutes.
-        </p>
-      ) : null}
+      <p className={styles.runningNote}>
+        Generation runs on the server — you can switch jobs, close this tab, or queue several at
+        once. Refresh this page to see new resumes when ready (usually 1–3 minutes).
+      </p>
 
       <JobDetailGraphicList
         jobId={jobId}
