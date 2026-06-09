@@ -11,10 +11,7 @@ export default function GeneratedCoverLetterPreview() {
             <p>Hola hola,</p>
 
             <p>
-              My name is Matt Ruiz, and I am applying for the Tech Lead Manager role at
-              Check Technologies. I want to join the team building the payroll infrastructure
-              that partners rely on for calculations, tax payments, filings, money movement,
-              and clear reconciliation.
+              {"My name is Matt Ruiz, and I am applying for the Tech Lead Manager role at Check Technologies. I want to join the team building the payroll infrastructure that partners rely on for calculations, tax payments, filings, money movement, and clear reconciliation."}
             </p>
 
             <p>
