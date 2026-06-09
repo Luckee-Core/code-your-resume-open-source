@@ -27,8 +27,10 @@ import jobResponsibilitiesReducer from "./dumps/jobResponsibilities";
 import jobRequirementsReducer from "./dumps/jobRequirements";
 import jobNiceToHavesReducer from "./dumps/jobNiceToHaves";
 import jobQuestionsReducer from "./dumps/jobQuestions";
+import jobNewsletterSourcesReducer from "./dumps/jobNewsletterSources";
 import jobQuestionAnswersReducer from "./dumps/jobQuestionAnswers";
 import employmentsReducer from "./dumps/employments";
+import currentJobNewsletterSourceReducer from "./current/currentJobNewsletterSource";
 
 export const rootReducer = combineReducers({
   app: appReducer,
@@ -41,6 +43,7 @@ export const rootReducer = combineReducers({
   currentProfessionalBackground: currentProfessionalBackgroundReducer,
   currentStudioEditor: currentStudioEditorReducer,
   currentJobStudio: currentJobStudioReducer,
+  currentJobNewsletterSource: currentJobNewsletterSourceReducer,
   imageGraphics: imageGraphicsReducer,
   companies: companiesReducer,
   employees: employeesReducer,
@@ -50,6 +53,7 @@ export const rootReducer = combineReducers({
   jobRequirements: jobRequirementsReducer,
   jobNiceToHaves: jobNiceToHavesReducer,
   jobQuestions: jobQuestionsReducer,
+  jobNewsletterSources: jobNewsletterSourcesReducer,
   jobQuestionAnswers: jobQuestionAnswersReducer,
   employments: employmentsReducer,
   studioBuilder: studioBuilderReducer,

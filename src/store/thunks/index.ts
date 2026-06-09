@@ -80,6 +80,14 @@ export {
 } from "./job-questions";
 
 export {
+  loadJobNewsletterSourcesThunk,
+  createJobNewsletterSourceThunk,
+  updateJobNewsletterSourceThunk,
+  processJobNewsletterFromEmailManagerThunk,
+  type ProcessFromEmailManagerOutcome,
+} from "./job-newsletter-sources";
+
+export {
   loadJobQuestionAnswersForJobThunk,
   createJobQuestionAnswerThunk,
   createJobQuestionWithAnswerForJobThunk,

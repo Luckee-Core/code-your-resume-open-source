@@ -44,8 +44,12 @@ const nextConfig: NextConfig = {
         destination: `${base}/api/user-background-studio/:path*`,
       });
       rules.push({
-        source: "/api/user-background-studio",
-        destination: `${base}/api/user-background-studio`,
+        source: "/api/job-newsletter-ingest/:path*",
+        destination: `${base}/api/job-newsletter-ingest/:path*`,
+      });
+      rules.push({
+        source: "/api/job-newsletter-ingest",
+        destination: `${base}/api/job-newsletter-ingest`,
       });
     }
 
