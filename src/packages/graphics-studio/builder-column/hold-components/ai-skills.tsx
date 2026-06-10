@@ -3,176 +3,186 @@
 import React from "react";
 
 export default function GeneratedSkillsPreview() {
-  const summary = [
-    "Built and shipped React Native, Expo, and Next.js products with TypeScript, Node.js backends, real-time data, payments, maps, video, and production deployment workflows.",
-    "Delivered AI-enabled workflows using OpenAI and Anthropic Claude APIs for chatbots, prompt engineering, embeddings, function calling, fine-tuning, and RAG-style systems.",
-    "Led practical product builds across marketplaces, social apps, training tools, field-service workflows, and automation projects with an operations-aware engineering style.",
-    "Scaled delivery patterns with CI/testing, Vercel, AWS, GCP, Firebase, Supabase, Redux, React Navigation, Expo Router, Twilio video, MapBox, and Salesforce platform experience.",
-  ];
-
-  const experience = [
-    {
-      role: "Software Engineer",
-      organization: "Acme Labs",
-      period: "Recent",
-      bullets: [
-        "Help teams reduce repetitive work through AI automation, workflow tooling, and practical engineering across Node.js, React Native, and Next.js applications.",
-        "Integrated OpenAI and Anthropic Claude APIs into prototypes and production systems, including real-time inference, chatbots, embeddings, function calling, and RAG workflows.",
-      ],
-    },
-    {
-      role: "Product Engineer",
-      organization: "Independent product and client work",
-      period: "Recent",
-      bullets: [
-        "Built dashboard and mobile prototypes with TypeScript, React, Redux, PostgreSQL, and Stripe integrations.",
-        "Delivered sample marketplace and scheduling apps with authentication, notifications, and admin tooling.",
-      ],
-    },
-    {
-      role: "Salesforce BA / Trainer / Developer",
-      organization: "Example Training Co.",
-      period: "Earlier",
-      bullets: [
-        "Coordinated with large development groups, delivered Salesforce training workshops and curriculum, and contributed measurable process improvements.",
-        "Applied Salesforce Admin and Apex Developer knowledge across core platform features, custom objects, flows, automation, and business analysis work.",
-      ],
-    },
-  ];
-
-  const technicalFocus = [
-    {
-      label: "AI and automation",
-      value:
-        "OpenAI, Anthropic Claude, chatbots, prompt engineering, fine-tuning, embeddings, function calling, RAG systems, real-time inference, n8n-style workflow automation.",
-    },
-    {
-      label: "Mobile and web",
-      value:
-        "React Native, Expo, Expo Router, React Navigation, Redux, Next.js, React, TypeScript, JavaScript, Node.js, dashboards, full-stack services.",
-    },
-    {
-      label: "Backends and data",
-      value:
-        "Firebase Realtime Database, Firestore, Firebase Auth, Cloud Functions, Supabase PostgreSQL, real-time subscriptions, authentication, CI/testing patterns.",
-    },
-    {
-      label: "Integrations and platforms",
-      value:
-        "Twilio video, MapBox, Stripe, Salesforce Admin/Apex/flows, Vercel, AWS, GCP, managed hosting, edge functions, CI/CD deployment.",
-    },
-  ];
-
   return (
     <React.Fragment>
-      <main className="min-h-screen w-full bg-slate-100 px-4 py-4 font-sans text-slate-800">
-        <section className="mx-auto flex w-full max-w-5xl flex-col rounded-sm border border-slate-200 bg-white px-9 py-7 shadow-sm">
-          <header className="border-b border-slate-200 pb-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
-              Full-stack product engineer
-            </p>
-            <div className="mt-2">
-              <h1 className="text-3xl font-semibold tracking-tight text-slate-950">
-                Alex Chen
-              </h1>
-            </div>
+      <main className={styles.canvas}>
+        <section className={styles.paper}>
+          <header className={styles.header}>
+            <h1 className={styles.name}>Matt Ruiz</h1>
+            <div className={styles.subline}>Senior Software Engineer | Philadelphia</div>
           </header>
 
-          <div className="grid grid-cols-[1.35fr_0.9fr] gap-7 pt-5">
-            <div className="space-y-5">
-              <section>
-                <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
-                  Summary
-                </h2>
-                <ul className="mt-2 space-y-1.5 text-sm leading-relaxed text-slate-700">
-                  {summary.map((item) => (
-                    <li key={item} className="flex gap-2">
-                      <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-slate-400" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </section>
+          <section className={styles.section}>
+            <h2 className={styles.sectionLabel}>Executive Summary</h2>
+            <p className={styles.summary}>
+              I design and ship production software systems with a practical eye for
+              architecture, maintainability, and real-world operations. My work spans
+              TypeScript, React Native, Next.js, Node.js, Firebase, Salesforce, and AI
+              automation, with a track record of collaborating across teams and
+              supporting engineers through reviews, planning, and implementation.
+            </p>
+          </section>
 
-              <section>
-                <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
-                  Experience
-                </h2>
-                <div className="mt-2 space-y-4">
-                  {experience.map((entry) => (
-                    <article key={`${entry.role}-${entry.organization}`}>
-                      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                        <h3 className="text-sm font-semibold text-slate-950">
-                          {entry.role} | {entry.organization}
-                        </h3>
-                        <p className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">
-                          {entry.period}
-                        </p>
-                      </div>
-                      <ul className="mt-1.5 space-y-1 text-sm leading-relaxed text-slate-700">
-                        {entry.bullets.map((bullet) => (
-                          <li key={bullet} className="flex gap-2">
-                            <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-slate-400" />
-                            <span>{bullet}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </article>
-                  ))}
+          <section className={styles.section}>
+            <h2 className={styles.sectionLabel}>Experience</h2>
+            <div className={styles.experienceList}>
+              <article className={styles.experienceEntry}>
+                <div className={styles.entryHeader}>
+                  <h3 className={styles.entryTitle}>
+                    Senior Software Engineer | Acme Labs
+                  </h3>
+                  <div className={styles.entryDate}>Recent</div>
                 </div>
-              </section>
+                <ul className={styles.bulletList}>
+                  <li className={styles.bulletItem}>
+                    <span className={styles.bulletDot} />
+                    <span>
+                      Designed, developed, and maintained production mobile and web
+                      software across marketplaces, social apps, field-service workflows,
+                      and training tools using TypeScript, React Native, Next.js, Node.js,
+                      Firebase, Supabase, and Cloud Functions.
+                    </span>
+                  </li>
+                  <li className={styles.bulletItem}>
+                    <span className={styles.bulletDot} />
+                    <span>
+                      Contributed architecture and technical strategy for real-time and
+                      payment-enabled product builds, including Stripe, MapBox, Twilio
+                      Video, push notifications, authentication, backend automation, and
+                      CI/testing patterns.
+                    </span>
+                  </li>
+                  <li className={styles.bulletItem}>
+                    <span className={styles.bulletDot} />
+                    <span>
+                      Collaborated with product and client stakeholders to scope features,
+                      troubleshoot issues, and estimate work across TeenPros, BoxBets,
+                      Swizzy Golf, Women Heart Sister Match, and field-service workflow
+                      builds.
+                    </span>
+                  </li>
+                  <li className={styles.bulletItem}>
+                    <span className={styles.bulletDot} />
+                    <span>
+                      Supported engineering quality through review-ready implementation,
+                      reusable npm modules, shared tooling, and plain-language
+                      documentation; applied OpenAI and Anthropic APIs where automation
+                      reduced repetitive operational work.
+                    </span>
+                  </li>
+                </ul>
+              </article>
+
+              <article className={styles.experienceEntry}>
+                <div className={styles.entryHeader}>
+                  <h3 className={styles.entryTitle}>
+                    Salesforce Business Analyst / Trainer / Developer | Revature
+                  </h3>
+                  <div className={styles.entryDate}>Earlier</div>
+                </div>
+                <ul className={styles.bulletList}>
+                  <li className={styles.bulletItem}>
+                    <span className={styles.bulletDot} />
+                    <span>
+                      Coordinated with large development groups, translating Salesforce
+                      platform work across Admin, Apex, custom objects, flows, automation,
+                      requirements, and delivery training.
+                    </span>
+                  </li>
+                  <li className={styles.bulletItem}>
+                    <span className={styles.bulletDot} />
+                    <span>
+                      Produced training curriculum and process improvements that helped
+                      teams work more consistently through planning, implementation, and
+                      handoff.
+                    </span>
+                  </li>
+                </ul>
+              </article>
             </div>
+          </section>
 
-            <aside className="space-y-5">
-              <section>
-                <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
-                  Technical Focus
-                </h2>
-                <div className="mt-2 space-y-3 text-sm leading-relaxed text-slate-700">
-                  {technicalFocus.map((group) => (
-                    <p key={group.label}>
-                      <span className="font-semibold text-slate-950">{group.label}:</span>{" "}
-                      {group.value}
-                    </p>
-                  ))}
-                </div>
-              </section>
-
-              <section>
-                <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
-                  Education
-                </h2>
-                <div className="mt-2 text-sm leading-relaxed text-slate-700">
-                  <p className="font-semibold text-slate-950">
-                    West Chester University of Pennsylvania
-                  </p>
-                  <p>B.S. Computer Science, 2018</p>
-                </div>
-              </section>
-
-              <section>
-                <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
-                  Delivery Notes
-                </h2>
-                <ul className="mt-2 space-y-1.5 text-sm leading-relaxed text-slate-700">
-                  <li className="flex gap-2">
-                    <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-slate-400" />
-                    <span>
-                      Approach shaped by early electrical and field operations work in a family contracting business: diagnose before prescribing, keep systems usable, and optimize for outcomes.
-                    </span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-slate-400" />
-                    <span>
-                      Salesforce foundation remains strong across admin, Apex, custom objects, flows, automation, and training, with current focus on AI, mobile, web, and workflow automation delivery.
-                    </span>
-                  </li>
-                </ul>
-              </section>
-            </aside>
-          </div>
+          <section className={styles.section}>
+            <h2 className={styles.sectionLabel}>Education</h2>
+            <div className={styles.educationBlock}>
+              <div className={styles.educationTitle}>
+                B.S. Computer Science | West Chester University of Pennsylvania
+              </div>
+              <div className={styles.educationMeta}>2018</div>
+              <div className={styles.educationNote}>
+                Early electrical and field operations apprenticeship in a family
+                contracting business shaped an operations-aware approach to building
+                software that works in real conditions.
+              </div>
+            </div>
+          </section>
         </section>
       </main>
     </React.Fragment>
   );
 }
+
+const styles = {
+  canvas: `
+    w-full bg-slate-100 px-3 py-4 font-sans text-slate-800
+  `,
+  paper: `
+    mx-auto w-[816px] max-w-full rounded-sm border border-slate-200 bg-white
+    px-10 py-8 shadow-sm ring-1 ring-slate-100
+  `,
+  header: `
+    border-b border-slate-200 pb-4
+  `,
+  name: `
+    text-3xl font-semibold tracking-tight text-slate-950
+  `,
+  subline: `
+    mt-2 text-sm font-medium text-slate-600
+  `,
+  section: `
+    mt-5
+  `,
+  sectionLabel: `
+    border-b border-slate-200 pb-1 text-[11px] font-bold uppercase
+    tracking-[0.2em] text-slate-500
+  `,
+  summary: `
+    mt-2 text-sm leading-relaxed text-slate-700
+  `,
+  experienceList: `
+    mt-3 space-y-5
+  `,
+  experienceEntry: `
+    text-sm leading-relaxed
+  `,
+  entryHeader: `
+    flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1
+  `,
+  entryTitle: `
+    text-sm font-semibold text-slate-950
+  `,
+  entryDate: `
+    text-xs font-semibold uppercase tracking-[0.14em] text-slate-500
+  `,
+  bulletList: `
+    mt-2 space-y-1.5 text-sm leading-relaxed text-slate-700
+  `,
+  bulletItem: `
+    flex gap-2
+  `,
+  bulletDot: `
+    mt-2 h-1 w-1 shrink-0 rounded-full bg-slate-400
+  `,
+  educationBlock: `
+    mt-2 text-sm leading-relaxed text-slate-700
+  `,
+  educationTitle: `
+    font-semibold text-slate-950
+  `,
+  educationMeta: `
+    text-sm text-slate-600
+  `,
+  educationNote: `
+    mt-1 text-sm leading-relaxed text-slate-700
+  `,
+} as const;
