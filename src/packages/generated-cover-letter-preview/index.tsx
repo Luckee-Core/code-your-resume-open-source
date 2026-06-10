@@ -31,11 +31,11 @@ export default function GeneratedCoverLetterPreview() {
           <p>
             I am also comfortable on the DevOps side of the stack: CI and
             testing patterns, automated deployment, containerization, cloud
-            platforms, and infrastructure-aware engineering. I have used AI
-            coding tools in day-to-day development and integrated OpenAI and
-            Claude APIs into production systems, so I treat AI as a practical
-            way to improve velocity while still reviewing security, reliability,
-            and maintainability closely.
+            platforms, and the infrastructure-as-code practices that keep
+            releases repeatable. I have used AI coding tools in day-to-day
+            development and integrated OpenAI and Claude APIs into production
+            systems, so I treat AI as a practical way to improve velocity while
+            still reviewing security, reliability, and maintainability closely.
           </p>
 
           <p>
