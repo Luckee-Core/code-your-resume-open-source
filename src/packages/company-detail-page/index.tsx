@@ -7,7 +7,6 @@ import { crmDetailPageTokens as t } from "@/packages/crm-detail-ui";
 import { DetailHeader } from "./header";
 import { AtAGlanceSection } from "./at-a-glance";
 import { OnlineProfilesSection } from "./online-profiles";
-import { EmployeesSection } from "./employees";
 import { JobsSection } from "./jobs";
 import { EditCompanyModal } from "./edit";
 
@@ -40,10 +39,7 @@ export const CompanyDetailPage = () => {
         <AtAGlanceSection />
         <OnlineProfilesSection />
       </div>
-      <div className={styles.twoCol}>
-        <EmployeesSection />
-        <JobsSection />
-      </div>
+      <JobsSection />
       <EditCompanyModal />
     </div>
   );
@@ -53,5 +49,4 @@ const styles = {
   wrap: t.pageWrapFullWidth,
   empty: t.emptyMessage,
   researchGrid: t.researchGrid,
-  twoCol: t.twoCol,
 };

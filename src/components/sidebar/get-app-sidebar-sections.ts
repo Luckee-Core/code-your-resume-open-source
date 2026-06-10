@@ -4,16 +4,14 @@ import {
   COMPANIES_PATH,
   DASHBOARD_PATH,
   DOCS_PATH,
-  EMPLOYEES_PATH,
-  EXPERIENCE_PATH,
   EXPERIENCE_BACKGROUND_PATH,
   EXPERIENCE_STUDIO_PATH,
-  JOB_APPLICATIONS_PATH,
   JOB_QUESTIONS_PATH,
   AI_COSTS_PATH,
   AI_PROMPTS_PATH,
   JOB_NEWSLETTERS_PATH,
   JOBS_PATH,
+  MY_LINKEDIN_PATH,
 } from "@/config/routes";
 
 /**
@@ -29,17 +27,18 @@ export const getAppSidebarSections = (): SidebarSection[] => {
       ],
     },
     {
+      title: "Profile",
+      links: [{ name: "My LinkedIn", href: MY_LINKEDIN_PATH }],
+    },
+    {
       title: "Job search",
       links: [
         { name: "Companies", href: COMPANIES_PATH },
         { name: "Jobs", href: JOBS_PATH },
-        { name: "Employees", href: EMPLOYEES_PATH },
-        { name: "Applications", href: JOB_APPLICATIONS_PATH },
         { name: "Job questions", href: JOB_QUESTIONS_PATH },
         { name: "Job newsletters", href: JOB_NEWSLETTERS_PATH },
         { name: "AI prompts", href: AI_PROMPTS_PATH },
         { name: "AI costs", href: AI_COSTS_PATH },
-        { name: "Work History", href: EXPERIENCE_PATH },
         { name: "Professional background", href: EXPERIENCE_BACKGROUND_PATH },
         { name: "Technical skills", href: EXPERIENCE_STUDIO_PATH },
       ],

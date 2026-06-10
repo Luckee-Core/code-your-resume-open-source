@@ -1,0 +1,1 @@
+export { listLinkedInEducationsApi } from "./list";

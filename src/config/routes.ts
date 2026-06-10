@@ -16,9 +16,6 @@ export const DOCS_GETTING_STARTED_PATH = "/docs/getting-started";
 /** TSX preview trust model, iframe sandbox, CDN notes. */
 export const DOCS_SECURITY_TSX_PREVIEW_PATH = "/docs/security/tsx-preview";
 
-/** CRM experience — employment history. */
-export const EXPERIENCE_PATH = "/experience";
-
 /** Long-form education + narrative segments (Supabase via Express). */
 export const EXPERIENCE_BACKGROUND_PATH = "/experience/background";
 
@@ -28,12 +25,9 @@ export const COMPANIES_PATH = "/companies";
 export const COMPANY_DETAIL_PAGE_PATH = "/company-detail-page";
 export const JOBS_PATH = "/jobs";
 export const JOB_DETAIL_PAGE_PATH = "/job-detail-page";
-export const EMPLOYEES_PATH = "/employees";
-export const COMPANY_EMPLOYEE_DETAIL_PAGE_PATH = "/company-employee-detail-page";
-export const JOB_APPLICATIONS_PATH = "/job-applications";
-export const JOB_APPLICATION_DETAIL_PAGE_PATH = "/job-application-detail-page";
 export const JOB_QUESTIONS_PATH = "/job-questions";
 export const JOB_NEWSLETTERS_PATH = "/job-newsletters";
 export const JOB_NEWSLETTER_DETAIL_PAGE_PATH = "/job-newsletter-detail-page";
 export const AI_PROMPTS_PATH = "/ai-prompts";
 export const AI_COSTS_PATH = "/ai-costs";
+export const MY_LINKEDIN_PATH = "/my-linkedin";

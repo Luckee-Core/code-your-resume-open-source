@@ -1,6 +1,5 @@
 export type { ImageGraphic } from "./image-graphic";
 export type { BreadcrumbItem } from "./breadcrumb";
-export type { Employment } from "./employment";
 export type { JobStudioChatMessage, JobStudioPayload } from "./job-studio";
 export type { JobDetailBuilderSectionKey } from "./job-detail-builder";
 export { JOB_DETAIL_BUILDER_SECTION_ORDER, JOB_DETAIL_BUILDER_SECTION_TITLE } from "./job-detail-builder";

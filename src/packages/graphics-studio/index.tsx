@@ -17,13 +17,10 @@ export const ImageCreationStudio = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const graphic = useAppSelector((s) => s.currentImageGraphic);
-  const crmLoadStatus = useAppSelector((s) => s.crmBuilder.listLoadStatus);
 
   useEffect(() => {
-    if (crmLoadStatus === "idle") {
-      void dispatch(loadCrmVaultThunk());
-    }
-  }, [dispatch, crmLoadStatus]);
+    void dispatch(loadCrmVaultThunk());
+  }, [dispatch]);
 
   useEffect(() => {
     if (!graphic.id) {

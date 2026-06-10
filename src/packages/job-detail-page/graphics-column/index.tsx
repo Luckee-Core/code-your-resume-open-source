@@ -1,6 +1,5 @@
 "use client";
 
-import { ApplicationsSection } from "../builder-column/applications";
 import { ApplicationQuestionsSection } from "../builder-column/application-questions";
 import { GenerateCompanyInterest } from "../builder-column/applications/generate-company-interest";
 import { GenerateCoverLetter } from "../builder-column/applications/generate-cover-letter";
@@ -15,7 +14,7 @@ export const JobDetailGraphicsColumn = () => {
   return (
     <div className={styles.column}>
       <div className={styles.scroll}>
-        <section className={s.draftColumn} aria-label="Job graphics and applications">
+        <section className={s.draftColumn} aria-label="Job graphics">
           <div className={s.draftBody}>
             <ul className={s.draftList}>
               <JobDetailSectionCard
@@ -40,7 +39,6 @@ export const JobDetailGraphicsColumn = () => {
                 <GenerateCompanyInterest />
               </JobDetailSectionCard>
               <ApplicationQuestionsSection />
-              <ApplicationsSection />
             </ul>
           </div>
         </section>

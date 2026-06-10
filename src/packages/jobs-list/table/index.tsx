@@ -13,15 +13,15 @@ const getTime = (date: string | undefined): number => (date ? new Date(date).get
 export const JobsTable = () => {
   const jobsRecord = useAppSelector((s) => s.jobs);
   const companiesRecord = useAppSelector((s) => s.companies);
-  const statusFilter = useAppSelector((s) => s.jobsListBuilder.statusFilter);
+  const statusFilters = useAppSelector((s) => s.jobsListBuilder.statusFilters);
   const [sortColumn, setSortColumn] = useState<SortColumn>("updatedAt");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
 
   const jobsList = useMemo(() => Object.values(jobsRecord), [jobsRecord]);
 
   const filteredJobs = useMemo(
-    () => jobsList.filter((job) => jobMatchesJobsListStatusFilter(job, statusFilter)),
-    [jobsList, statusFilter],
+    () => jobsList.filter((job) => jobMatchesJobsListStatusFilter(job, statusFilters)),
+    [jobsList, statusFilters],
   );
 
   const handleSort = (column: SortColumn) => {
@@ -56,7 +56,7 @@ export const JobsTable = () => {
       <div className={styles.emptyState}>
         <p className={styles.emptyTitle}>No jobs yet</p>
         <p className={styles.emptyDescription}>
-          Add jobs from a company detail page to track postings and applications.
+          Add jobs from a company detail page to track postings and drafts.
         </p>
       </div>
     );

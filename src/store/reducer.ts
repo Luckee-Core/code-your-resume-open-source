@@ -5,7 +5,6 @@ import crmBuilderReducer from "./builders/crmBuilder";
 import companiesListBuilderReducer from "./builders/companiesListBuilder";
 import jobsListBuilderReducer from "./builders/jobsListBuilder";
 import breadcrumbBuilderReducer from "./builders/breadcrumbBuilder";
-import experienceBuilderReducer from "./builders/experienceBuilder";
 import technicalSkillsBuilderReducer from "./builders/technicalSkillsBuilder";
 import professionalBackgroundBuilderReducer from "./builders/professionalBackgroundBuilder";
 import jobStudioBuilderReducer from "./builders/jobStudioBuilder";
@@ -13,17 +12,13 @@ import jobDetailChatFabReducer from "./builders/jobDetailChatFab";
 import currentImageGraphicReducer from "./current/currentImageGraphic";
 import currentCompanyReducer from "./current/currentCompany";
 import currentJobReducer from "./current/currentJob";
-import currentCompanyEmployeeReducer from "./current/currentCompanyEmployee";
-import currentJobApplicationReducer from "./current/currentJobApplication";
 import currentTechnicalSkillsReducer from "./current/currentTechnicalSkills";
 import currentProfessionalBackgroundReducer from "./current/currentProfessionalBackground";
 import currentStudioEditorReducer from "./current/currentStudioEditor";
 import currentJobStudioReducer from "./current/currentJobStudio";
 import imageGraphicsReducer from "./dumps/imageGraphics";
 import companiesReducer from "./dumps/companies";
-import employeesReducer from "./dumps/employees";
 import jobsReducer from "./dumps/jobs";
-import jobApplicationsReducer from "./dumps/jobApplications";
 import jobResponsibilitiesReducer from "./dumps/jobResponsibilities";
 import jobRequirementsReducer from "./dumps/jobRequirements";
 import jobNiceToHavesReducer from "./dumps/jobNiceToHaves";
@@ -36,7 +31,10 @@ import jobNewsletterIngestAiCostsReducer from "./dumps/jobNewsletterIngestAiCost
 import aiPromptsReducer from "./dumps/aiPrompts";
 import aiExchangeCostsReducer from "./dumps/aiExchangeCosts";
 import jobQuestionAnswersReducer from "./dumps/jobQuestionAnswers";
-import employmentsReducer from "./dumps/employments";
+import linkedInProfilesReducer from "./dumps/linkedinProfiles";
+import linkedInEmploymentsReducer from "./dumps/linkedinEmployments";
+import linkedInEducationsReducer from "./dumps/linkedinEducations";
+import linkedInCertificationsReducer from "./dumps/linkedinCertifications";
 import currentJobNewsletterSourceReducer from "./current/currentJobNewsletterSource";
 
 export const rootReducer = combineReducers({
@@ -44,8 +42,6 @@ export const rootReducer = combineReducers({
   currentImageGraphic: currentImageGraphicReducer,
   currentCompany: currentCompanyReducer,
   currentJob: currentJobReducer,
-  currentCompanyEmployee: currentCompanyEmployeeReducer,
-  currentJobApplication: currentJobApplicationReducer,
   currentTechnicalSkills: currentTechnicalSkillsReducer,
   currentProfessionalBackground: currentProfessionalBackgroundReducer,
   currentStudioEditor: currentStudioEditorReducer,
@@ -53,9 +49,7 @@ export const rootReducer = combineReducers({
   currentJobNewsletterSource: currentJobNewsletterSourceReducer,
   imageGraphics: imageGraphicsReducer,
   companies: companiesReducer,
-  employees: employeesReducer,
   jobs: jobsReducer,
-  jobApplications: jobApplicationsReducer,
   jobResponsibilities: jobResponsibilitiesReducer,
   jobRequirements: jobRequirementsReducer,
   jobNiceToHaves: jobNiceToHavesReducer,
@@ -68,13 +62,15 @@ export const rootReducer = combineReducers({
   aiPrompts: aiPromptsReducer,
   aiExchangeCosts: aiExchangeCostsReducer,
   jobQuestionAnswers: jobQuestionAnswersReducer,
-  employments: employmentsReducer,
+  linkedInProfiles: linkedInProfilesReducer,
+  linkedInEmployments: linkedInEmploymentsReducer,
+  linkedInEducations: linkedInEducationsReducer,
+  linkedInCertifications: linkedInCertificationsReducer,
   studioBuilder: studioBuilderReducer,
   crmBuilder: crmBuilderReducer,
   companiesListBuilder: companiesListBuilderReducer,
   jobsListBuilder: jobsListBuilderReducer,
   breadcrumbBuilder: breadcrumbBuilderReducer,
-  experienceBuilder: experienceBuilderReducer,
   technicalSkillsBuilder: technicalSkillsBuilderReducer,
   professionalBackgroundBuilder: professionalBackgroundBuilderReducer,
   jobStudioBuilder: jobStudioBuilderReducer,

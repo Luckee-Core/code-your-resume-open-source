@@ -163,7 +163,7 @@ export const JobsSection = () => {
         <div className={styles.emptyState}>
           <Briefcase className={styles.emptyIcon} aria-hidden />
           <p className={styles.emptyTitle}>No jobs yet</p>
-          <p className={styles.emptyHint}>Track postings and applications for this company.</p>
+          <p className={styles.emptyHint}>Track postings and drafts for this company.</p>
         </div>
       ) : (
         <div className={styles.tableViewport}>

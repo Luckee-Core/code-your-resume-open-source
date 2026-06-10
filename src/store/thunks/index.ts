@@ -26,11 +26,6 @@ export {
   runCompanyWebsiteResearchThunk,
   deleteCompanyThunk,
   refreshCompaniesThunk,
-  openCompanyEmployeeThunk,
-  createEmployeeThunk,
-  updateEmployeeThunk,
-  deleteEmployeeThunk,
-  refreshEmployeesThunk,
   openJobThunk,
   createJobThunk,
   createJobFromListingUrlThunk,
@@ -40,15 +35,6 @@ export {
   importJobDescriptionThunk,
   deleteJobThunk,
   refreshJobsThunk,
-  openJobApplicationThunk,
-  createJobApplicationThunk,
-  updateJobApplicationThunk,
-  deleteJobApplicationThunk,
-  refreshJobApplicationsThunk,
-  refreshEmploymentsThunk,
-  createEmploymentThunk,
-  updateEmploymentThunk,
-  deleteEmploymentThunk,
 } from "./crm";
 
 export {
@@ -104,3 +90,10 @@ export {
   updateJobQuestionAnswerThunk,
   deleteJobQuestionAnswerThunk,
 } from "./job-question-answers";
+
+export {
+  loadTenantLinkedInProfileThunk,
+  createTenantLinkedInProfileThunk,
+  updateTenantLinkedInProfileUrlThunk,
+  syncTenantLinkedInProfileThunk,
+} from "./linkedin-profile";

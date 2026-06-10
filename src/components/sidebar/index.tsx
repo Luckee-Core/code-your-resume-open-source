@@ -7,25 +7,18 @@ import {
   BookOpen,
   Briefcase,
   Building2,
-  FileText,
   MessageCircleQuestion,
   PanelLeft,
   PanelLeftClose,
   Rows3,
   Sparkles,
-  UserSquare2,
 } from "lucide-react";
 import {
   COMPANIES_PATH,
   COMPANY_DETAIL_PAGE_PATH,
   DASHBOARD_PATH,
-  COMPANY_EMPLOYEE_DETAIL_PAGE_PATH,
   DOCS_PATH,
-  EMPLOYEES_PATH,
-  EXPERIENCE_PATH,
   EXPERIENCE_STUDIO_PATH,
-  JOB_APPLICATIONS_PATH,
-  JOB_APPLICATION_DETAIL_PAGE_PATH,
   JOB_DETAIL_PAGE_PATH,
   JOB_QUESTIONS_PATH,
   JOB_NEWSLETTERS_PATH,
@@ -51,14 +44,8 @@ const navIcon = (name: string, active: boolean) => {
       return <Building2 className={cls} />;
     case "Jobs":
       return <Briefcase className={cls} />;
-    case "Employees":
-      return <UserSquare2 className={cls} />;
-    case "Applications":
-      return <FileText className={cls} />;
     case "Job questions":
       return <MessageCircleQuestion className={cls} />;
-    case "Work History":
-      return <Briefcase className={cls} />;
     case "Background Studio":
       return <Sparkles className={cls} />;
     default:
@@ -84,12 +71,6 @@ export const Sidebar = () => {
       if (name === "Jobs") {
         return pathname === JOBS_PATH || pathname === JOB_DETAIL_PAGE_PATH;
       }
-      if (name === "Employees") {
-        return pathname === EMPLOYEES_PATH || pathname === COMPANY_EMPLOYEE_DETAIL_PAGE_PATH;
-      }
-      if (name === "Applications") {
-        return pathname === JOB_APPLICATIONS_PATH || pathname === JOB_APPLICATION_DETAIL_PAGE_PATH;
-      }
       if (name === "Job questions") {
         return pathname === JOB_QUESTIONS_PATH;
       }
@@ -97,7 +78,6 @@ export const Sidebar = () => {
         return pathname === JOB_NEWSLETTERS_PATH || pathname === JOB_NEWSLETTER_DETAIL_PAGE_PATH;
       }
       if (name === "Background Studio") return pathname === EXPERIENCE_STUDIO_PATH;
-      if (name === "Work History") return pathname === EXPERIENCE_PATH;
       if (href === DASHBOARD_PATH) return pathname === DASHBOARD_PATH;
       return pathname === href;
     },

@@ -1,6 +1,6 @@
 /** Hero stat chips below primary CTAs. */
 export const LANDING_HERO_STAT_CHIPS = [
-  "Company → job → application",
+  "Company → job → draft",
   "TSX you can edit",
   "Self-host on Supabase",
 ] as const;
@@ -37,12 +37,12 @@ export const LANDING_HERO = {
 export const LANDING_CRM = {
   label: "Job-search CRM",
   headline: "Your job search shouldn't live in a spreadsheet.",
-  body: `I used to juggle notes, tabs, and half-updated trackers. Here, companies, employees, jobs, and applications sit in one CRM. Paste a posting URL when you're ready to import. Pull website research before you write the next letter.`,
+  body: `I used to juggle notes, tabs, and half-updated trackers. Here, companies and jobs sit in one CRM. Paste a posting URL when you're ready to import. Pull website research before you write the next letter.`,
   bullets: [
-    "Companies, employees, jobs, applications",
+    "Companies and jobs in one place",
     "Add a job from the posting URL",
-    "Employment history that feeds every draft",
-    "Status and timeline per application — not vibes in a doc",
+    "Professional background that feeds every draft",
+    "Status and timeline per role — not vibes in a doc",
   ] as const,
 } as const;
 

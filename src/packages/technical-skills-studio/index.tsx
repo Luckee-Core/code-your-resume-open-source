@@ -15,17 +15,11 @@ export const TechnicalSkillsStudio = () => {
   const dispatch = useAppDispatch();
   const loadStatus = useAppSelector((s) => s.technicalSkillsBuilder.loadStatus);
   const loadError = useAppSelector((s) => s.technicalSkillsBuilder.error);
-  const crmLoadStatus = useAppSelector((s) => s.crmBuilder.listLoadStatus);
 
   useEffect(() => {
     void dispatch(loadTechnicalSkillsThunk());
+    void dispatch(loadCrmVaultThunk());
   }, [dispatch]);
-
-  useEffect(() => {
-    if (crmLoadStatus === 'idle') {
-      void dispatch(loadCrmVaultThunk());
-    }
-  }, [dispatch, crmLoadStatus]);
 
   if (loadStatus === 'loading') {
     return (

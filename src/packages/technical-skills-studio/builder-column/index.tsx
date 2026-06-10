@@ -8,7 +8,6 @@ import { getTechnicalSkillsFingerprint } from '@/utils/technical-skills';
 // getTechnicalSkillsFingerprint is used inside useMemo above
 import { CurrentTechnicalSkillsActions } from '@/store/current/currentTechnicalSkills';
 import { TechnicalSkillsBuilderColumnHeader } from './header';
-import { JobBulletsPanel } from './job-bullets-panel';
 
 const filledCount = (items: TechnicalSkillItem[]): number =>
   items.filter((i) => i.status === 'active' && (Boolean(i.title?.trim()) || Boolean(i.body?.trim()))).length;
@@ -168,7 +167,6 @@ export const TechnicalSkillsBuilderColumn = () => {
             </table>
           </div>
         </div>
-        <JobBulletsPanel isSaving={isSaving} />
       </div>
     </div>
   );

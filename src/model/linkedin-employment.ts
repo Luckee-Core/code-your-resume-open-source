@@ -1,0 +1,20 @@
+export type LinkedInEmployment = {
+  id: string;
+  linkedinProfileId: string;
+  sortOrder: number;
+  position: string;
+  companyName: string;
+  location: string;
+  employmentType: string;
+  workplaceType: string;
+  description: string;
+  duration: string;
+  companyLinkedinUrl: string;
+  startMonth: string;
+  startYear: number | null;
+  endMonth: string;
+  endYear: number | null;
+  isCurrent: boolean;
+  createdAt: string;
+  updatedAt: string;
+};

@@ -1,17 +1,19 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { JobStatus } from "@/model/job";
 import {
-  DEFAULT_JOBS_LIST_STATUS_FILTER,
-  type JobsListStatusFilter,
+  DEFAULT_JOBS_LIST_STATUS_FILTERS,
+  normalizeJobsListStatusFilters,
+  type JobsListStatusFilters,
 } from "@/utils/job";
 
 type JobsListBuilderState = {
-  statusFilter: JobsListStatusFilter;
+  statusFilters: JobsListStatusFilters;
   /** Per-job spinner while POST /skills-component/generate is in flight. */
   resumeGenerateBusyByJobId: Record<string, boolean>;
 };
 
 const initialState: JobsListBuilderState = {
-  statusFilter: DEFAULT_JOBS_LIST_STATUS_FILTER,
+  statusFilters: DEFAULT_JOBS_LIST_STATUS_FILTERS,
   resumeGenerateBusyByJobId: {},
 };
 
@@ -19,11 +21,19 @@ const jobsListBuilderSlice = createSlice({
   name: "jobsListBuilder",
   initialState,
   reducers: {
-    setStatusFilter: (state, action: PayloadAction<JobsListStatusFilter>) => {
-      state.statusFilter = action.payload;
+    setStatusFilters: (state, action: PayloadAction<JobsListStatusFilters>) => {
+      state.statusFilters = normalizeJobsListStatusFilters(action.payload);
     },
-    resetStatusFilter: (state) => {
-      state.statusFilter = DEFAULT_JOBS_LIST_STATUS_FILTER;
+    toggleStatusFilter: (state, action: PayloadAction<JobStatus>) => {
+      const status = action.payload;
+      if (state.statusFilters.includes(status)) {
+        state.statusFilters = state.statusFilters.filter((value) => value !== status);
+        return;
+      }
+      state.statusFilters = normalizeJobsListStatusFilters([...state.statusFilters, status]);
+    },
+    resetStatusFilters: (state) => {
+      state.statusFilters = DEFAULT_JOBS_LIST_STATUS_FILTERS;
     },
     setResumeGenerateBusy: (
       state,

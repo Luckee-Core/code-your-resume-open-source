@@ -3,11 +3,8 @@ import {
   COMPANIES_PATH,
   COMPANY_DETAIL_PAGE_PATH,
   DASHBOARD_PATH,
-  COMPANY_EMPLOYEE_DETAIL_PAGE_PATH,
-  EMPLOYEES_PATH,
-  EXPERIENCE_PATH,
-  JOB_APPLICATIONS_PATH,
-  JOB_APPLICATION_DETAIL_PAGE_PATH,
+  EXPERIENCE_BACKGROUND_PATH,
+  EXPERIENCE_STUDIO_PATH,
   JOB_DETAIL_PAGE_PATH,
   JOB_QUESTIONS_PATH,
   AI_COSTS_PATH,
@@ -15,6 +12,7 @@ import {
   JOB_NEWSLETTERS_PATH,
   JOB_NEWSLETTER_DETAIL_PAGE_PATH,
   JOBS_PATH,
+  MY_LINKEDIN_PATH,
 } from "@/config/routes";
 
 /**
@@ -35,12 +33,6 @@ export const resolveDefaultDashboardBreadcrumbForPathname = (pathname: string): 
   if (pathname === JOBS_PATH || pathname === JOB_DETAIL_PAGE_PATH) {
     return [{ label: "Jobs", href: JOBS_PATH }];
   }
-  if (pathname === EMPLOYEES_PATH || pathname === COMPANY_EMPLOYEE_DETAIL_PAGE_PATH) {
-    return [{ label: "Employees", href: EMPLOYEES_PATH }];
-  }
-  if (pathname === JOB_APPLICATIONS_PATH || pathname === JOB_APPLICATION_DETAIL_PAGE_PATH) {
-    return [{ label: "Applications", href: JOB_APPLICATIONS_PATH }];
-  }
   if (pathname === JOB_QUESTIONS_PATH) {
     return [{ label: "Job questions", href: JOB_QUESTIONS_PATH }];
   }
@@ -53,8 +45,14 @@ export const resolveDefaultDashboardBreadcrumbForPathname = (pathname: string): 
   if (pathname === AI_COSTS_PATH) {
     return [{ label: "AI costs", href: AI_COSTS_PATH }];
   }
-  if (pathname === EXPERIENCE_PATH) {
-    return [{ label: "Experience", href: EXPERIENCE_PATH }];
+  if (pathname === EXPERIENCE_BACKGROUND_PATH) {
+    return [{ label: "Professional background", href: EXPERIENCE_BACKGROUND_PATH }];
+  }
+  if (pathname === EXPERIENCE_STUDIO_PATH) {
+    return [{ label: "Technical skills", href: EXPERIENCE_STUDIO_PATH }];
+  }
+  if (pathname === MY_LINKEDIN_PATH) {
+    return [{ label: "My LinkedIn", href: MY_LINKEDIN_PATH }];
   }
 
   return [];

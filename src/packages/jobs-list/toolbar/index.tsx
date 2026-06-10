@@ -2,26 +2,24 @@
 
 import { useCallback } from "react";
 import { toast } from "sonner";
+import type { JobStatus } from "@/model/job";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { JobsListBuilderActions } from "@/store/builders/jobsListBuilder";
 import {
   BULK_DRAFT_LISTING_IMPORT_BATCH_SIZE,
   bulkImportDraftJobListingsThunk,
 } from "@/store/thunks";
-import {
-  JOBS_LIST_STATUS_FILTER_OPTIONS,
-  type JobsListStatusFilter,
-} from "@/utils/job";
+import { JOBS_LIST_STATUS_FILTER_OPTIONS } from "@/utils/job";
 
 export const JobsListToolbar = () => {
   const dispatch = useAppDispatch();
   const running = useAppSelector((s) => s.crmBuilder.isBulkDraftListingImportRunning);
   const listLoading = useAppSelector((s) => s.crmBuilder.listLoadStatus === "loading");
-  const statusFilter = useAppSelector((s) => s.jobsListBuilder.statusFilter);
+  const statusFilters = useAppSelector((s) => s.jobsListBuilder.statusFilters);
 
-  const onStatusFilterChange = useCallback(
-    (value: string) => {
-      dispatch(JobsListBuilderActions.setStatusFilter(value as JobsListStatusFilter));
+  const onStatusFilterToggle = useCallback(
+    (status: JobStatus) => {
+      dispatch(JobsListBuilderActions.toggleStatusFilter(status));
     },
     [dispatch],
   );
@@ -59,21 +57,23 @@ export const JobsListToolbar = () => {
   return (
     <div className={styles.container}>
       <div className={styles.row}>
-        <label className={styles.statusFilterLabel}>
-          <span className={styles.statusFilterText}>Status</span>
-          <select
-            className={styles.statusSelect}
-            value={statusFilter}
-            aria-label="Filter jobs by status"
-            onChange={(e) => onStatusFilterChange(e.target.value)}
-          >
+        <fieldset className={styles.statusFilterFieldset}>
+          <legend className={styles.statusFilterLegend}>Status</legend>
+          <div className={styles.statusFilterOptions}>
             {JOBS_LIST_STATUS_FILTER_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
+              <label key={opt.value} className={styles.statusFilterOption}>
+                <input
+                  type="checkbox"
+                  className={styles.statusCheckbox}
+                  checked={statusFilters.includes(opt.value)}
+                  aria-label={`Show ${opt.label} jobs`}
+                  onChange={() => onStatusFilterToggle(opt.value)}
+                />
+                <span className={styles.statusFilterLabel}>{opt.label}</span>
+              </label>
             ))}
-          </select>
-        </label>
+          </div>
+        </fieldset>
         <button
           type="button"
           className={styles.button}
@@ -95,16 +95,17 @@ export const JobsListToolbar = () => {
 
 const styles = {
   container: `mb-3 space-y-1`,
-  row: `flex flex-wrap items-center gap-2`,
-  statusFilterLabel: `inline-flex items-center gap-1.5`,
-  statusFilterText: `text-xs font-medium text-gray-600`,
-  statusSelect: `
-    rounded-md border border-gray-300 bg-white px-2 py-1.5 text-sm text-gray-900
-    shadow-sm cursor-pointer
-  `,
+  row: `flex flex-wrap items-start gap-3`,
+  statusFilterFieldset: `min-w-0 border-0 p-0 m-0 flex flex-wrap items-center gap-x-3 gap-y-1.5`,
+  statusFilterLegend: `text-xs font-medium text-gray-600 shrink-0`,
+  statusFilterOptions: `flex flex-wrap items-center gap-x-3 gap-y-1.5`,
+  statusFilterOption: `inline-flex items-center gap-1.5 cursor-pointer select-none`,
+  statusCheckbox: `h-3.5 w-3.5 rounded border-gray-300 text-orange-600 cursor-pointer`,
+  statusFilterLabel: `text-xs font-medium text-gray-700`,
   button: `
     px-3 py-1.5 text-sm font-medium rounded border border-orange-300 bg-orange-50
     text-orange-900 hover:bg-orange-100 disabled:opacity-60 disabled:cursor-not-allowed
+    shrink-0
   `,
   hint: `text-xs text-gray-500`,
 };
