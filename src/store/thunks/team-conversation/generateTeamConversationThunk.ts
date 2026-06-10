@@ -1,20 +1,19 @@
-import { generateCoverLetter } from "@/api/cover-letter";
+import { generateTeamConversation } from "@/api/team-conversation";
 import { coerceErrorFields, reportThunkError } from "@/api/thunk-errors";
 import type { AppThunk } from "@/store";
 import { loadImageGraphicsThunk } from "@/store/thunks/image-creation-studio/load-image-graphics-thunk";
 
-export type GenerateCoverLetterThunkInput = {
+export type GenerateTeamConversationThunkInput = {
   jobId: string;
-  pointOfEmphasis?: string;
 };
 
 /**
- * Queues cover letter generation on Express. Graphic persistence runs server-side.
+ * Queues team-conversation generation on Express. Graphic persistence runs server-side.
  *
  * @returns 200 when queued, 400 if input invalid, 500 on API failure
  */
-export const generateCoverLetterThunk =
-  (input: GenerateCoverLetterThunkInput): AppThunk<Promise<200 | 400 | 500>> =>
+export const generateTeamConversationThunk =
+  (input: GenerateTeamConversationThunkInput): AppThunk<Promise<200 | 400 | 500>> =>
   async (dispatch) => {
     const jobId = input.jobId.trim();
     if (!jobId) {
@@ -22,10 +21,7 @@ export const generateCoverLetterThunk =
     }
 
     try {
-      const result = await generateCoverLetter({
-        jobId,
-        pointOfEmphasis: input.pointOfEmphasis?.trim() || undefined,
-      });
+      const result = await generateTeamConversation({ jobId });
       if (result.httpStatus === 400) {
         return 400;
       }
@@ -38,15 +34,15 @@ export const generateCoverLetterThunk =
     } catch (error) {
       const { message, stack } = coerceErrorFields(error);
       reportThunkError({
-        event: "failedToGenerateCoverLetter",
+        event: "failedToGenerateTeamConversation",
         message,
         stack,
-        thunkName: "generateCoverLetterThunk",
+        thunkName: "generateTeamConversationThunk",
         collection: "job",
         entityId: jobId,
         severity: "error",
       });
-      console.error("generateCoverLetterThunk error:", error);
+      console.error("generateTeamConversationThunk error:", error);
       return 500;
     }
   };

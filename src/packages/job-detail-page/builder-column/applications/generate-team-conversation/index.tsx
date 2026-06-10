@@ -1,53 +1,67 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Loader2, Wand2 } from "lucide-react";
 import { toast } from "sonner";
 import { EXPERIENCE_BACKGROUND_PATH } from "@/config/routes";
 import { useAppDispatch, useAppSelector } from "@/store";
 import {
-  generateCoverLetterThunk,
+  generateTeamConversationThunk,
   loadProfessionalBackgroundThunk,
 } from "@/store/thunks";
 import { crmDetailPageTokens as t } from "@/packages/crm-detail-ui";
 import { JobDetailGraphicList } from "../../../graphics-column/job-graphic-list";
-import { GenerateCoverLetterModal } from "./generate-cover-letter-modal";
 
 /**
- * Generate cover letter TSX and list job-scoped cover letter graphics below the action.
+ * Build the YC-style team conversation prompt for the current company.
  */
-export const GenerateCoverLetter = () => {
+const buildTeamConversationPromptHint = (companyName?: string): string => {
+  const trimmed = companyName?.trim();
+  if (trimmed) {
+    return (
+      `Start a conversation with the team at ${trimmed}. Share something about you, ` +
+      `what you're looking for, or why ${trimmed} interests you.`
+    );
+  }
+  return (
+    "Start a conversation with the team. Share something about you, what you're looking for, " +
+    "or why this role interests you."
+  );
+};
+
+/**
+ * Generate a YC-style team conversation opener and list matching graphics below.
+ */
+export const GenerateTeamConversation = () => {
   const dispatch = useAppDispatch();
   const loadStatus = useAppSelector((s) => s.professionalBackgroundBuilder.loadStatus);
   const loadError = useAppSelector((s) => s.professionalBackgroundBuilder.error);
   const draftSegments = useAppSelector((s) => s.currentProfessionalBackground.draftSegments);
   const job = useAppSelector((s) => s.currentJob);
   const company = useAppSelector((s) => s.currentCompany);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+
+  const promptHint = useMemo(
+    () => buildTeamConversationPromptHint(company.name),
+    [company.name],
+  );
 
   const hasBackgroundVoice =
     Boolean(draftSegments.credibility_bio?.trim()) ||
     Boolean(draftSegments.voice_style?.trim());
 
-  const isBackgroundLoading = loadStatus === "loading";
-  const isBackgroundError = loadStatus === "error";
-
-  const canGenerate =
-    hasBackgroundVoice && job.id.trim() && job.title?.trim() && !isBackgroundLoading && !isBackgroundError;
-
-  const handleGenerate = async (pointOfEmphasis: string) => {
+  const handleGenerate = async () => {
     if (!hasBackgroundVoice) {
       toast.error("Add credibility bio or voice style in Professional Background Studio first.");
       return;
     }
     if (!job.id.trim()) {
-      toast.error("Open a job before generating a cover letter.");
+      toast.error("Open a job before generating.");
       return;
     }
     if (!job.title?.trim()) {
-      toast.error("Job title is required to generate a cover letter.");
+      toast.error("Job title is required.");
       return;
     }
 
@@ -55,15 +69,15 @@ export const GenerateCoverLetter = () => {
 
     try {
       const status = await dispatch(
-        generateCoverLetterThunk({
+        generateTeamConversationThunk({
           jobId: job.id,
-          pointOfEmphasis: pointOfEmphasis || undefined,
         }),
       );
 
       if (status === 200) {
-        setIsModalOpen(false);
-        toast.success("Cover letter generation started — it will appear below in a few minutes.");
+        toast.success(
+          "Team conversation generation started — it will appear below in a few minutes.",
+        );
       } else if (status === 400) {
         toast.error("Add professional background (bio or voice) before generating.");
       } else {
@@ -74,8 +88,14 @@ export const GenerateCoverLetter = () => {
     }
   };
 
+  const isBackgroundLoading = loadStatus === "loading";
+  const isBackgroundError = loadStatus === "error";
+
   return (
     <div className={styles.root}>
+      <p className={styles.promptHint}>{promptHint}</p>
+      <p className={styles.humanNote}>Human-written messages are more likely to get a response.</p>
+
       {isBackgroundLoading ? (
         <p className={styles.hint}>Loading professional background…</p>
       ) : isBackgroundError ? (
@@ -102,8 +122,15 @@ export const GenerateCoverLetter = () => {
       <button
         type="button"
         className={t.btnPrimarySm}
-        onClick={() => setIsModalOpen(true)}
-        disabled={!canGenerate || isGenerating}
+        onClick={() => void handleGenerate()}
+        disabled={
+          isGenerating ||
+          isBackgroundLoading ||
+          isBackgroundError ||
+          !hasBackgroundVoice ||
+          !job.id.trim() ||
+          !job.title?.trim()
+        }
       >
         {isGenerating ? (
           <>
@@ -113,39 +140,29 @@ export const GenerateCoverLetter = () => {
         ) : (
           <>
             <Wand2 className={styles.icon} aria-hidden />
-            Generate cover letter
+            Generate team conversation
           </>
         )}
       </button>
 
       <p className={styles.runningNote}>
-        Generation runs on the server — you can leave this page. Refresh to see new cover letters
-        when ready (usually 1–3 minutes).
+        Generation runs on the server — you can leave this page. Refresh to see new answers when
+        ready (usually 1–3 minutes).
       </p>
 
       <JobDetailGraphicList
         jobId={job.id}
-        kind="coverLetter"
-        emptyLabel="No cover letters for this job yet."
+        kind="teamConversation"
+        emptyLabel="No team conversation answers for this job yet."
       />
-
-      {isModalOpen ? (
-        <GenerateCoverLetterModal
-          jobTitle={job.title ?? ""}
-          companyName={company.name}
-          busy={isGenerating}
-          onClose={() => {
-            if (!isGenerating) setIsModalOpen(false);
-          }}
-          onSubmit={(pointOfEmphasis) => void handleGenerate(pointOfEmphasis)}
-        />
-      ) : null}
     </div>
   );
 };
 
 const styles = {
   root: `space-y-3`,
+  promptHint: `text-sm text-gray-600 leading-relaxed`,
+  humanNote: `text-xs text-gray-500 italic`,
   hint: `text-sm text-gray-500`,
   empty: `text-sm italic text-gray-400`,
   link: `underline text-orange-700 hover:text-orange-900`,

@@ -86,7 +86,7 @@ export const JobsListToolbar = () => {
         </button>
       </div>
       <p className={styles.hint}>
-        Default view hides archived jobs. Bulk import: draft only, with a posting URL and no
+        Default view shows draft jobs only. Bulk import: draft only, with a posting URL and no
         responsibilities yet. Listing column: R · Req · NTH counts.
       </p>
     </div>

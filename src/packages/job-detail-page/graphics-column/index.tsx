@@ -2,6 +2,7 @@
 
 import { ApplicationQuestionsSection } from "../builder-column/application-questions";
 import { GenerateCompanyInterest } from "../builder-column/applications/generate-company-interest";
+import { GenerateTeamConversation } from "../builder-column/applications/generate-team-conversation";
 import { GenerateCoverLetter } from "../builder-column/applications/generate-cover-letter";
 import { GenerateResume } from "../builder-column/applications/generate-resume";
 import { JobDetailSectionCard } from "../builder-column/section-card";
@@ -37,6 +38,13 @@ export const JobDetailGraphicsColumn = () => {
                 headingId="crm-job-company-interest-heading"
               >
                 <GenerateCompanyInterest />
+              </JobDetailSectionCard>
+              <JobDetailSectionCard
+                sectionKey="applications"
+                title="Team conversation"
+                headingId="crm-job-team-conversation-heading"
+              >
+                <GenerateTeamConversation />
               </JobDetailSectionCard>
               <ApplicationQuestionsSection />
             </ul>

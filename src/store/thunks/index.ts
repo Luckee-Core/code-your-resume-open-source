@@ -62,6 +62,11 @@ export {
 } from "./company-interest";
 
 export {
+  generateTeamConversationThunk,
+  type GenerateTeamConversationThunkInput,
+} from "./team-conversation";
+
+export {
   loadJobQuestionsThunk,
   createJobQuestionThunk,
   updateJobQuestionThunk,

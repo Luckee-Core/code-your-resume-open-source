@@ -3,10 +3,8 @@ import { JOB_STATUSES, type Job, type JobStatus } from "@/model/job";
 /** Selected job statuses shown in the jobs list. */
 export type JobsListStatusFilters = JobStatus[];
 
-/** Default jobs list filter: every status except archived. */
-export const DEFAULT_JOBS_LIST_STATUS_FILTERS: JobsListStatusFilters = JOB_STATUSES.filter(
-  (status) => status !== "archived",
-);
+/** Default jobs list filter: draft jobs only. */
+export const DEFAULT_JOBS_LIST_STATUS_FILTERS: JobsListStatusFilters = ["draft"];
 
 export const JOBS_LIST_STATUS_FILTER_OPTIONS: Array<{
   value: JobStatus;

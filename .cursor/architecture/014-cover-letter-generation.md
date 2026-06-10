@@ -24,7 +24,7 @@ Document how **Generate cover letter** on the job detail Applications section pr
 
 **Response:** `202 { success: true, accepted: true, jobId }` — generation and graphic persistence run on Express in the background; the client does not receive TSX.
 
-The same `{ jobId }` contract applies to **company interest** (`POST /api/data/company-interest/generate`, canvas 816×480) and **skills/resume** (`POST /api/data/skills-component/generate`, canvas 816×1150). Shared types: `GenerateByJobIdInput` in `src/api/generation/types.ts`.
+The same `{ jobId }` contract applies to **company interest** (`POST /api/data/company-interest/generate`, canvas 816×480), **team conversation** (`POST /api/data/team-conversation/generate`, canvas 816×480 — YC-style opener), and **skills/resume** (`POST /api/data/skills-component/generate`, canvas 816×1150). Shared types: `GenerateByJobIdInput` in `src/api/generation/types.ts`.
 
 ### 3) Inputs
 
@@ -47,9 +47,10 @@ Each Cursor generation flow has its own Supabase ledger (requests / exchanges / 
 |------|--------|
 | Cover letter | `cover_letter_generation_requests`, `cover_letter_generation_exchanges`, `cover_letter_generation_responses` |
 | Company interest | `company_interest_generation_requests`, `company_interest_generation_exchanges`, `company_interest_generation_responses` |
+| Team conversation | `team_conversation_generation_requests`, `team_conversation_generation_exchanges`, `team_conversation_generation_responses` |
 | Skills / resume TSX | `skills_component_generation_requests`, `skills_component_generation_exchanges`, `skills_component_generation_responses` |
 
-Express CRUD lives in `src/data/cover-letter-generation/`, `src/data/company-interest-generation/`, and `src/data/skills-component-generation/`. Each request and exchange row includes `job_id` for per-job cost filtering. The `skills` column stores optional technical-skill prompt lines for audit; full prompts are stored in `prompt_text`. Cursor runs record `cost_estimate` on the exchange row (not Anthropic token columns).
+Express CRUD lives in `src/data/cover-letter-generation/`, `src/data/company-interest-generation/`, `src/data/team-conversation-generation/`, and `src/data/skills-component-generation/`. Each request and exchange row includes `job_id` for per-job cost filtering. The `skills` column stores optional technical-skill prompt lines for audit; full prompts are stored in `prompt_text`. Cursor runs record `cost_estimate` on the exchange row (not Anthropic token columns).
 
 DDL and registry seeds: express-server `docs/supabase-exchange-registry-update.sql`.
 
