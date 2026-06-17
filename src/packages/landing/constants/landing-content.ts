@@ -41,7 +41,7 @@ export const LANDING_CRM = {
   bullets: [
     "Companies and jobs in one place",
     "Add a job from the posting URL",
-    "Professional background that feeds every draft",
+    "Projects and voice style that feed every draft",
     "Status and timeline per role — not vibes in a doc",
   ] as const,
 } as const;
@@ -61,7 +61,7 @@ export const LANDING_JOB_STUDIO = {
 export const LANDING_GENERATE = {
   label: "Generate per job",
   headline: "Three documents. Tailored each time. Edited as TSX.",
-  aside: `The server pulls job bullets, your professional background, and active technical skills into editable TSX. I tweak in Graphics Studio, then export PNG when it reads right — not when a template says I'm done.`,
+  aside: `The server pulls job bullets, your projects, voice style notes, and active technical skills into editable TSX. I tweak in Graphics Studio, then export PNG when it reads right — not when a template says I'm done.`,
   cards: [
     {
       title: "Resume",
@@ -85,7 +85,7 @@ export const LANDING_GENERATE = {
 
 export const LANDING_STUDIOS = {
   label: "Studios",
-  headline: "Four studios. One pipeline from background to PNG.",
+  headline: "Five studios. One pipeline from projects to PNG.",
   items: [
     {
       title: "Technical Skills Studio",
@@ -93,9 +93,14 @@ export const LANDING_STUDIOS = {
         "Coach chat plus a skills table. I mark what's active per job — drafts only pull from that set.",
     },
     {
-      title: "Professional Background",
+      title: "Projects",
       description:
-        "Education, bio, voice, portfolio. One canonical source so I'm not retyping the same story.",
+        "Portfolio work history with notes and website research. The narrative source for every draft.",
+    },
+    {
+      title: "Voice style",
+      description:
+        "Tone and channel notes in one place — how you actually write, not a generic template voice.",
     },
     {
       title: "Graphics Studio",

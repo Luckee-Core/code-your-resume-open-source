@@ -20,7 +20,7 @@ Document how **Generate cover letter** on the job detail Applications section pr
 | Next proxy | [`src/app/api/data/cover-letter/generate/route.ts`](../../src/app/api/data/cover-letter/generate/route.ts) — `maxDuration = 300` |
 | Express | `POST /api/data/cover-letter/generate` |
 
-**Request body:** `{ jobId: string }` only. Express loads job, company, bullets, professional background, and active technical skills from Supabase via `loadJobGenerationContext` before calling `runCoverLetterGeneration`.
+**Request body:** `{ jobId: string }` only. Express loads job, company, bullets, projects, voice style, and active technical skills from Supabase via `loadJobGenerationContext` before calling `runCoverLetterGeneration`.
 
 **Response:** `202 { success: true, accepted: true, jobId }` — generation and graphic persistence run on Express in the background; the client does not receive TSX.
 
@@ -28,10 +28,10 @@ The same `{ jobId }` contract applies to **company interest** (`POST /api/data/c
 
 ### 3) Inputs
 
-- **Server-loaded from `jobId`** — job title, company name, responsibility/requirement/nice-to-have bullets, active technical skill prompt lines, and professional background segments.
-- **Client pre-flight (UI only)** — job detail Applications sections still read Redux for friendly disable states (e.g. missing bio/voice or no active skills). The server returns **400** if required data is missing at generation time (source of truth is Supabase, not stale client state).
+- **Server-loaded from `jobId`** — job title, company name, responsibility/requirement/nice-to-have bullets, active technical skill prompt lines, **projects block**, and **voice style** text.
+- **Client pre-flight (UI only)** — job detail Applications sections load projects + voice style for friendly disable states (e.g. missing narrative context or no active skills). The server returns **400** if required data is missing at generation time (source of truth is Supabase, not stale client state).
 
-Job detail page dispatches `loadProfessionalBackgroundThunk` and `loadTechnicalSkillsThunk` on mount so UI hints stay accurate.
+Generate panels dispatch `loadVoiceStyleThunk` and `loadProjectsThunk` locally; job detail mount still loads `loadTechnicalSkillsThunk` for resume generation hints.
 
 ### 4) Persistence
 

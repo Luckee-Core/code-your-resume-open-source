@@ -3,6 +3,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 type ListLoadStatus = "idle" | "loading" | "error";
 
 type CompanyWebsiteResearchRunPhase = "idle" | "website";
+type ProjectWebsiteResearchRunPhase = "idle" | "website";
 
 type CrmBuilderState = {
   listLoadStatus: ListLoadStatus;
@@ -10,6 +11,8 @@ type CrmBuilderState = {
   isCompanyEditModalOpen: boolean;
   companyWebsiteResearchRunPhase: CompanyWebsiteResearchRunPhase;
   isCompanyWebsiteResearchConfirmModalOpen: boolean;
+  projectWebsiteResearchRunPhase: ProjectWebsiteResearchRunPhase;
+  isProjectWebsiteResearchConfirmModalOpen: boolean;
   lastJobImportWarning: string | null;
   isBulkDraftListingImportRunning: boolean;
 };
@@ -20,6 +23,8 @@ const initialState: CrmBuilderState = {
   isCompanyEditModalOpen: false,
   companyWebsiteResearchRunPhase: "idle",
   isCompanyWebsiteResearchConfirmModalOpen: false,
+  projectWebsiteResearchRunPhase: "idle",
+  isProjectWebsiteResearchConfirmModalOpen: false,
   lastJobImportWarning: null,
   isBulkDraftListingImportRunning: false,
 };
@@ -45,6 +50,15 @@ const crmBuilderSlice = createSlice({
     },
     setCompanyWebsiteResearchConfirmModalOpen: (state, action: PayloadAction<boolean>) => {
       state.isCompanyWebsiteResearchConfirmModalOpen = action.payload;
+    },
+    setProjectWebsiteResearchRunPhase: (
+      state,
+      action: PayloadAction<ProjectWebsiteResearchRunPhase>,
+    ) => {
+      state.projectWebsiteResearchRunPhase = action.payload;
+    },
+    setProjectWebsiteResearchConfirmModalOpen: (state, action: PayloadAction<boolean>) => {
+      state.isProjectWebsiteResearchConfirmModalOpen = action.payload;
     },
     setLastJobImportWarning: (state, action: PayloadAction<string | null>) => {
       state.lastJobImportWarning = action.payload;

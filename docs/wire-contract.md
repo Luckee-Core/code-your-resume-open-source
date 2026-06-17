@@ -59,7 +59,7 @@ Full list: each repo’s `.env.example`.
 ```text
 /api/data/*                  → rewrite → Express /api/data/*
 /api/technical-skills/*      → rewrite → Express /api/technical-skills/*
-/api/professional-background/* → rewrite → Express /api/professional-background/*
+/api/voice-style/*            → rewrite → Express /api/voice-style/*
 /api/job-studio/*            → rewrite → Express /api/job-studio/*
 /api/user-background-studio/* → rewrite → Express /api/user-background-studio/* (when mounted)
 ```
@@ -73,7 +73,7 @@ GET  /api/data/company/list
 POST /api/data/company/create
 …    (see Express ADR 009)
 POST /api/technical-skills/*
-POST /api/professional-background/*
+POST /api/voice-style/*
 POST /api/job-studio/*
 POST /api/user-background-studio/*
 ```
@@ -95,6 +95,11 @@ Apply SQL in this order on a fresh Supabase project:
 5. `docs/supabase-job-listing-sections-mirror.sql` — optional listing sections
 6. `docs/supabase-job-studio-schema.sql` — job studio chat
 7. `docs/supabase-user-background-studio-schema.sql` — user background studio (if used)
+8. `docs/supabase-projects-schema.sql` — portfolio projects + note log
+9. `docs/supabase-voice-style-schema.sql` — voice/tone notes singleton
+10. `docs/supabase-project-notes-synthesis.sql` — project notes AI synthesis ledger + prompt seed
+11. `docs/supabase-project-website-research.sql` — project website research summary fields
+12. `docs/supabase-skills-component-point-of-emphasis-prompt-v4.sql` — resume prompt v4 (removes hardcoded Acme Labs employer)
 
 Optional seed: `npm run seed:sql` in Express repo (generates SQL from demo JSON fixtures).
 

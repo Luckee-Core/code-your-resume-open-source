@@ -106,7 +106,7 @@ export const GenerateCoverLetterModal = ({
               disabled={busy}
             />
             <p className={styles.hint}>
-              Optional. Leave blank to generate from the job posting and professional background
+              Optional. Leave blank to generate from the job posting, projects, and voice style
               alone.
             </p>
           </div>

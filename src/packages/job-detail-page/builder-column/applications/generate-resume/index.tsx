@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { generateSkillsComponentThunk, loadTechnicalSkillsThunk } from "@/store/thunks";
 import { crmDetailPageTokens as t } from "@/packages/crm-detail-ui";
 import { JobDetailGraphicList } from "../../../graphics-column/job-graphic-list";
+import { GenerateResumeModal } from "./generate-resume-modal";
 
 /**
  * Generate resume TSX and list job-scoped resume graphics below the action.
@@ -16,7 +17,9 @@ export const GenerateResume = () => {
   const loadStatus = useAppSelector((s) => s.technicalSkillsBuilder.loadStatus);
   const loadError = useAppSelector((s) => s.technicalSkillsBuilder.error);
   const draftTechnicalSkills = useAppSelector((s) => s.currentTechnicalSkills.draftTechnicalSkills);
-  const jobId = useAppSelector((s) => s.currentJob.id);
+  const job = useAppSelector((s) => s.currentJob);
+  const company = useAppSelector((s) => s.currentCompany);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
 
   const promptLines = useMemo(
@@ -27,12 +30,12 @@ export const GenerateResume = () => {
     [draftTechnicalSkills],
   );
 
-  const handleGenerate = async () => {
+  const handleGenerate = async (focusPoints: string) => {
     if (!promptLines.length) {
       toast.error("Add skills in the Technical Skills Studio first.");
       return;
     }
-    if (!jobId.trim()) {
+    if (!job.id.trim()) {
       toast.error("Open a job before generating a resume.");
       return;
     }
@@ -42,11 +45,13 @@ export const GenerateResume = () => {
     try {
       const status = await dispatch(
         generateSkillsComponentThunk({
-          jobId,
+          jobId: job.id,
+          pointOfEmphasis: focusPoints || undefined,
         }),
       );
 
       if (status === 200) {
+        setIsModalOpen(false);
         toast.success("Resume generation started — it will appear below in a few minutes.");
       } else if (status === 400) {
         toast.error("No skills or job to generate from.");
@@ -86,13 +91,13 @@ export const GenerateResume = () => {
       <button
         type="button"
         className={t.btnPrimarySm}
-        onClick={() => void handleGenerate()}
+        onClick={() => setIsModalOpen(true)}
         disabled={
           isGenerating ||
           isSkillsLoading ||
           isSkillsError ||
           !hasActiveSkills ||
-          !jobId.trim()
+          !job.id.trim()
         }
       >
         {isGenerating ? (
@@ -114,10 +119,22 @@ export const GenerateResume = () => {
       </p>
 
       <JobDetailGraphicList
-        jobId={jobId}
+        jobId={job.id}
         kind="resume"
         emptyLabel="No resumes for this job yet."
       />
+
+      {isModalOpen ? (
+        <GenerateResumeModal
+          jobTitle={job.title ?? ""}
+          companyName={company.name}
+          busy={isGenerating}
+          onClose={() => {
+            if (!isGenerating) setIsModalOpen(false);
+          }}
+          onSubmit={(focusPoints) => void handleGenerate(focusPoints)}
+        />
+      ) : null}
     </div>
   );
 };

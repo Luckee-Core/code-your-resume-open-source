@@ -16,11 +16,13 @@ export const DOCS_GETTING_STARTED_PATH = "/docs/getting-started";
 /** TSX preview trust model, iframe sandbox, CDN notes. */
 export const DOCS_SECURITY_TSX_PREVIEW_PATH = "/docs/security/tsx-preview";
 
-/** Long-form education + narrative segments (Supabase via Express). */
-export const EXPERIENCE_BACKGROUND_PATH = "/experience/background";
+/** Long-form voice/tone notes (Supabase via Express). */
+export const EXPERIENCE_VOICE_PATH = "/experience/voice";
 
 /** CRM experience — Technical Skills Studio (coach chat + skill rows). */
 export const EXPERIENCE_STUDIO_PATH = "/experience/studio";
+export const PROJECTS_PATH = "/experience/projects";
+export const PROJECT_DETAIL_PAGE_PATH = "/project-detail-page";
 export const COMPANIES_PATH = "/companies";
 export const COMPANY_DETAIL_PAGE_PATH = "/company-detail-page";
 export const JOBS_PATH = "/jobs";

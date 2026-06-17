@@ -2,6 +2,9 @@
 
 import React from "react";
 
+/** OSS studio preview only — not used when Express injects tenant identity at generation time. */
+const DEMO_CANDIDATE_NAME = "Demo Candidate";
+
 export default function GeneratedSkillsPreview() {
   const summary = [
     "Built and shipped React Native, Expo, and Next.js products with TypeScript, Node.js backends, real-time data, payments, maps, video, and production deployment workflows.",
@@ -13,7 +16,7 @@ export default function GeneratedSkillsPreview() {
   const experience = [
     {
       role: "Software Engineer",
-      organization: "Acme Labs",
+      organization: "Northwind Apps",
       period: "Recent",
       bullets: [
         "Help teams reduce repetitive work through AI automation, workflow tooling, and practical engineering across Node.js, React Native, and Next.js applications.",
@@ -73,7 +76,7 @@ export default function GeneratedSkillsPreview() {
             </p>
             <div className="mt-2">
               <h1 className="text-3xl font-semibold tracking-tight text-slate-950">
-                Alex Chen
+                {DEMO_CANDIDATE_NAME}
               </h1>
             </div>
           </header>

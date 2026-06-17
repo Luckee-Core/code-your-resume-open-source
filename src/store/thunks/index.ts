@@ -46,9 +46,9 @@ export {
 } from "./technical-skills";
 
 export {
-  loadProfessionalBackgroundThunk,
-  saveProfessionalBackgroundThunk,
-} from "./professional-background";
+  loadVoiceStyleThunk,
+  saveVoiceStyleThunk,
+} from "./voice-style";
 
 export { loadJobStudioChatThunk, sendJobStudioMessageThunk } from "./job-studio";
 
@@ -85,6 +85,19 @@ export {
   loadJobNewsletterIngestAiCostsThunk,
   type LoadJobNewsletterIngestAiCostsInput,
 } from "./job-newsletter-sources";
+
+export {
+  loadProjectsThunk,
+  openProjectThunk,
+  createProjectThunk,
+  updateProjectThunk,
+  deleteProjectThunk,
+  loadProjectNotesThunk,
+  createProjectNoteThunk,
+  deleteProjectNoteThunk,
+  synthesizeProjectNotesThunk,
+  runProjectWebsiteResearchThunk,
+} from "./projects";
 
 export { loadAiExchangeCostsThunk, loadAiPromptsThunk } from "./ai";
 

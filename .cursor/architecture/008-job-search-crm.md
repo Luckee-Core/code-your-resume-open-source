@@ -19,7 +19,7 @@ Document how **Companies → Employees / Jobs → Job applications → Employmen
 
 - **Per-entity action paths**: `/api/data/company/list`, `/api/data/employee/create`, etc.
 - Client modules (e.g. [`src/api/company/list.ts`](../../src/api/company/list.ts)) call **relative** URLs such as `fetch("/api/data/company/list")` — no shared CRM URL helper.
-- **Next config:** `EXPRESS_API_URL` or `CRM_EXPRESS_INTERNAL_URL` overrides the Express rewrite target. In **`next dev`**, if unset, Next defaults rewrites to **`http://127.0.0.1:3053`** (same as Express default `PORT`). Rewrites cover `/api/data/*`, `/api/technical-skills/*`, `/api/professional-background/*`, and `/api/job-studio/*`. For production (Vercel), set `EXPRESS_API_URL` to the public Railway URL.
+- **Next config:** `EXPRESS_API_URL` or `CRM_EXPRESS_INTERNAL_URL` overrides the Express rewrite target. In **`next dev`**, if unset, Next defaults rewrites to **`http://127.0.0.1:3053`** (same as Express default `PORT`). Rewrites cover `/api/data/*`, `/api/technical-skills/*`, `/api/voice-style/*`, and `/api/job-studio/*`. For production (Vercel), set `EXPRESS_API_URL` to the public Railway URL.
 
 ### 3) Redux
 

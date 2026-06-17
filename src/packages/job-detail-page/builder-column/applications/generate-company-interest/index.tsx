@@ -1,16 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Loader2, Wand2 } from "lucide-react";
 import { toast } from "sonner";
-import { EXPERIENCE_BACKGROUND_PATH } from "@/config/routes";
+import { EXPERIENCE_VOICE_PATH, PROJECTS_PATH } from "@/config/routes";
 import { useAppDispatch, useAppSelector } from "@/store";
 import {
   generateCompanyInterestThunk,
-  loadProfessionalBackgroundThunk,
+  loadProjectsThunk,
+  loadVoiceStyleThunk,
 } from "@/store/thunks";
 import { crmDetailPageTokens as t } from "@/packages/crm-detail-ui";
+import { hasNarrativeContextForGeneration } from "@/utils/narrative-context";
 import { JobDetailGraphicList } from "../../../graphics-column/job-graphic-list";
 
 /**
@@ -18,19 +20,26 @@ import { JobDetailGraphicList } from "../../../graphics-column/job-graphic-list"
  */
 export const GenerateCompanyInterest = () => {
   const dispatch = useAppDispatch();
-  const loadStatus = useAppSelector((s) => s.professionalBackgroundBuilder.loadStatus);
-  const loadError = useAppSelector((s) => s.professionalBackgroundBuilder.error);
-  const draftSegments = useAppSelector((s) => s.currentProfessionalBackground.draftSegments);
+  const voiceLoadStatus = useAppSelector((s) => s.voiceStyleBuilder.loadStatus);
+  const voiceLoadError = useAppSelector((s) => s.voiceStyleBuilder.error);
+  const draftVoiceBody = useAppSelector((s) => s.currentVoiceStyle.draftBody);
+  const projects = useAppSelector((s) => s.projects);
   const job = useAppSelector((s) => s.currentJob);
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const hasBackgroundVoice =
-    Boolean(draftSegments.credibility_bio?.trim()) ||
-    Boolean(draftSegments.voice_style?.trim());
+  useEffect(() => {
+    void dispatch(loadVoiceStyleThunk());
+    void dispatch(loadProjectsThunk());
+  }, [dispatch]);
+
+  const hasNarrativeContext = useMemo(
+    () => hasNarrativeContextForGeneration(projects, draftVoiceBody),
+    [projects, draftVoiceBody],
+  );
 
   const handleGenerate = async () => {
-    if (!hasBackgroundVoice) {
-      toast.error("Add credibility bio or voice style in Professional Background Studio first.");
+    if (!hasNarrativeContext) {
+      toast.error("Add projects or voice style notes before generating.");
       return;
     }
     if (!job.id.trim()) {
@@ -54,7 +63,7 @@ export const GenerateCompanyInterest = () => {
       if (status === 200) {
         toast.success("Company interest generation started — it will appear below in a few minutes.");
       } else if (status === 400) {
-        toast.error("Add professional background (bio or voice) before generating.");
+        toast.error("Add projects or voice style before generating.");
       } else {
         toast.error("Generation failed. Check server logs.");
       }
@@ -63,8 +72,8 @@ export const GenerateCompanyInterest = () => {
     }
   };
 
-  const isBackgroundLoading = loadStatus === "loading";
-  const isBackgroundError = loadStatus === "error";
+  const isContextLoading = voiceLoadStatus === "loading";
+  const isContextError = voiceLoadStatus === "error";
 
   return (
     <div className={styles.root}>
@@ -72,24 +81,28 @@ export const GenerateCompanyInterest = () => {
         Answers: What interests you about working for this company?
       </p>
 
-      {isBackgroundLoading ? (
-        <p className={styles.hint}>Loading professional background…</p>
-      ) : isBackgroundError ? (
+      {isContextLoading ? (
+        <p className={styles.hint}>Loading projects and voice style…</p>
+      ) : isContextError ? (
         <div className={styles.errorBlock}>
-          <p className={styles.errorText}>{loadError ?? "Could not load professional background."}</p>
+          <p className={styles.errorText}>{voiceLoadError ?? "Could not load voice style."}</p>
           <button
             type="button"
             className={t.btnPrimarySm}
-            onClick={() => void dispatch(loadProfessionalBackgroundThunk())}
+            onClick={() => void dispatch(loadVoiceStyleThunk())}
           >
             Retry
           </button>
         </div>
-      ) : !hasBackgroundVoice ? (
+      ) : !hasNarrativeContext ? (
         <p className={styles.empty}>
-          Add a credibility bio or voice style in{" "}
-          <Link href={EXPERIENCE_BACKGROUND_PATH} className={styles.link}>
-            Professional Background Studio
+          Add at least one{" "}
+          <Link href={PROJECTS_PATH} className={styles.link}>
+            project
+          </Link>{" "}
+          or voice style in{" "}
+          <Link href={EXPERIENCE_VOICE_PATH} className={styles.link}>
+            Voice style studio
           </Link>{" "}
           first.
         </p>
@@ -101,9 +114,9 @@ export const GenerateCompanyInterest = () => {
         onClick={() => void handleGenerate()}
         disabled={
           isGenerating ||
-          isBackgroundLoading ||
-          isBackgroundError ||
-          !hasBackgroundVoice ||
+          isContextLoading ||
+          isContextError ||
+          !hasNarrativeContext ||
           !job.id.trim() ||
           !job.title?.trim()
         }

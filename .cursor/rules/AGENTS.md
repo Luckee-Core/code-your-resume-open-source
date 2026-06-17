@@ -56,7 +56,7 @@ BEFORE implementing ANY feature, you MUST:
 - CRM detail UI → `.cursor/architecture/009-crm-detail-ui-parity.md`
 - Breadcrumbs → `.cursor/architecture/019-app-shell-breadcrumbs.md`
 - Technical Skills Studio → `.cursor/architecture/011-technical-skills-studio.md`
-- Professional Background Studio → `.cursor/architecture/012-professional-background-studio.md`
+- Professional Background Studio → removed; see **022 – Voice Style Studio** and **020 – Projects**
 - Job Studio → `.cursor/architecture/013-job-studio.md`
 - Cover letter generation → `.cursor/architecture/014-cover-letter-generation.md`
 - Error event logging → `.cursor/architecture/015-error-event-logging.md`

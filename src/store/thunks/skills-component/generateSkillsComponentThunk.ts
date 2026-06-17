@@ -5,6 +5,7 @@ import { loadImageGraphicsThunk } from "@/store/thunks/image-creation-studio/loa
 
 export type GenerateSkillsComponentThunkInput = {
   jobId: string;
+  pointOfEmphasis?: string;
 };
 
 /**
@@ -22,7 +23,10 @@ export const generateSkillsComponentThunk =
     }
 
     try {
-      const result = await generateSkillsComponent({ jobId });
+      const result = await generateSkillsComponent({
+        jobId,
+        pointOfEmphasis: input.pointOfEmphasis?.trim() || undefined,
+      });
       if (result.httpStatus === 400) {
         return 400;
       }

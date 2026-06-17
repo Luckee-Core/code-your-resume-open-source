@@ -6,14 +6,14 @@ import companiesListBuilderReducer from "./builders/companiesListBuilder";
 import jobsListBuilderReducer from "./builders/jobsListBuilder";
 import breadcrumbBuilderReducer from "./builders/breadcrumbBuilder";
 import technicalSkillsBuilderReducer from "./builders/technicalSkillsBuilder";
-import professionalBackgroundBuilderReducer from "./builders/professionalBackgroundBuilder";
+import voiceStyleBuilderReducer from "./builders/voiceStyleBuilder";
 import jobStudioBuilderReducer from "./builders/jobStudioBuilder";
 import jobDetailChatFabReducer from "./builders/jobDetailChatFab";
 import currentImageGraphicReducer from "./current/currentImageGraphic";
 import currentCompanyReducer from "./current/currentCompany";
 import currentJobReducer from "./current/currentJob";
 import currentTechnicalSkillsReducer from "./current/currentTechnicalSkills";
-import currentProfessionalBackgroundReducer from "./current/currentProfessionalBackground";
+import currentVoiceStyleReducer from "./current/currentVoiceStyle";
 import currentStudioEditorReducer from "./current/currentStudioEditor";
 import currentJobStudioReducer from "./current/currentJobStudio";
 import imageGraphicsReducer from "./dumps/imageGraphics";
@@ -36,6 +36,9 @@ import linkedInEmploymentsReducer from "./dumps/linkedinEmployments";
 import linkedInEducationsReducer from "./dumps/linkedinEducations";
 import linkedInCertificationsReducer from "./dumps/linkedinCertifications";
 import currentJobNewsletterSourceReducer from "./current/currentJobNewsletterSource";
+import currentProjectReducer from "./current/currentProject";
+import projectsReducer from "./dumps/projects";
+import projectNotesReducer from "./dumps/projectNotes";
 
 export const rootReducer = combineReducers({
   app: appReducer,
@@ -43,10 +46,13 @@ export const rootReducer = combineReducers({
   currentCompany: currentCompanyReducer,
   currentJob: currentJobReducer,
   currentTechnicalSkills: currentTechnicalSkillsReducer,
-  currentProfessionalBackground: currentProfessionalBackgroundReducer,
+  currentVoiceStyle: currentVoiceStyleReducer,
   currentStudioEditor: currentStudioEditorReducer,
   currentJobStudio: currentJobStudioReducer,
   currentJobNewsletterSource: currentJobNewsletterSourceReducer,
+  currentProject: currentProjectReducer,
+  projects: projectsReducer,
+  projectNotes: projectNotesReducer,
   imageGraphics: imageGraphicsReducer,
   companies: companiesReducer,
   jobs: jobsReducer,
@@ -72,7 +78,7 @@ export const rootReducer = combineReducers({
   jobsListBuilder: jobsListBuilderReducer,
   breadcrumbBuilder: breadcrumbBuilderReducer,
   technicalSkillsBuilder: technicalSkillsBuilderReducer,
-  professionalBackgroundBuilder: professionalBackgroundBuilderReducer,
+  voiceStyleBuilder: voiceStyleBuilderReducer,
   jobStudioBuilder: jobStudioBuilderReducer,
   jobDetailChatFab: jobDetailChatFabReducer,
 });

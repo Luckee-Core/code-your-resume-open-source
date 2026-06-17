@@ -11,7 +11,6 @@ import {
   loadCrmVaultThunk,
   loadImageGraphicsThunk,
   loadJobBulletsThunk,
-  loadProfessionalBackgroundThunk,
   loadTechnicalSkillsThunk,
   loadJobStudioChatThunk,
   loadJobQuestionsThunk,
@@ -68,7 +67,6 @@ export const JobDetailPage = () => {
     void dispatch(loadCrmVaultThunk());
     void dispatch(loadImageGraphicsThunk());
     void dispatch(loadTechnicalSkillsThunk());
-    void dispatch(loadProfessionalBackgroundThunk());
   }, [dispatch]);
 
   useEffect(() => {

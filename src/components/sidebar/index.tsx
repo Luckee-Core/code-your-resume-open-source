@@ -24,6 +24,8 @@ import {
   JOB_NEWSLETTERS_PATH,
   JOB_NEWSLETTER_DETAIL_PAGE_PATH,
   JOBS_PATH,
+  PROJECTS_PATH,
+  PROJECT_DETAIL_PAGE_PATH,
 } from "@/config/routes";
 import { getAppSidebarSections } from "./get-app-sidebar-sections";
 
@@ -76,6 +78,9 @@ export const Sidebar = () => {
       }
       if (name === "Job newsletters") {
         return pathname === JOB_NEWSLETTERS_PATH || pathname === JOB_NEWSLETTER_DETAIL_PAGE_PATH;
+      }
+      if (name === "Projects") {
+        return pathname === PROJECTS_PATH || pathname === PROJECT_DETAIL_PAGE_PATH;
       }
       if (name === "Background Studio") return pathname === EXPERIENCE_STUDIO_PATH;
       if (href === DASHBOARD_PATH) return pathname === DASHBOARD_PATH;

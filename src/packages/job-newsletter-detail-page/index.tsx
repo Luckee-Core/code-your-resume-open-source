@@ -66,7 +66,7 @@ export const JobNewsletterDetailPage = () => {
     );
 
     if (forSource.length === 0 && outcome.result.emailsProcessed === 0) {
-      toast.message("No unprocessed emails in Email Manager");
+      toast.message("No unprocessed emails in Email Manager (checked up to 48h)");
     } else if (
       listingsForSource === 0 &&
       forSource.some((row) => row.status === "parse_error")

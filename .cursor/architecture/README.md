@@ -20,16 +20,16 @@ This folder contains Architecture Decision Records (ADRs) for the **code-your-re
 9. [008 – Job-search CRM](./008-job-search-crm.md)
 10. [009 – CRM detail UI parity](./009-crm-detail-ui-parity.md)
 11. [011 – Technical Skills Studio](./011-technical-skills-studio.md)
-12. [012 – Professional Background Studio](./012-professional-background-studio.md)
-13. [013 – Job Studio](./013-job-studio.md)
+12. [013 – Job Studio](./013-job-studio.md)
 14. [014 – Cover letter generation](./014-cover-letter-generation.md)
 15. [015 – Error event logging](./015-error-event-logging.md) — Supabase `reportThunkError` / prod persistence
 16. [016 – Client API error handling](./016-client-api-error-handling.md) — `requestApi`, never throw
 17. [017 – Job application questions](./017-job-application-questions.md) — reusable prompts + per-job answers
 18. [018 – Marketing landing package](./018-marketing-landing-package.md) — `/` marketing, `/dashboard` app home
 19. [019 – App shell breadcrumbs](./019-app-shell-breadcrumbs.md)
-20. [020 – Documentation site API reference](./020-api-docs-page.md) — `/docs/api`, Express catalog fetch
+20. [020 – Projects entity](./020-projects-entity.md) — Portfolio projects + note log; primary work-history narrative for AI
 21. [021 – LinkedIn profile](./021-linkedin-profile.md) — My LinkedIn, Apify sync, normalized tables
+22. [022 – Voice Style Studio](./022-voice-style-studio.md) — Singleton tone/voice notes for generation
 
 > **Pair ADR note:** Express server ADR **009** covers `/api/data` entity routers ([009-api-data-entity-routers.md](https://github.com/Luckee-Core/code-your-resume-open-source-express-server/blob/main/.cursor/architecture/009-api-data-entity-routers.md)). Next **009** here is CRM detail UI parity — different topic.
 

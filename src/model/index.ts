@@ -9,10 +9,5 @@ export type {
   TechnicalSkillsChatMessage,
   TechnicalSkillsStudioPayload,
 } from "./technical-skills";
-export type {
-  ProfessionalBackgroundPayload,
-  ProfessionalBackgroundSegmentKey,
-  ProfessionalBackgroundSegments,
-} from "./professional-background";
-export { PROFESSIONAL_BACKGROUND_SEGMENT_KEYS } from "./professional-background";
+export type { VoiceStylePayload } from "./voice-style";
 export type { StructuredResponseBodyItem, StructuredResponseSection } from "./shared/structured-response";

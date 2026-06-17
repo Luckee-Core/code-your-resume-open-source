@@ -2,7 +2,7 @@
 
 ## Purpose
 
-CRM detail packages (`company-detail-page`, `job-detail-page`, `company-employee-detail-page`, `job-application-detail-page`) follow the **same layout and surface patterns** as Lead Studio’s **`lead-detail-page`** package (structural reference in the `lead-studio-web-open-source` repo), so multi-product work stays predictable.
+CRM detail packages (`company-detail-page`, `job-detail-page`, `company-employee-detail-page`, `job-application-detail-page`, **`project-detail-page`**) follow the **same layout and surface patterns** as Lead Studio’s **`lead-detail-page`** package (structural reference in the `lead-studio-web-open-source` repo), so multi-product work stays predictable.
 
 ## Palette decision (Option A)
 

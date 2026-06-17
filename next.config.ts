@@ -20,12 +20,12 @@ const nextConfig: NextConfig = {
         destination: `${base}/api/technical-skills/:path*`,
       });
       rules.push({
-        source: "/api/professional-background",
-        destination: `${base}/api/professional-background`,
+        source: "/api/voice-style",
+        destination: `${base}/api/voice-style`,
       });
       rules.push({
-        source: "/api/professional-background/:path*",
-        destination: `${base}/api/professional-background/:path*`,
+        source: "/api/voice-style/:path*",
+        destination: `${base}/api/voice-style/:path*`,
       });
       rules.push({
         source: "/api/technical-skills",

@@ -1,6 +1,6 @@
 # Code Your Resume (open source)
 
-Next.js app with Redux: job-search CRM UI, graphics studio (TSX live preview), technical skills studio, professional background studio, job studio, and in-app docs.
+Next.js app with Redux: job-search CRM UI, graphics studio (TSX live preview), technical skills studio, projects, voice style studio, job studio, and in-app docs.
 
 **Companion API:** [code-your-resume-open-source-express-server](https://github.com/Luckee-Core/code-your-resume-open-source-express-server) (Express + Supabase, port **3053**).
 
@@ -23,7 +23,7 @@ npm install && npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) (marketing) or [http://localhost:3000/dashboard](http://localhost:3000/dashboard) (app).
 
-Next rewrites `/api/data/*`, `/api/technical-skills/*`, `/api/professional-background/*`, and `/api/job-studio/*` to Express (`EXPRESS_API_URL` or default `http://127.0.0.1:3053` in dev). See `next.config.ts`.
+Next rewrites `/api/data/*`, `/api/technical-skills/*`, `/api/voice-style/*`, and `/api/job-studio/*` to Express (`EXPRESS_API_URL` or default `http://127.0.0.1:3053` in dev). See `next.config.ts`.
 
 ## Architecture
 
