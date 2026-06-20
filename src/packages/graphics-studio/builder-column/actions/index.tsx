@@ -1,23 +1,66 @@
 "use client";
 
-import { Download, Loader2, Printer } from "lucide-react";
+import { useState } from "react";
+import { Download, Loader2, Printer, Ruler } from "lucide-react";
+import { toast } from "sonner";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { downloadImageGraphicPreviewPngThunk, printImageGraphicPreviewThunk } from "@/store/thunks";
+import {
+  downloadImageGraphicPreviewPngThunk,
+  fitImageGraphicCanvasHeightToContentThunk,
+  printImageGraphicPreviewThunk,
+} from "@/store/thunks";
 
 type ImageCreationStudioBuilderColumnActionsProps = {
   previewHasContent: boolean;
+  /** Measured TSX content height; enables **Fit height to content** when it differs from canvas. */
+  contentHeightPx: number | null;
+  canvasHeightPx: number;
 };
 
 /**
  * Toolbar actions for the studio builder column (e.g. PNG export, print/PDF).
  */
 export const ImageCreationStudioBuilderColumnActions = (props: ImageCreationStudioBuilderColumnActionsProps) => {
-  const { previewHasContent } = props;
+  const { previewHasContent, contentHeightPx, canvasHeightPx } = props;
   const dispatch = useAppDispatch();
   const isDownloadingPreviewPng = useAppSelector((s) => s.currentStudioEditor.isDownloadingPreviewPng);
+  const [isFittingHeight, setIsFittingHeight] = useState(false);
+
+  const canFitHeightToContent =
+    previewHasContent &&
+    contentHeightPx != null &&
+    contentHeightPx !== canvasHeightPx &&
+    !isFittingHeight;
+
+  const onFitHeightToContent = async () => {
+    if (!canFitHeightToContent || contentHeightPx == null) {
+      return;
+    }
+    setIsFittingHeight(true);
+    const status = await dispatch(fitImageGraphicCanvasHeightToContentThunk());
+    setIsFittingHeight(false);
+
+    if (status === 200) {
+      toast.success("Canvas height fitted to content");
+    }
+  };
 
   return (
     <div className={styles.root}>
+      <button
+        type="button"
+        className={styles.secondaryBtn}
+        onClick={() => void onFitHeightToContent()}
+        disabled={!canFitHeightToContent}
+        title="Set canvas height to match measured TSX content"
+      >
+        {isFittingHeight ? (
+          <Loader2 className={styles.btnIconSpin} aria-hidden />
+        ) : (
+          <Ruler className={styles.btnIcon} aria-hidden />
+        )}
+        Fit height to content
+      </button>
       <button
         type="button"
         className={styles.secondaryBtn}

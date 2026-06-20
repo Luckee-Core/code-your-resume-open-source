@@ -10,5 +10,5 @@ export {
   downloadImageGraphicPreviewPngThunk,
   type DownloadImageGraphicPreviewPngInput,
 } from "./download-image-graphic-preview-png-thunk";
-export { syncImageGraphicCanvasHeightThunk } from "./sync-image-graphic-canvas-height-thunk";
+export { fitImageGraphicCanvasHeightToContentThunk } from "./fit-image-graphic-canvas-height-thunk";
 export { printImageGraphicPreviewThunk } from "./print-image-graphic-preview-thunk";

@@ -1,0 +1,1 @@
+export { generateIdealCandidate } from "./generate";

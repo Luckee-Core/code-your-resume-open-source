@@ -3,12 +3,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { CurrentStudioEditorActions } from "@/store/current/currentStudioEditor";
-import { syncImageGraphicCanvasHeightThunk } from "@/store/thunks";
 import {
   clampStudioPreviewDimension,
   compileImageStudioTsx,
   computePreviewDisplayScale,
   computeStudioIframeSrcDoc,
+  isStudioPreviewMeasuredHeightCredible,
   resolveStudioPreviewHeightPx,
   IMAGE_STUDIO_PREVIEW_IFRAME_ELEMENT_ID,
 } from "@/utils/image-creation-studio";
@@ -16,8 +16,6 @@ import { ImageCreationStudioBuilderColumnActions } from "./actions";
 import { useStudioPreviewMeasuredHeight } from "./use-studio-preview-measured-height";
 
 const TSX_PREVIEW_DEBOUNCE_MS = 400;
-/** Debounce before persisting measured canvas height to the server. */
-const CANVAS_HEIGHT_SYNC_DEBOUNCE_MS = 1500;
 
 /**
  * Tracks an element's content-box width via `ResizeObserver` so the preview can fit-to-container.
@@ -58,8 +56,14 @@ export const ImageCreationStudioBuilderColumn = () => {
   );
 
   const previewW = clampStudioPreviewDimension(canvasWidthPx, 960);
-  const storedPreviewH = clampStudioPreviewDimension(canvasHeightPx, 540);
-  const previewH = resolveStudioPreviewHeightPx(storedPreviewH, previewMeasuredContentHeightPx);
+  const storedCanvasH = clampStudioPreviewDimension(canvasHeightPx, 540);
+  const displayPreviewH = resolveStudioPreviewHeightPx(storedCanvasH, previewMeasuredContentHeightPx);
+
+  const measuredContentHeightPx =
+    previewMeasuredContentHeightPx != null &&
+    isStudioPreviewMeasuredHeightCredible(previewMeasuredContentHeightPx, storedCanvasH)
+      ? previewMeasuredContentHeightPx
+      : null;
 
   const [previewAreaRef, previewAreaWidth] = useElementWidth<HTMLDivElement>();
 
@@ -69,7 +73,7 @@ export const ImageCreationStudioBuilderColumn = () => {
   );
 
   const previewDisplayW = previewW * previewDisplayScale;
-  const previewDisplayH = previewH * previewDisplayScale;
+  const previewDisplayH = displayPreviewH * previewDisplayScale;
 
   const tsxPreviewOutOfSync = Boolean(tsxDraft.trim()) && tsxDraft !== tsxBaselineForPreview;
 
@@ -94,30 +98,16 @@ export const ImageCreationStudioBuilderColumn = () => {
       computeStudioIframeSrcDoc({
         tsxDraft: debouncedTsxDraft,
         previewW,
-        previewH: storedPreviewH,
+        previewH: storedCanvasH,
       }),
-    [debouncedTsxDraft, previewW, storedPreviewH],
+    [debouncedTsxDraft, previewW, storedCanvasH],
   );
 
   useStudioPreviewMeasuredHeight({
     graphicId,
-    canvasHeightPx: storedPreviewH,
+    canvasHeightPx: storedCanvasH,
     iframeSrcDoc,
   });
-
-  /** Persist measured height when content outgrows stored canvas dimensions. */
-  useEffect(() => {
-    if (previewMeasuredContentHeightPx == null) {
-      return;
-    }
-    if (previewMeasuredContentHeightPx === storedPreviewH) {
-      return;
-    }
-    const id = window.setTimeout(() => {
-      void dispatch(syncImageGraphicCanvasHeightThunk(previewMeasuredContentHeightPx));
-    }, CANVAS_HEIGHT_SYNC_DEBOUNCE_MS);
-    return () => window.clearTimeout(id);
-  }, [dispatch, previewMeasuredContentHeightPx, storedPreviewH]);
 
   const tsxCompileError = useMemo(() => {
     const trimmed = debouncedTsxDraft.trim();
@@ -141,14 +131,17 @@ export const ImageCreationStudioBuilderColumn = () => {
             <div className={styles.titleBlock}>
               <h2 className={styles.h2}>Preview</h2>
               <p className={styles.canvasMeta}>
-                Canvas {previewW}×{previewH}px
-                {previewMeasuredContentHeightPx != null &&
-                previewMeasuredContentHeightPx !== storedPreviewH
-                  ? " (height fits content)"
+                Canvas {previewW}×{storedCanvasH}px
+                {measuredContentHeightPx != null && measuredContentHeightPx !== storedCanvasH
+                  ? ` · content ≈ ${measuredContentHeightPx}px`
                   : null}
               </p>
             </div>
-            <ImageCreationStudioBuilderColumnActions previewHasContent={previewHasContent} />
+            <ImageCreationStudioBuilderColumnActions
+              previewHasContent={previewHasContent}
+              contentHeightPx={measuredContentHeightPx}
+              canvasHeightPx={storedCanvasH}
+            />
           </div>
           {tsxPreviewOutOfSync ? (
             <p className={styles.staleBanner} role="status">
@@ -175,12 +168,12 @@ export const ImageCreationStudioBuilderColumn = () => {
                   title="Layout preview"
                   className={styles.previewFrame}
                   width={previewW}
-                  height={previewH}
+                  height={displayPreviewH}
                   sandbox="allow-scripts allow-same-origin allow-modals allow-popups allow-popups-to-escape-sandbox"
                   srcDoc={iframeSrcDoc}
                   style={{
                     width: previewW,
-                    height: previewH,
+                    height: displayPreviewH,
                     transform: `scale(${previewDisplayScale})`,
                     transformOrigin: "top left",
                   }}

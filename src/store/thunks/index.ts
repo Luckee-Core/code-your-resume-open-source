@@ -6,7 +6,7 @@ export {
   openImageGraphicStudioThunk,
   openImageGraphicStudioByIdThunk,
   saveImageGraphicStudioDraftThunk,
-  syncImageGraphicCanvasHeightThunk,
+  fitImageGraphicCanvasHeightToContentThunk,
   downloadImageGraphicPreviewPngThunk,
   printImageGraphicPreviewThunk,
 } from "./image-creation-studio";
@@ -65,6 +65,11 @@ export {
   generateTeamConversationThunk,
   type GenerateTeamConversationThunkInput,
 } from "./team-conversation";
+
+export {
+  generateIdealCandidateThunk,
+  type GenerateIdealCandidateThunkInput,
+} from "./ideal-candidate";
 
 export {
   loadJobQuestionsThunk,

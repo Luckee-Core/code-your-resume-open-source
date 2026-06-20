@@ -9,4 +9,5 @@ export * from "./escape-for-inline-script";
 export * from "./social-canvas-presets";
 export * from "./studio-iframe-src-doc";
 export * from "./apply-studio-preview-print-filename";
+export * from "./apply-studio-preview-print-page-size";
 export * from "./strip-react-imports-from-image-studio-tsx";

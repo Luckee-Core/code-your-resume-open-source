@@ -23,27 +23,27 @@ export const clampStudioPreviewDimension = (n: number, fallback: number): number
 };
 
 /**
- * Preview iframe height: measured content height when credible, otherwise stored canvas height.
+ * On-screen preview iframe height: `max(stored canvas, measured content)`; stored canvas unchanged.
  *
- * @param canvasHeightPx - Persisted graphic height (fallback before first measure)
+ * @param canvasHeightPx - Persisted graphic height
  * @param measuredContentHeightPx - Live layout height from iframe (null until measured)
  */
 export const resolveStudioPreviewHeightPx = (
   canvasHeightPx: number,
   measuredContentHeightPx: number | null,
 ): number => {
-  const fallback = clampStudioPreviewDimension(canvasHeightPx, 540);
-  const displayFallback = Math.max(fallback, STUDIO_PREVIEW_MIN_CREDIBLE_HEIGHT_PX);
+  const stored = clampStudioPreviewDimension(canvasHeightPx, 540);
+  const displayFallback = Math.max(stored, STUDIO_PREVIEW_MIN_CREDIBLE_HEIGHT_PX);
 
   if (measuredContentHeightPx == null) {
     return displayFallback;
   }
 
-  const measured = clampStudioPreviewDimension(measuredContentHeightPx, fallback);
-  if (!isStudioPreviewMeasuredHeightCredible(measured, fallback)) {
+  const measured = clampStudioPreviewDimension(measuredContentHeightPx, stored);
+  if (!isStudioPreviewMeasuredHeightCredible(measured, stored)) {
     return displayFallback;
   }
-  return measured;
+  return Math.max(stored, measured);
 };
 
 type ComputeStudioIframeSrcDocParams = {

@@ -1,7 +1,12 @@
 import type { ImageGraphic } from "@/model";
 import { filterImageGraphicsByJobId } from "./filter-image-graphics-by-job-id";
 
-export type JobGraphicKind = "resume" | "coverLetter" | "companyInterest" | "teamConversation";
+export type JobGraphicKind =
+  | "resume"
+  | "coverLetter"
+  | "companyInterest"
+  | "teamConversation"
+  | "idealCandidate";
 
 const matchesResumeGraphic = (graphic: ImageGraphic): boolean => {
   if (graphic.metadata?.skillsComponentSource === "cursor") {
@@ -31,11 +36,19 @@ const matchesTeamConversationGraphic = (graphic: ImageGraphic): boolean => {
   return graphic.title.trim().startsWith("Team conversation —");
 };
 
+const matchesIdealCandidateGraphic = (graphic: ImageGraphic): boolean => {
+  if (graphic.metadata?.idealCandidateSource === "cursor") {
+    return true;
+  }
+  return graphic.title.trim().startsWith("Ideal candidate —");
+};
+
 const matchers: Record<JobGraphicKind, (graphic: ImageGraphic) => boolean> = {
   resume: matchesResumeGraphic,
   coverLetter: matchesCoverLetterGraphic,
   companyInterest: matchesCompanyInterestGraphic,
   teamConversation: matchesTeamConversationGraphic,
+  idealCandidate: matchesIdealCandidateGraphic,
 };
 
 /**
@@ -53,6 +66,9 @@ export const resolveJobGraphicKind = (graphic: ImageGraphic): JobGraphicKind | n
   }
   if (matchesTeamConversationGraphic(graphic)) {
     return "teamConversation";
+  }
+  if (matchesIdealCandidateGraphic(graphic)) {
+    return "idealCandidate";
   }
   return null;
 };

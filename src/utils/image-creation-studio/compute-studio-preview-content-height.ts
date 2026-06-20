@@ -38,8 +38,13 @@ const elementUsesViewportMinHeight = (el: HTMLElement): boolean => {
  * @param root - Preview mount node (`#root`)
  */
 export const computeStudioPreviewContentHeightPx = (root: HTMLElement): number | null => {
+  const view = root.ownerDocument.defaultView;
+  if (!view) {
+    return null;
+  }
+
   const rootRect = root.getBoundingClientRect();
-  const rootPadBottom = Number.parseFloat(window.getComputedStyle(root).paddingBottom) || 0;
+  const rootPadBottom = Number.parseFloat(view.getComputedStyle(root).paddingBottom) || 0;
 
   let maxBottom = 0;
 
@@ -66,6 +71,43 @@ export const computeStudioPreviewContentHeightPx = (root: HTMLElement): number |
     return null;
   }
   return Math.ceil(scroll);
+};
+
+/**
+ * Preview / fit height: max of descendant-bottom, scroll, and border-box on `#root`.
+ *
+ * @param root - Preview mount node (`#root`)
+ */
+export const measureStudioPreviewRootHeightPx = (root: HTMLElement): number => {
+  const candidates: number[] = [];
+
+  const contentH = computeStudioPreviewContentHeightPx(root);
+  if (contentH != null && contentH > 0) {
+    candidates.push(contentH);
+  }
+
+  const scrollH = root.scrollHeight;
+  if (Number.isFinite(scrollH) && scrollH > 0) {
+    candidates.push(scrollH);
+  }
+
+  const rectH = root.getBoundingClientRect().height;
+  if (Number.isFinite(rectH) && rectH > 0) {
+    candidates.push(rectH);
+  }
+
+  return candidates.length > 0 ? Math.ceil(Math.max(...candidates)) : 0;
+};
+
+/**
+ * Tight print height: `#root` scroll + border box only (no canvas hints).
+ *
+ * @param root - Preview mount node (`#root`)
+ */
+export const measureStudioPreviewRootTightHeightPx = (root: HTMLElement): number => {
+  const scrollH = root.scrollHeight;
+  const rectH = root.getBoundingClientRect().height;
+  return Math.ceil(Math.max(scrollH > 0 ? scrollH : 0, rectH > 0 ? rectH : 0));
 };
 
 /**
@@ -129,7 +171,8 @@ export const measureStudioPreviewIframeContentHeightPx = (iframe: HTMLIFrameElem
     if (!(root instanceof HTMLElement)) {
       return null;
     }
-    return computeStudioPreviewContentHeightPx(root);
+    const heightPx = measureStudioPreviewRootHeightPx(root);
+    return heightPx > 0 ? heightPx : null;
   } catch {
     return null;
   }

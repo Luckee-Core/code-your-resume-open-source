@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { useAppSelector } from "@/store";
 import type { ImageGraphic } from "@/model";
 import { ImageGraphicsTableRow } from "./row";
+import { imageGraphicsTableShellStyles as shell } from "./shell-styles";
 
 /**
  * Sorted table of image graphics for the local user.
@@ -25,8 +26,9 @@ export const ImageGraphicsTable = () => {
   }
 
   return (
-    <div className={styles.tableWrap}>
-      <table className={styles.table}>
+    <div className={shell.tableViewport}>
+      <div className={shell.tableWrap}>
+        <table className={styles.table}>
         <thead>
           <tr className={styles.trHead}>
             <th className={styles.th}>Title</th>
@@ -41,6 +43,7 @@ export const ImageGraphicsTable = () => {
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 };
@@ -50,9 +53,6 @@ const styles = {
     rounded-md border border-dashed border-gray-300 bg-gray-50 px-4 py-10 text-center
   `,
   emptyText: `text-sm text-gray-600`,
-  tableWrap: `
-    overflow-x-auto rounded-md border border-gray-200 bg-white
-  `,
   table: `
     min-w-full border-collapse text-left text-sm
   `,

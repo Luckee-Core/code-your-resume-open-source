@@ -2,5 +2,7 @@
 export {
   computeStudioPreviewContentHeightPx,
   measureStudioPreviewIframeContentHeightPx,
+  measureStudioPreviewRootHeightPx,
+  measureStudioPreviewRootTightHeightPx,
   STUDIO_PREVIEW_VIEWPORT_HEIGHT_CLASSES,
 } from "./compute-studio-preview-content-height";

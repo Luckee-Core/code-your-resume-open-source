@@ -2,6 +2,7 @@ import { toast } from "sonner";
 import type { AppThunk } from "@/store";
 import {
   applyStudioPreviewPrintFilename,
+  applyStudioPreviewPrintPageSize,
   IMAGE_STUDIO_PREVIEW_IFRAME_ELEMENT_ID,
 } from "@/utils/image-creation-studio";
 import { resolveImageGraphicPrintFilename } from "@/utils/image-graphics";
@@ -10,7 +11,7 @@ type Status = Promise<200 | 400 | 500>;
 
 /**
  * Triggers the browser print dialog for the studio preview iframe.
- * Sets parent + iframe document titles so "Save as PDF" defaults to `resume` or `cover_letter`.
+ * Sets `@page` from tight `#root` measure; titles parent + iframe for Save as PDF filename.
  * Must run synchronously on the click stack (no `async`) so the browser keeps user activation.
  */
 export const printImageGraphicPreviewThunk = (): AppThunk<Status> => {
@@ -28,7 +29,12 @@ export const printImageGraphicPreviewThunk = (): AppThunk<Status> => {
     }
 
     try {
-      const printFilename = resolveImageGraphicPrintFilename(getState().currentImageGraphic);
+      const graphic = getState().currentImageGraphic;
+      const printFilename = resolveImageGraphicPrintFilename(graphic);
+      applyStudioPreviewPrintPageSize(iframe, graphic.canvasWidthPx, {
+        canvasHeightPx: graphic.canvasHeightPx,
+        measuredContentHeightPx: getState().currentStudioEditor.previewMeasuredContentHeightPx,
+      });
       applyStudioPreviewPrintFilename(iframe, printFilename);
       contentWindow.focus();
       contentWindow.print();

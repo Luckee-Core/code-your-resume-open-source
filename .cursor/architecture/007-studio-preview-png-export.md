@@ -48,18 +48,19 @@ Stable DOM ids live in `@/utils/image-creation-studio` so thunks can `document.g
 
 ## Dynamic canvas height (content-driven)
 
-Generated resumes (and all studio graphics) use a **minimum** stored canvas height. The live preview **measures rendered TSX** and expands when content needs more space.
+Generated resumes use a **minimum** stored canvas height (816×1150). The preview **expands on screen** when measured content is taller; canvas height is **not** auto-persisted.
 
 | Piece | Role |
 |--------|------|
-| `build-tsx-react-preview-src-doc.ts` | `#root` uses `min-height` + `height: auto`; boot script posts `IMAGE_STUDIO_PREVIEW_HEIGHT_POST_MESSAGE_TYPE` via `ResizeObserver`. |
-| `measure-studio-preview-iframe-content-height.ts` | Fallback read of iframe `scrollHeight`. |
-| `resolveStudioPreviewHeightPx` | Effective preview height = measured content when known, else stored canvas height. |
-| `use-studio-preview-measured-height.ts` | Listens for postMessage + polls; writes `currentStudioEditor.previewMeasuredContentHeightPx`. |
-| `syncImageGraphicCanvasHeightThunk` | Debounced PATCH when measured height differs from persisted `canvasHeightPx`. |
-| `saveImageGraphicStudioDraftThunk` | Also syncs canvas height on save. |
+| `build-tsx-react-preview-src-doc.ts` | `#root` uses `height: auto`; boot script posts `IMAGE_STUDIO_PREVIEW_HEIGHT_POST_MESSAGE_TYPE` via `ResizeObserver`. |
+| `compute-studio-preview-content-height.ts` | `measureStudioPreviewRootHeightPx` (preview/fit), `measureStudioPreviewRootTightHeightPx` (print). |
+| `resolveStudioPreviewHeightPx` | On-screen iframe height = `max(stored, measured)`; stored canvas unchanged. |
+| `use-studio-preview-measured-height.ts` | Listens for postMessage + polls; writes `previewMeasuredContentHeightPx`. |
+| `fitImageGraphicCanvasHeightToContentThunk` | Manual **Fit height to content** → PATCH canvas height. |
+| `apply-studio-preview-print-page-size.ts` | Before print: normalize viewport classes, measure tight `#root`, set `@page` in inches. |
+| `print-image-graphic-preview-thunk.ts` | Print / PDF from preview iframe. |
 
-Resume generation still creates graphics at **816×1150 minimum**; Graphics Studio grows height after the first successful measure.
+Resume generation still creates graphics at **816×1150 minimum**; use **Fit height to content** or edit dimensions to persist a taller canvas.
 
 ## Operational notes
 

@@ -102,7 +102,6 @@ export const buildTsxReactPreviewSrcDoc = (
   dimensions: ImageStudioPreviewDimensions = DEFAULT_PREVIEW_DIM,
 ): string => {
   const w = clampDim(dimensions.widthPx, DEFAULT_PREVIEW_DIM.widthPx);
-  const h = clampDim(dimensions.heightPx, DEFAULT_PREVIEW_DIM.heightPx);
   const safeCompiled = escapeForInlineScript(compiledJs);
   const reactUrl = `https://unpkg.com/react@${PREVIEW_REACT_UMD_VERSION}/umd/react.production.min.js`;
   const reactDomUrl = `https://unpkg.com/react-dom@${PREVIEW_REACT_UMD_VERSION}/umd/react-dom.production.min.js`;
@@ -201,7 +200,6 @@ ${STUDIO_PREVIEW_CONTENT_HEIGHT_BOOT_FN}
     @media print {
       @page {
         margin: 0;
-        size: ${w}px ${h}px;
       }
       body {
         margin: 0;

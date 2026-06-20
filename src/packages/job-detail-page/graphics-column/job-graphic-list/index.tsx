@@ -7,6 +7,7 @@ import {
   type JobGraphicKind,
 } from "@/utils/image-graphics";
 import { ImageGraphicsTableRow } from "@/packages/graphics/table/row";
+import { imageGraphicsTableShellStyles as shell } from "@/packages/graphics/table/shell-styles";
 
 type Props = {
   jobId: string;
@@ -29,8 +30,9 @@ export const JobDetailGraphicList = ({ jobId, kind, emptyLabel }: Props) => {
   }
 
   return (
-    <div className={styles.tableWrap}>
-      <table className={styles.table}>
+    <div className={shell.tableViewport}>
+      <div className={shell.tableWrap}>
+        <table className={styles.table}>
         <thead>
           <tr className={styles.trHead}>
             <th className={styles.th}>Title</th>
@@ -45,15 +47,13 @@ export const JobDetailGraphicList = ({ jobId, kind, emptyLabel }: Props) => {
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 };
 
 const styles = {
   empty: `text-sm italic text-gray-400`,
-  tableWrap: `
-    overflow-x-auto rounded-md border border-gray-200 bg-white
-  `,
   table: `
     min-w-full border-collapse text-left text-sm
   `,

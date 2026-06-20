@@ -1,6 +1,6 @@
 "use client";
 
-import { startTransition, useEffect, useRef, useState } from "react";
+import { startTransition, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { MoreHorizontal } from "lucide-react";
 import { toast } from "sonner";
@@ -12,6 +12,13 @@ type ImageGraphicsTableRowProps = {
   graphicId: string;
 };
 
+const DROPDOWN_MIN_WIDTH_PX = 140;
+
+type MenuPosition = {
+  top: number;
+  left: number;
+};
+
 export const ImageGraphicsTableRow = (props: ImageGraphicsTableRowProps) => {
   const { graphicId } = props;
   const graphic = useAppSelector((s) => s.imageGraphics[graphicId]);
@@ -19,7 +26,32 @@ export const ImageGraphicsTableRow = (props: ImageGraphicsTableRowProps) => {
   const router = useRouter();
 
   const [menuOpen, setMenuOpen] = useState(false);
+  const [menuPos, setMenuPos] = useState<MenuPosition | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  const updateMenuPos = useCallback(() => {
+    const rect = buttonRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    setMenuPos({
+      top: rect.bottom + 4,
+      left: Math.max(8, rect.right - DROPDOWN_MIN_WIDTH_PX),
+    });
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!menuOpen) {
+      setMenuPos(null);
+      return;
+    }
+    updateMenuPos();
+    window.addEventListener("resize", updateMenuPos);
+    window.addEventListener("scroll", updateMenuPos, true);
+    return () => {
+      window.removeEventListener("resize", updateMenuPos);
+      window.removeEventListener("scroll", updateMenuPos, true);
+    };
+  }, [menuOpen, updateMenuPos]);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -81,16 +113,29 @@ export const ImageGraphicsTableRow = (props: ImageGraphicsTableRowProps) => {
       <td className={styles.tdActions}>
         <div ref={menuRef} className={styles.menuWrap}>
           <button
+            ref={buttonRef}
             type="button"
             className={styles.ellipsisBtn}
             aria-label="Graphic actions"
             aria-expanded={menuOpen}
-            onClick={() => setMenuOpen((o) => !o)}
+            onClick={() => {
+              setMenuOpen((open) => {
+                const next = !open;
+                if (next) {
+                  updateMenuPos();
+                }
+                return next;
+              });
+            }}
           >
             <MoreHorizontal className={styles.ellipsisIcon} aria-hidden />
           </button>
-          {menuOpen ? (
-            <div className={styles.dropdown} role="menu">
+          {menuOpen && menuPos ? (
+            <div
+              className={styles.dropdown}
+              style={{ top: menuPos.top, left: menuPos.left }}
+              role="menu"
+            >
               <button type="button" className={styles.menuItem} role="menuitem" onClick={onEdit}>
                 Edit
               </button>
@@ -127,7 +172,7 @@ const styles = {
   `,
   ellipsisIcon: `h-4 w-4`,
   dropdown: `
-    absolute right-0 top-full z-50 mt-1 min-w-[140px] rounded-lg border border-gray-200
+    fixed z-[200] min-w-[140px] rounded-lg border border-gray-200
     bg-white py-1 shadow-lg
   `,
   menuItem: `
