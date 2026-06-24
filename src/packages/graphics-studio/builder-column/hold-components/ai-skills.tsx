@@ -2,180 +2,158 @@
 
 import React from "react";
 
-/** OSS studio preview only — not used when Express injects tenant identity at generation time. */
-const DEMO_CANDIDATE_NAME = "Demo Candidate";
-
 export default function GeneratedSkillsPreview() {
-  const summary = [
-    "Built and shipped React Native, Expo, and Next.js products with TypeScript, Node.js backends, real-time data, payments, maps, video, and production deployment workflows.",
-    "Delivered AI-enabled workflows using OpenAI and Anthropic Claude APIs for chatbots, prompt engineering, embeddings, function calling, fine-tuning, and RAG-style systems.",
-    "Led practical product builds across marketplaces, social apps, training tools, field-service workflows, and automation projects with an operations-aware engineering style.",
-    "Scaled delivery patterns with CI/testing, Vercel, AWS, GCP, Firebase, Supabase, Redux, React Navigation, Expo Router, Twilio video, MapBox, and Salesforce platform experience.",
-  ];
-
   const experience = [
     {
       role: "Software Engineer",
-      organization: "Northwind Apps",
-      period: "Recent",
+      organization: "Luckee",
+      period: "Jan 2026 – May 2026",
       bullets: [
-        "Help teams reduce repetitive work through AI automation, workflow tooling, and practical engineering across Node.js, React Native, and Next.js applications.",
-        "Integrated OpenAI and Anthropic Claude APIs into prototypes and production systems, including real-time inference, chatbots, embeddings, function calling, and RAG workflows.",
+        "Built Reddit search with listing scrape, interest profile compilation, and relevant-thread ranking—candidate generation and scoring for outbound personalization workflows.",
+        "Designed standardized AI integration patterns across 10+ surfaces using Anthropic Claude, Express domain routers, and Supabase persistence with request/response ledgers for measurable iteration.",
+        "Extracted monolith domains into standalone Express services for job search, lead research, and finance studios while preserving ADR-aligned backend structure.",
+        "Shipped ICP Studio and Business Coach workflows with structured JSON parsing and context assembly syncing customer and strategy data into personalization pipelines.",
       ],
     },
     {
-      role: "Product Engineer",
-      organization: "Independent product and client work",
-      period: "Recent",
+      role: "Software Engineer",
+      organization: "WomenHeart - SisterMatch",
+      period: "2021 – Present",
       bullets: [
-        "Built dashboard and mobile prototypes with TypeScript, React, Redux, PostgreSQL, and Stripe integrations.",
-        "Delivered sample marketplace and scheduling apps with authentication, notifications, and admin tooling.",
+        "Integrated Claude Sonnet modules for peer matching and support features in a two-sided marketplace, scaling a closed network to 1,000 in-house users.",
+        "Built cross-platform peer support using React, React Native, and Expo with TypeScript on Firebase/GCP and AWS with Vercel frontend hosting.",
       ],
     },
     {
-      role: "Salesforce BA / Trainer / Developer",
-      organization: "Example Training Co.",
-      period: "Earlier",
+      role: "Software Engineer",
+      organization: "Pencil Bible",
+      period: "2021 – 2025",
       bullets: [
-        "Coordinated with large development groups, delivered Salesforce training workshops and curriculum, and contributed measurable process improvements.",
-        "Applied Salesforce Admin and Apex Developer knowledge across core platform features, custom objects, flows, automation, and business analysis work.",
+        "Scaled the app to 300,000 users during tenure—consumer onboarding and retention on iOS at high volume.",
+        "Achieved top 5 iPad ranking for the keyword bible through iterative product and performance work, including a React Native Skia migration for smoother rendering at scale.",
+        "Built MVP from scratch using React Native, Expo, TypeScript, and Firebase/GCP.",
       ],
     },
-  ];
-
-  const technicalFocus = [
     {
-      label: "AI and automation",
-      value:
-        "OpenAI, Anthropic Claude, chatbots, prompt engineering, fine-tuning, embeddings, function calling, RAG systems, real-time inference, n8n-style workflow automation.",
-    },
-    {
-      label: "Mobile and web",
-      value:
-        "React Native, Expo, Expo Router, React Navigation, Redux, Next.js, React, TypeScript, JavaScript, Node.js, dashboards, full-stack services.",
-    },
-    {
-      label: "Backends and data",
-      value:
-        "Firebase Realtime Database, Firestore, Firebase Auth, Cloud Functions, Supabase PostgreSQL, real-time subscriptions, authentication, CI/testing patterns.",
-    },
-    {
-      label: "Integrations and platforms",
-      value:
-        "Twilio video, MapBox, Stripe, Salesforce Admin/Apex/flows, Vercel, AWS, GCP, managed hosting, edge functions, CI/CD deployment.",
+      role: "Lead Software Engineer",
+      organization: "Amplinks",
+      period: "2021 – 2025",
+      bullets: [
+        "Led React and React Native development for three years; launched sales, service, and project management modules to production with Stripe, Firebase, AWS, and GCP backends.",
+        "Onboarded and mentored the company's first full-time developer while shipping cross-platform mobile and web product modules.",
+      ],
     },
   ];
 
   return (
-    <React.Fragment>
-      <main className="min-h-screen w-full bg-slate-100 px-4 py-4 font-sans text-slate-800">
-        <section className="mx-auto flex w-full max-w-5xl flex-col rounded-sm border border-slate-200 bg-white px-9 py-7 shadow-sm">
-          <header className="border-b border-slate-200 pb-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
-              Full-stack product engineer
-            </p>
-            <div className="mt-2">
-              <h1 className="text-3xl font-semibold tracking-tight text-slate-950">
-                {DEMO_CANDIDATE_NAME}
-              </h1>
-            </div>
-          </header>
+    <main className={styles.page}>
+      <article className={styles.paper}>
+        <header className={styles.header}>
+          <h1 className={styles.name}>Matt Ruiz</h1>
+          <p className={styles.subline}>
+            Staff Software Engineer, Onboarding · Philadelphia, Pennsylvania, United States
+          </p>
+        </header>
 
-          <div className="grid grid-cols-[1.35fr_0.9fr] gap-7 pt-5">
-            <div className="space-y-5">
-              <section>
-                <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
-                  Summary
-                </h2>
-                <ul className="mt-2 space-y-1.5 text-sm leading-relaxed text-slate-700">
-                  {summary.map((item) => (
-                    <li key={item} className="flex gap-2">
-                      <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-slate-400" />
-                      <span>{item}</span>
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Executive Summary</h2>
+          <p className={styles.summary}>
+            I build backend systems for personalization, ranking, and onboarding at
+            scale—from interest-profile compilation and relevant-thread ranking on Reddit
+            search to Claude-driven peer matching for 1,000 users. I own Express service
+            extraction, inference pipelines, and standardized AI integration patterns with
+            ledger-backed instrumentation so teams can test growth bets and learn quickly. I
+            partner across product and engineering, mentor developers, and use metrics to cut
+            work that does not move activation.
+          </p>
+        </section>
+
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Experience</h2>
+          <div className={styles.experienceList}>
+            {experience.map((entry) => (
+              <article key={entry.organization} className={styles.experienceEntry}>
+                <div className={styles.experienceHeader}>
+                  <h3 className={styles.experienceRole}>
+                    {entry.role} | {entry.organization}
+                  </h3>
+                  <p className={styles.experiencePeriod}>{entry.period}</p>
+                </div>
+                <ul className={styles.bulletList}>
+                  {entry.bullets.map((bullet) => (
+                    <li key={bullet} className={styles.bulletItem}>
+                      <span className={styles.bulletMarker} aria-hidden="true" />
+                      <span>{bullet}</span>
                     </li>
                   ))}
                 </ul>
-              </section>
-
-              <section>
-                <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
-                  Experience
-                </h2>
-                <div className="mt-2 space-y-4">
-                  {experience.map((entry) => (
-                    <article key={`${entry.role}-${entry.organization}`}>
-                      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                        <h3 className="text-sm font-semibold text-slate-950">
-                          {entry.role} | {entry.organization}
-                        </h3>
-                        <p className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">
-                          {entry.period}
-                        </p>
-                      </div>
-                      <ul className="mt-1.5 space-y-1 text-sm leading-relaxed text-slate-700">
-                        {entry.bullets.map((bullet) => (
-                          <li key={bullet} className="flex gap-2">
-                            <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-slate-400" />
-                            <span>{bullet}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </article>
-                  ))}
-                </div>
-              </section>
-            </div>
-
-            <aside className="space-y-5">
-              <section>
-                <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
-                  Technical Focus
-                </h2>
-                <div className="mt-2 space-y-3 text-sm leading-relaxed text-slate-700">
-                  {technicalFocus.map((group) => (
-                    <p key={group.label}>
-                      <span className="font-semibold text-slate-950">{group.label}:</span>{" "}
-                      {group.value}
-                    </p>
-                  ))}
-                </div>
-              </section>
-
-              <section>
-                <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
-                  Education
-                </h2>
-                <div className="mt-2 text-sm leading-relaxed text-slate-700">
-                  <p className="font-semibold text-slate-950">
-                    West Chester University of Pennsylvania
-                  </p>
-                  <p>B.S. Computer Science, 2018</p>
-                </div>
-              </section>
-
-              <section>
-                <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
-                  Delivery Notes
-                </h2>
-                <ul className="mt-2 space-y-1.5 text-sm leading-relaxed text-slate-700">
-                  <li className="flex gap-2">
-                    <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-slate-400" />
-                    <span>
-                      Approach shaped by early electrical and field operations work in a family contracting business: diagnose before prescribing, keep systems usable, and optimize for outcomes.
-                    </span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-slate-400" />
-                    <span>
-                      Salesforce foundation remains strong across admin, Apex, custom objects, flows, automation, and training, with current focus on AI, mobile, web, and workflow automation delivery.
-                    </span>
-                  </li>
-                </ul>
-              </section>
-            </aside>
+              </article>
+            ))}
           </div>
         </section>
-      </main>
-    </React.Fragment>
+
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Education</h2>
+          <p className={styles.educationLine}>
+            Bachelor&apos;s degree, Computer Science (major) and Web Technology (minor), West
+            Chester University of Pennsylvania (2018)
+          </p>
+        </section>
+      </article>
+    </main>
   );
 }
+
+const styles = {
+  page: `
+    w-full bg-slate-100 px-4 py-6 font-sans text-slate-800
+  `,
+  paper: `
+    mx-auto w-full max-w-[816px] rounded-sm border border-slate-200 bg-white px-8 py-7 shadow-sm
+  `,
+  header: `
+    border-b border-slate-200 pb-4
+  `,
+  name: `
+    text-xl font-semibold tracking-tight text-slate-950
+  `,
+  subline: `
+    mt-1 text-sm text-slate-600
+  `,
+  section: `
+    mt-5
+  `,
+  sectionTitle: `
+    text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500
+  `,
+  summary: `
+    mt-2 text-sm leading-relaxed text-slate-700
+  `,
+  experienceList: `
+    mt-2 space-y-4
+  `,
+  experienceEntry: `
+    text-sm leading-relaxed text-slate-700
+  `,
+  experienceHeader: `
+    flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1
+  `,
+  experienceRole: `
+    font-semibold text-slate-950
+  `,
+  experiencePeriod: `
+    text-xs font-medium uppercase tracking-[0.12em] text-slate-500
+  `,
+  bulletList: `
+    mt-1.5 space-y-1
+  `,
+  bulletItem: `
+    flex gap-2
+  `,
+  bulletMarker: `
+    mt-2 h-1 w-1 shrink-0 rounded-full bg-slate-400
+  `,
+  educationLine: `
+    mt-2 text-sm leading-relaxed text-slate-700
+  `,
+} as const;
