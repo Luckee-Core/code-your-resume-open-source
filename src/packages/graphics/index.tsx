@@ -1,5 +1,6 @@
 "use client";
 
+import { QuickApplySection } from "@/packages/quick-apply";
 import { GraphicsListHeader } from "./header";
 import { GraphicsListCreateModal } from "./header/create";
 
@@ -12,6 +13,8 @@ export const ImageGraphicsListPage = () => {
   return (
     <div className={styles.routeShell}>
       <GraphicsListHeader />
+
+      <QuickApplySection />
 
       <div className={styles.itemsBody}>
         <ImageGraphicsTable />

@@ -72,6 +72,12 @@ export {
 } from "./ideal-candidate";
 
 export {
+  runQuickApplyPipelineThunk,
+  type RunQuickApplyPipelineThunkInput,
+  type RunQuickApplyPipelineThunkResult,
+} from "./quick-apply";
+
+export {
   loadJobQuestionsThunk,
   createJobQuestionThunk,
   updateJobQuestionThunk,

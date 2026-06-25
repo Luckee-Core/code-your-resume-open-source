@@ -30,6 +30,7 @@ This folder contains Architecture Decision Records (ADRs) for the **code-your-re
 20. [020 – Projects entity](./020-projects-entity.md) — Portfolio projects + note log; primary work-history narrative for AI
 21. [021 – LinkedIn profile](./021-linkedin-profile.md) — My LinkedIn, Apify sync, normalized tables
 22. [022 – Voice Style Studio](./022-voice-style-studio.md) — Singleton tone/voice notes for generation
+23. [023 – Quick apply pipeline](./023-quick-apply-pipeline.md) — Dashboard URL → scrape → resume
 
 > **Pair ADR note:** Express server ADR **009** covers `/api/data` entity routers ([009-api-data-entity-routers.md](https://github.com/Luckee-Core/code-your-resume-open-source-express-server/blob/main/.cursor/architecture/009-api-data-entity-routers.md)). Next **009** here is CRM detail UI parity — different topic.
 
