@@ -45,52 +45,23 @@ src/
 
 ---
 
-## 2) `ApiResponse<T>` Contract
+## 2) `ApiResponse<T>` / `ApiResult<T>` Contract
+
+The live contract is `{ success, data?, error?, httpStatus }` — **not** an `{ ok, error.code }` union. Canonical types and transport rules live in [016 – Client API error handling](./016-client-api-error-handling.md).
 
 ```ts
 // src/api/_shared/types.ts
-export type ApiErrorCode =
-  | "BAD_REQUEST"
-  | "UNAUTHORIZED"
-  | "FORBIDDEN"
-  | "NOT_FOUND"
-  | "CONFLICT"
-  | "UNPROCESSABLE_ENTITY"
-  | "TOO_MANY_REQUESTS"
-  | "INTERNAL_SERVER_ERROR"
-  | "SERVICE_UNAVAILABLE";
+export type ApiResponse<T> = {
+  success: boolean;
+  data?: T;
+  error?: string;
+  warnings?: string[];
+};
 
-export type ApiResponse<T> =
-  | {
-      ok: true;
-      status: number;
-      data: T;
-      message?: string;
-    }
-  | {
-      ok: false;
-      status: number;
-      error: {
-        code: ApiErrorCode;
-        message: string;
-        /** Optional machine-readable code from the companion Express JSON (e.g. missing Google key). */
-        companionCode?: string;
-        details?: unknown;
-      };
-    };
+export type ApiResult<T> = ApiResponse<T> & { httpStatus: number };
 ```
 
-### Response Helper
-
-```ts
-// src/api/_shared/response.ts
-import { NextResponse } from "next/server";
-import type { ApiResponse } from "./types";
-
-export function jsonResponse<T>(payload: ApiResponse<T>) {
-  return NextResponse.json(payload, { status: payload.status });
-}
-```
+Express JSON uses `{ success, data?, error? }`. Browser modules return `ApiResult<T>` via `requestApi`. Do not add an `ok` / `ApiErrorCode` union.
 
 ---
 
@@ -99,32 +70,23 @@ export function jsonResponse<T>(payload: ApiResponse<T>) {
 ### Router Factory (required JSDoc)
 
 ```ts
-// src/api/_shared/router-factory.ts
-import type { NextRequest } from "next/server";
-import type { ApiResponse } from "./types";
-import { jsonResponse } from "./response";
-
+// Next BFF handlers (non-CRM) return the same envelope as Express.
 /**
  * Creates a standardized Next.js route handler with shared error handling.
- * Ensures every route returns ApiResponse<T> and consistent HTTP status codes.
+ * Ensures every route returns `{ success, data?, error? }` and consistent HTTP status codes.
  */
 export function createRouteHandler<T>(
-  handler: (req: NextRequest) => Promise<ApiResponse<T>>
+  handler: (req: NextRequest) => Promise<ApiResult<T>>
 ) {
   return async function routeHandler(req: NextRequest) {
     try {
       const result = await handler(req);
-      return jsonResponse(result);
+      return NextResponse.json(result, { status: result.httpStatus || 200 });
     } catch (error) {
-      return jsonResponse({
-        ok: false,
-        status: 500,
-        error: {
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Unexpected server error",
-          details: error,
-        },
-      });
+      return NextResponse.json(
+        { success: false, error: "Unexpected server error" },
+        { status: 500 },
+      );
     }
   };
 }
@@ -156,19 +118,19 @@ import type { Lot } from "@/model/lot";
 /**
  * Fetches and validates a lot domain entity, then maps it to API response shape.
  */
-export async function getLotById(lotId: string): Promise<ApiResponse<Lot>> {
+export async function getLotById(lotId: string): Promise<ApiResult<Lot>> {
   if (!lotId) {
     return {
-      ok: false,
-      status: 400,
-      error: { code: "BAD_REQUEST", message: "lotId is required" },
+      success: false,
+      httpStatus: 400,
+      error: "lotId is required",
     };
   }
 
   // Domain fetch omitted.
   return {
-    ok: true,
-    status: 200,
+    success: true,
+    httpStatus: 200,
     data: {} as Lot,
   };
 }
@@ -182,20 +144,22 @@ export async function getLotById(lotId: string): Promise<ApiResponse<Lot>> {
 
 ```ts
 // src/store/thunks/lots.thunks.ts
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import type { AppThunk } from "@/store";
 import { lotsApi } from "@/api/lots/client";
 
 /**
  * Loads a lot by id through the API layer.
  */
-export const fetchLotByIdThunk = createAsyncThunk(
-  "lots/fetchById",
-  async (lotId: string, { rejectWithValue }) => {
+export const fetchLotByIdThunk =
+  (lotId: string): AppThunk<Promise<200 | 400 | 500>> =>
+  async (dispatch) => {
     const result = await lotsApi.getById(lotId);
-    if (!result.ok) return rejectWithValue(result.error);
-    return result.data;
-  }
-);
+    if (!result.success || !result.data) {
+      return result.httpStatus === 400 ? 400 : 500;
+    }
+    dispatch(LotsActions.upsertLot(result.data));
+    return 200;
+  };
 ```
 
 ```tsx
@@ -241,13 +205,10 @@ useEffect(() => {
 
 ```ts
 return {
-  ok: false,
-  status: 404,
-  error: {
-    code: "NOT_FOUND",
-    message: `Lot ${lotId} not found`,
-  },
-} satisfies ApiResponse<never>;
+  success: false,
+  httpStatus: 404,
+  error: `Lot ${lotId} not found`,
+} satisfies ApiResult<never>;
 ```
 
 ### ❌ Incorrect: Throw raw errors to client
@@ -267,7 +228,7 @@ throw new Error("Lot not found"); // no status, no typed payload
 
 ### Return Types
 
-- ✅ `Promise<ApiResponse<Lot>>`
+- ✅ `Promise<ApiResult<Lot>>`
 - ❌ `Promise<any>`
 
 ### Component Usage
@@ -287,7 +248,7 @@ throw new Error("Lot not found"); // no status, no typed payload
 ## 7) PR Review Checklist
 
 - [ ] API function added under `src/api/{domain}/`
-- [ ] Uses `ApiResponse<T>` for success and error shapes
+- [ ] Uses `ApiResult<T>` (`success`, `httpStatus`) for success and error shapes
 - [ ] Called from thunk only (no direct component API call)
 - [ ] Error branch returns typed error with explicit status code
 - [ ] JSDoc present on router factory, handler(s), and business logic function(s)

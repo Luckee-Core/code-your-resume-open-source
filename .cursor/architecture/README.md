@@ -9,7 +9,7 @@ This folder contains Architecture Decision Records (ADRs) for the **code-your-re
 1. [001 – Redux patterns](./001-redux-patterns.md) — Flat `dumps/` / `current/` / `builders/` layers, manual thunks.
 2. [002 – Component composition](./002-component-composition.md) — Thin app routes, `src/packages/`.
 3. [003 – Styling rules](./003-styling-rules.md) — Styles object + template literals.
-4. [004 – API integration](./004-api-integration.md) — `src/api/` clients, thunks only.
+4. [004 – API integration](./004-api-integration.md) — `src/api/` clients, thunks only; JSON envelope is [016](./016-client-api-error-handling.md).
 5. [005 – File organization](./005-file-organization.md) — kebab-case, barrel exports.
 6. [006 – Constants and utilities](./006-constants-utilities.md) — Pure utilities.
 7. [010 – Public content reads from Express](./010-public-blog-express-fetch.md) — Server Component reads + Redux list hydration.
@@ -33,6 +33,8 @@ This folder contains Architecture Decision Records (ADRs) for the **code-your-re
 23. [023 – Quick apply pipeline](./023-quick-apply-pipeline.md) — Dashboard URL → scrape → resume
 
 > **Pair ADR note:** Express server ADR **009** covers `/api/data` entity routers ([009-api-data-entity-routers.md](https://github.com/Luckee-Core/code-your-resume-open-source-express-server/blob/main/.cursor/architecture/009-api-data-entity-routers.md)). Next **009** here is CRM detail UI parity — different topic.
+
+> **Template forks:** nextjs-template ADRs **011** (domain models) and **012** (package form inputs / zero-arg save thunks) are not adopted as numbered files here. Persisted types already live in `src/model/`. Form folders, zero-prop modals, and the template strict whole-slice `useAppSelector` rule are deferred; this repo follows [001](./001-redux-patterns.md) (field reads on a slice are allowed) and existing package forms.
 
 ### Review checklists
 

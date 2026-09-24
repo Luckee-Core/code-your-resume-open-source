@@ -44,7 +44,7 @@ export type ApiResult<T> = ApiResponse<T> & { httpStatus: number };
 | `200`–`599` | HTTP status from the response |
 | `0` | Client-side network failure (`fetch` threw) |
 
-**Live Express JSON** uses `{ success, data?, error? }` (and sometimes top-level fields like `tsx`, `segments`, `skills`). This ADR does **not** adopt the aspirational `ok`/error-code union shown in [004 – API integration](./004-api-integration.md) examples.
+**Live Express JSON** uses `{ success, data?, error? }` (and sometimes top-level fields like `tsx`, `segments`, `skills`). [004 – API integration](./004-api-integration.md) defers to this contract.
 
 ### 3) API modules never throw
 
