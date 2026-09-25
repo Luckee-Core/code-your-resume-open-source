@@ -2,7 +2,7 @@
 
 ## Objective
 
-Document **My LinkedIn**: tenant profile URL storage, Apify sync via `linkedin-scraper-express-server`, and normalized Supabase tables exposed through Express `/api/data/**`.
+Document **My LinkedIn**: tenant profile URL storage, Apify sync inside the Express server, and normalized Supabase tables exposed through Express `/api/data/**`.
 
 ## Decisions
 
@@ -14,8 +14,7 @@ Document **My LinkedIn**: tenant profile URL storage, Apify sync via `linkedin-s
 
 ### 2) Scraper boundary
 
-- **linkedin-scraper-express-server** (port 3039) holds `APIFY_API_TOKEN` and calls `harvestapi~linkedin-profile-scraper`.
-- **code-your-resume-open-source-express-server** orchestrates sync via `LINKEDIN_SCRAPER_EXPRESS_URL` and persists mapped rows.
+- **code-your-resume-open-source-express-server** holds `APIFY_API_TOKEN` and calls `harvestapi~linkedin-profile-scraper` directly (`fetchLinkedInProfileFromApify`), then persists mapped rows.
 
 ### 3) API surface
 
@@ -32,5 +31,5 @@ Document **My LinkedIn**: tenant profile URL storage, Apify sync via `linkedin-s
 ## PR checklist
 
 - [ ] Run `docs/supabase-linkedin-profile-schema.sql` in tenant Supabase before first load.
-- [ ] Set `LINKEDIN_SCRAPER_EXPRESS_URL` on Express; run linkedin-scraper-express-server locally.
+- [ ] Set `APIFY_API_TOKEN` on Express.
 - [ ] CRM reads/writes via thunks → `src/api/**` → Express `/api/data/**`.

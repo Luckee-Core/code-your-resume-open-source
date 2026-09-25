@@ -37,7 +37,7 @@ DDL:
 | `/api/data/project` | `GET /list`, `GET /get?id=`, `POST /create`, `PATCH /update`, `DELETE /delete?id=`, `POST /synthesize-notes`, `POST /website-research` |
 | `/api/data/project-notes` | `GET /list?projectId=`, `POST /create`, `DELETE /delete?id=` |
 
-**`POST /api/data/project/website-research`** — body `{ id }`. Crawls `project.url`, optional Anthropic summary via `website_business_overview`, stores `websiteResearchSummary` + `websiteResearchCompletedAt`. Uses `fetchJobListingDocument` (HTTP or `WEBSITE_SCRAPER_URL` Playwright).
+**`POST /api/data/project/website-research`** — body `{ id }`. Crawls `project.url` with a plain HTTP GET, optional Anthropic summary via `website_business_overview`, stores `websiteResearchSummary` + `websiteResearchCompletedAt`.
 
 **`POST /api/data/project/synthesize-notes`** — body `{ id, synthesisText }`. Replaces all notes via AI (`project_notes_synthesis` flow).
 
@@ -78,5 +78,5 @@ Header ellipsis: Edit, Synthesize notes, Delete.
 1. Run `docs/supabase-projects-schema.sql` in Supabase.
 2. Run `docs/supabase-project-notes-synthesis.sql` in Supabase.
 3. Run `docs/supabase-project-website-research.sql` in Supabase.
-4. Set `ANTHROPIC_API_KEY` and optionally `WEBSITE_SCRAPER_URL` on Express.
+4. Set `ANTHROPIC_API_KEY` on Express.
 5. Update tenant AI prompt templates: replace `{{portfolio_github}}` with `{{projects}}`.
